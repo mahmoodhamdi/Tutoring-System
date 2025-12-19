@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ExamController;
 use App\Http\Controllers\Api\GroupController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\SessionController;
@@ -185,7 +186,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Notifications routes (Phase 11)
     Route::prefix('notifications')->group(function () {
-        // Routes will be added in Phase 11
+        Route::get('/', [NotificationController::class, 'index']);
+        Route::get('/unread-count', [NotificationController::class, 'unreadCount']);
+        Route::get('/recent', [NotificationController::class, 'recent']);
+        Route::get('/preferences', [NotificationController::class, 'preferences']);
+        Route::put('/preferences', [NotificationController::class, 'updatePreferences']);
+        Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead']);
+        Route::delete('/read', [NotificationController::class, 'deleteRead']);
+        Route::post('/test', [NotificationController::class, 'sendTest']);
+        Route::get('/{notification}', [NotificationController::class, 'show']);
+        Route::post('/{notification}/read', [NotificationController::class, 'markAsRead']);
+        Route::post('/{notification}/unread', [NotificationController::class, 'markAsUnread']);
+        Route::delete('/{notification}', [NotificationController::class, 'destroy']);
     });
 
     // Dashboard routes (Phase 12)
