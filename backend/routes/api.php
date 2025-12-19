@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\QuizController;
+use App\Http\Controllers\Api\PortalController;
 use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\StudentController;
@@ -227,7 +228,23 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
-// Portal routes (Phase 13) - Separate auth for students/parents
-Route::prefix('portal')->middleware('auth:sanctum')->group(function () {
-    // Routes will be added in Phase 13
+// Portal routes (Phase 14) - For students/parents
+Route::prefix('portal')->group(function () {
+    // Public routes
+    Route::post('/login', [PortalController::class, 'login']);
+
+    // Protected routes
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [PortalController::class, 'logout']);
+        Route::get('/profile', [PortalController::class, 'profile']);
+        Route::post('/password', [PortalController::class, 'updatePassword']);
+        Route::get('/dashboard', [PortalController::class, 'dashboard']);
+        Route::get('/attendance', [PortalController::class, 'attendance']);
+        Route::get('/payments', [PortalController::class, 'payments']);
+        Route::get('/grades', [PortalController::class, 'grades']);
+        Route::get('/schedule', [PortalController::class, 'schedule']);
+        Route::get('/announcements', [PortalController::class, 'announcements']);
+        Route::get('/announcements/{announcement}', [PortalController::class, 'showAnnouncement']);
+        Route::get('/children', [PortalController::class, 'children']);
+    });
 });
