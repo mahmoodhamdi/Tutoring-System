@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GroupController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -76,17 +79,37 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Sessions routes (Phase 5)
     Route::prefix('sessions')->group(function () {
-        // Routes will be added in Phase 5
+        Route::get('/', [SessionController::class, 'index']);
+        Route::get('/today', [SessionController::class, 'today']);
+        Route::get('/week', [SessionController::class, 'week']);
+        Route::get('/upcoming', [SessionController::class, 'upcoming']);
+        Route::post('/', [SessionController::class, 'store']);
+        Route::get('/{session}', [SessionController::class, 'show']);
+        Route::put('/{session}', [SessionController::class, 'update']);
+        Route::delete('/{session}', [SessionController::class, 'destroy']);
+        Route::post('/{session}/cancel', [SessionController::class, 'cancel']);
+        Route::post('/{session}/complete', [SessionController::class, 'complete']);
+        Route::get('/{session}/attendance', [AttendanceController::class, 'sessionAttendance']);
+        Route::post('/{session}/attendance', [AttendanceController::class, 'recordAttendance']);
     });
 
     // Attendance routes (Phase 6)
     Route::prefix('attendance')->group(function () {
-        // Routes will be added in Phase 6
+        Route::get('/', [AttendanceController::class, 'index']);
+        Route::get('/report', [AttendanceController::class, 'report']);
+        Route::put('/{attendance}', [AttendanceController::class, 'update']);
     });
 
     // Payments routes (Phase 7)
     Route::prefix('payments')->group(function () {
-        // Routes will be added in Phase 7
+        Route::get('/', [PaymentController::class, 'index']);
+        Route::get('/pending', [PaymentController::class, 'pending']);
+        Route::get('/overdue', [PaymentController::class, 'overdue']);
+        Route::get('/report', [PaymentController::class, 'report']);
+        Route::post('/', [PaymentController::class, 'store']);
+        Route::get('/{payment}', [PaymentController::class, 'show']);
+        Route::put('/{payment}', [PaymentController::class, 'update']);
+        Route::delete('/{payment}', [PaymentController::class, 'destroy']);
     });
 
     // Exams routes (Phase 8)
