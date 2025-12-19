@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -62,7 +63,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Groups routes (Phase 4)
     Route::prefix('groups')->group(function () {
-        // Routes will be added in Phase 4
+        Route::get('/', [GroupController::class, 'index']);
+        Route::post('/', [GroupController::class, 'store']);
+        Route::get('/{group}', [GroupController::class, 'show']);
+        Route::put('/{group}', [GroupController::class, 'update']);
+        Route::delete('/{group}', [GroupController::class, 'destroy']);
+        Route::post('/{group}/students', [GroupController::class, 'addStudents']);
+        Route::delete('/{group}/students/{student}', [GroupController::class, 'removeStudent']);
+        Route::get('/{group}/students', [GroupController::class, 'students']);
+        Route::get('/{group}/sessions', [GroupController::class, 'sessions']);
     });
 
     // Sessions routes (Phase 5)
