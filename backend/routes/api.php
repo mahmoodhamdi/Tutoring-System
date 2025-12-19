@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ExamController;
 use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\SessionController;
@@ -114,8 +115,23 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Exams routes (Phase 8)
     Route::prefix('exams')->group(function () {
-        // Routes will be added in Phase 8
+        Route::get('/', [ExamController::class, 'index']);
+        Route::get('/upcoming', [ExamController::class, 'upcoming']);
+        Route::get('/recent', [ExamController::class, 'recent']);
+        Route::post('/', [ExamController::class, 'store']);
+        Route::get('/{exam}', [ExamController::class, 'show']);
+        Route::put('/{exam}', [ExamController::class, 'update']);
+        Route::delete('/{exam}', [ExamController::class, 'destroy']);
+        Route::post('/{exam}/publish', [ExamController::class, 'publish']);
+        Route::post('/{exam}/cancel', [ExamController::class, 'cancel']);
+        Route::get('/{exam}/results', [ExamController::class, 'results']);
+        Route::post('/{exam}/results', [ExamController::class, 'recordResults']);
+        Route::put('/{exam}/results/{student}', [ExamController::class, 'updateResult']);
+        Route::get('/{exam}/statistics', [ExamController::class, 'statistics']);
     });
+
+    // Student Exams History
+    Route::get('/students/{student}/exams', [ExamController::class, 'studentExams']);
 
     // Quizzes routes (Phase 9)
     Route::prefix('quizzes')->group(function () {
