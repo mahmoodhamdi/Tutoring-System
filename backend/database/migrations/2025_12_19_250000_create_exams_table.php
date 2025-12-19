@@ -30,10 +30,13 @@ return new class extends Migration
             $table->foreignId('exam_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->decimal('marks_obtained', 5, 2)->nullable();
+            $table->decimal('obtained_marks', 5, 2)->nullable();
             $table->decimal('percentage', 5, 2)->nullable();
+            $table->boolean('is_passed')->nullable();
             $table->string('grade', 5)->nullable();
             $table->enum('status', ['pending', 'submitted', 'graded', 'absent'])->default('pending');
             $table->text('feedback')->nullable();
+            $table->text('notes')->nullable();
             $table->foreignId('graded_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamp('graded_at')->nullable();
             $table->timestamps();

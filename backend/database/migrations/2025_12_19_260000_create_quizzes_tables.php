@@ -26,6 +26,9 @@ return new class extends Migration
             $table->dateTime('available_from')->nullable();
             $table->dateTime('available_until')->nullable();
             $table->boolean('is_published')->default(false);
+            $table->boolean('is_active')->default(true);
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
             $table->timestamps();
         });
 
@@ -36,6 +39,8 @@ return new class extends Migration
             $table->text('question_text');
             $table->enum('question_type', ['multiple_choice', 'true_false', 'short_answer', 'essay'])->default('multiple_choice');
             $table->decimal('marks', 4, 2)->default(1);
+            $table->decimal('points', 4, 2)->default(1);
+            $table->unsignedInteger('order')->default(0);
             $table->unsignedInteger('order_index')->default(0);
             $table->text('explanation')->nullable();
             $table->timestamps();
@@ -48,6 +53,7 @@ return new class extends Migration
             $table->text('option_text');
             $table->boolean('is_correct')->default(false);
             $table->unsignedInteger('order_index')->default(0);
+            $table->unsignedInteger('order')->default(0);
             $table->timestamps();
         });
 
@@ -58,11 +64,13 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->dateTime('started_at');
             $table->dateTime('completed_at')->nullable();
+            $table->dateTime('submitted_at')->nullable();
+            $table->decimal('total_points', 5, 2)->nullable();
             $table->decimal('score', 5, 2)->nullable();
             $table->decimal('percentage', 5, 2)->nullable();
             $table->boolean('is_passed')->nullable();
             $table->unsignedInteger('time_taken_seconds')->nullable();
-            $table->enum('status', ['in_progress', 'completed', 'timed_out', 'abandoned'])->default('in_progress');
+            $table->enum('status', ['in_progress', 'completed', 'timed_out', 'abandoned', 'graded'])->default('in_progress');
             $table->timestamps();
         });
 

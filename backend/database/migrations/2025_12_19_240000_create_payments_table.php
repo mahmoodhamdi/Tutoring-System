@@ -16,11 +16,14 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('group_id')->nullable()->constrained()->onDelete('set null');
             $table->decimal('amount', 10, 2);
-            $table->date('payment_date');
-            $table->enum('payment_method', ['cash', 'bank_transfer', 'online'])->default('cash');
-            $table->enum('status', ['paid', 'pending', 'partial', 'refunded'])->default('pending');
-            $table->unsignedTinyInteger('period_month');
-            $table->unsignedSmallInteger('period_year');
+            $table->date('payment_date')->nullable();
+            $table->date('due_date')->nullable();
+            $table->dateTime('paid_at')->nullable();
+            $table->text('description')->nullable();
+            $table->enum('payment_method', ['cash', 'bank_transfer', 'online', 'card'])->nullable();
+            $table->enum('status', ['paid', 'pending', 'partial', 'refunded', 'overdue'])->default('pending');
+            $table->unsignedTinyInteger('period_month')->nullable();
+            $table->unsignedSmallInteger('period_year')->nullable();
             $table->text('notes')->nullable();
             $table->string('receipt_number', 50)->nullable();
             $table->foreignId('received_by')->nullable()->constrained('users')->onDelete('set null');
@@ -29,6 +32,7 @@ return new class extends Migration
             $table->index(['student_id', 'period_year', 'period_month']);
             $table->index('status');
             $table->index('payment_date');
+            $table->index('due_date');
         });
     }
 

@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('teacher_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('subject')->nullable();
             $table->string('grade_level', 50)->nullable();
             $table->unsignedInteger('max_students')->default(20);
             $table->decimal('monthly_fee', 10, 2)->default(0.00);
+            $table->decimal('fee_amount', 10, 2)->default(0.00);
             $table->text('schedule_description')->nullable();
+            $table->json('schedule')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
@@ -27,6 +30,7 @@ return new class extends Migration
             $table->index('is_active');
             $table->index('subject');
             $table->index('grade_level');
+            $table->index('teacher_id');
         });
     }
 

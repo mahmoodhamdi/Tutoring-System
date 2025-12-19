@@ -14,6 +14,9 @@ class ExamResult extends Model
         'exam_id',
         'student_id',
         'marks_obtained',
+        'obtained_marks',
+        'is_passed',
+        'notes',
         'percentage',
         'grade',
         'status',
@@ -70,7 +73,10 @@ class ExamResult extends Model
     public function scopePassed($query)
     {
         return $query->where('status', 'graded')
-            ->whereColumn('marks_obtained', '>=', function ($q) {
+            ->whereColumn('marks_obtained',
+        'obtained_marks',
+        'is_passed',
+        'notes', '>=', function ($q) {
                 $q->selectRaw('COALESCE(exams.pass_marks, exams.total_marks * 0.6)')
                     ->from('exams')
                     ->whereColumn('exams.id', 'exam_results.exam_id');

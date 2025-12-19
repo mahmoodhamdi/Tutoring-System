@@ -11,8 +11,14 @@ class Session extends Model
 {
     use HasFactory;
 
+    protected $table = 'tutoring_sessions';
+
     protected $fillable = [
         'group_id',
+        'session_date',
+        'start_time',
+        'end_time',
+        'topic',
         'title',
         'description',
         'scheduled_at',
@@ -25,6 +31,7 @@ class Session extends Model
     ];
 
     protected $casts = [
+        'session_date' => 'date',
         'scheduled_at' => 'datetime',
         'cancelled_at' => 'datetime',
         'duration_minutes' => 'integer',

@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Author
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade'); // Author
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('group_id')->nullable()->constrained()->onDelete('cascade'); // Null = all groups
             $table->string('title');
             $table->text('content');
-            $table->enum('priority', ['low', 'normal', 'high', 'urgent'])->default('normal');
+            $table->enum('priority', ['low', 'medium', 'normal', 'high', 'urgent'])->default('normal');
             $table->enum('type', ['general', 'schedule', 'exam', 'payment', 'event'])->default('general');
             $table->boolean('is_pinned')->default(false);
             $table->boolean('is_published')->default(false);
