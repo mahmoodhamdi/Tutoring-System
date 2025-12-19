@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ExamController;
 use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Http\Request;
@@ -135,7 +136,32 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Quizzes routes (Phase 9)
     Route::prefix('quizzes')->group(function () {
-        // Routes will be added in Phase 9
+        Route::get('/', [QuizController::class, 'index']);
+        Route::post('/', [QuizController::class, 'store']);
+        Route::get('/{quiz}', [QuizController::class, 'show']);
+        Route::put('/{quiz}', [QuizController::class, 'update']);
+        Route::delete('/{quiz}', [QuizController::class, 'destroy']);
+
+        // Publishing
+        Route::post('/{quiz}/publish', [QuizController::class, 'publish']);
+        Route::post('/{quiz}/unpublish', [QuizController::class, 'unpublish']);
+        Route::post('/{quiz}/duplicate', [QuizController::class, 'duplicate']);
+
+        // Questions management
+        Route::post('/{quiz}/questions', [QuizController::class, 'addQuestion']);
+        Route::put('/{quiz}/questions/{question}', [QuizController::class, 'updateQuestion']);
+        Route::delete('/{quiz}/questions/{question}', [QuizController::class, 'deleteQuestion']);
+        Route::post('/{quiz}/questions/reorder', [QuizController::class, 'reorderQuestions']);
+
+        // Quiz taking (student)
+        Route::post('/{quiz}/start', [QuizController::class, 'startAttempt'])->name('quizzes.start-attempt');
+        Route::post('/{quiz}/attempts/{attempt}/submit', [QuizController::class, 'submitAttempt']);
+        Route::get('/{quiz}/my-attempts', [QuizController::class, 'studentAttempts'])->name('quizzes.student-attempts');
+
+        // Attempts management (teacher)
+        Route::get('/{quiz}/attempts', [QuizController::class, 'allAttempts']);
+        Route::get('/{quiz}/attempts/{attempt}', [QuizController::class, 'showAttempt']);
+        Route::post('/{quiz}/attempts/{attempt}/answers/{answer}/grade', [QuizController::class, 'gradeAnswer']);
     });
 
     // Announcements routes (Phase 10)
