@@ -39,7 +39,7 @@ npm install
 
 Write-Host "Creating .env.local file..." -ForegroundColor Gray
 if (!(Test-Path ".env.local")) {
-    "NEXT_PUBLIC_API_URL=http://localhost:8000" | Out-File -FilePath ".env.local" -Encoding utf8
+    "NEXT_PUBLIC_API_URL=http://localhost:8001/api" | Out-File -FilePath ".env.local" -Encoding utf8
 }
 
 Write-Host "[OK] Frontend setup complete!" -ForegroundColor Green
@@ -53,11 +53,15 @@ Write-Host "To start the servers:" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Terminal 1 (Backend):" -ForegroundColor Yellow
 Write-Host "  cd D:\Tutoring-System\backend" -ForegroundColor White
-Write-Host "  php artisan serve" -ForegroundColor White
+Write-Host "  php artisan serve --port=8001" -ForegroundColor White
 Write-Host ""
 Write-Host "Terminal 2 (Frontend):" -ForegroundColor Yellow
 Write-Host "  cd D:\Tutoring-System\frontend" -ForegroundColor White
 Write-Host "  npm run dev" -ForegroundColor White
+Write-Host ""
+Write-Host "Or use the scripts:" -ForegroundColor Yellow
+Write-Host "  .\start-backend.ps1" -ForegroundColor White
+Write-Host "  .\start-frontend.ps1" -ForegroundColor White
 Write-Host ""
 Write-Host "Demo Login:" -ForegroundColor Cyan
 Write-Host "  Admin: admin@example.com / password" -ForegroundColor White
@@ -65,5 +69,5 @@ Write-Host "  Teacher: teacher@example.com / password" -ForegroundColor White
 Write-Host ""
 Write-Host "URLs:" -ForegroundColor Cyan
 Write-Host "  Frontend: http://localhost:3000" -ForegroundColor White
-Write-Host "  Backend API: http://localhost:8000" -ForegroundColor White
+Write-Host "  Backend API: http://localhost:8001" -ForegroundColor White
 Write-Host ""

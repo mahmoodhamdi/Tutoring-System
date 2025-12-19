@@ -1,7 +1,7 @@
 # Tutoring System - Project Links
 
 ## Servers
-- **Backend API**: http://localhost:8000
+- **Backend API**: http://localhost:8001
 - **Frontend**: http://localhost:3000
 
 ---
@@ -11,8 +11,10 @@
 ### Authentication
 | Page | URL |
 |------|-----|
+| Home | http://localhost:3000/ |
 | Login | http://localhost:3000/login |
 | Register | http://localhost:3000/register |
+| Forgot Password | http://localhost:3000/forgot-password |
 
 ### Dashboard (Admin/Teacher)
 | Page | URL |
@@ -22,60 +24,61 @@
 ### Students Management
 | Page | URL |
 |------|-----|
-| Students List | http://localhost:3000/students |
-| Add Student | http://localhost:3000/students/new |
-| Student Details | http://localhost:3000/students/[id] |
+| Students List | http://localhost:3000/dashboard/students |
+| Add Student | http://localhost:3000/dashboard/students/new |
+| Student Details | http://localhost:3000/dashboard/students/1 |
 
 ### Groups Management
 | Page | URL |
 |------|-----|
-| Groups List | http://localhost:3000/groups |
-| Add Group | http://localhost:3000/groups/new |
-| Group Details | http://localhost:3000/groups/[id] |
+| Groups List | http://localhost:3000/dashboard/groups |
+| Add Group | http://localhost:3000/dashboard/groups/new |
+| Group Details | http://localhost:3000/dashboard/groups/1 |
 
-### Sessions Management
+### Sessions/Schedule Management
 | Page | URL |
 |------|-----|
-| Sessions List | http://localhost:3000/sessions |
-| Add Session | http://localhost:3000/sessions/new |
-| Session Details | http://localhost:3000/sessions/[id] |
-
-### Attendance
-| Page | URL |
-|------|-----|
-| Attendance | http://localhost:3000/attendance |
+| Schedule | http://localhost:3000/dashboard/schedule |
+| Add Session | http://localhost:3000/dashboard/schedule/new |
+| Session Details | http://localhost:3000/dashboard/schedule/1 |
 
 ### Payments
 | Page | URL |
 |------|-----|
-| Payments List | http://localhost:3000/payments |
-| Add Payment | http://localhost:3000/payments/new |
+| Payments List | http://localhost:3000/dashboard/payments |
+| Add Payment | http://localhost:3000/dashboard/payments/new |
 
 ### Exams
 | Page | URL |
 |------|-----|
-| Exams List | http://localhost:3000/exams |
-| Add Exam | http://localhost:3000/exams/new |
-| Exam Details | http://localhost:3000/exams/[id] |
+| Exams List | http://localhost:3000/dashboard/exams |
+| Add Exam | http://localhost:3000/dashboard/exams/new |
+| Exam Details | http://localhost:3000/dashboard/exams/1 |
 
 ### Quizzes
 | Page | URL |
 |------|-----|
-| Quizzes List | http://localhost:3000/quizzes |
-| Add Quiz | http://localhost:3000/quizzes/new |
-| Quiz Details | http://localhost:3000/quizzes/[id] |
+| Quizzes List | http://localhost:3000/dashboard/quizzes |
+| Add Quiz | http://localhost:3000/dashboard/quizzes/new |
+| Quiz Details | http://localhost:3000/dashboard/quizzes/1 |
+| Take Quiz | http://localhost:3000/dashboard/quizzes/1/take |
 
 ### Announcements
 | Page | URL |
 |------|-----|
-| Announcements List | http://localhost:3000/announcements |
-| Add Announcement | http://localhost:3000/announcements/new |
-| Announcement Details | http://localhost:3000/announcements/[id] |
+| Announcements List | http://localhost:3000/dashboard/announcements |
+| Add Announcement | http://localhost:3000/dashboard/announcements/new |
+| Announcement Details | http://localhost:3000/dashboard/announcements/1 |
+
+### Notifications
+| Page | URL |
+|------|-----|
+| Notifications | http://localhost:3000/dashboard/notifications |
 
 ### Reports
 | Page | URL |
 |------|-----|
-| Reports | http://localhost:3000/reports |
+| Reports | http://localhost:3000/dashboard/reports |
 
 ---
 

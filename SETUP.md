@@ -40,11 +40,11 @@ php artisan migrate
 # Seed demo data (optional but recommended)
 php artisan db:seed
 
-# Start server
-php artisan serve
+# Start server on port 8001
+php artisan serve --port=8001
 ```
 
-Backend will be available at: http://localhost:8000
+Backend will be available at: http://localhost:8001
 
 ---
 
@@ -85,7 +85,7 @@ SESSION_DOMAIN=localhost
 
 ### Frontend (.env.local)
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8001/api
 ```
 
 ---
@@ -107,7 +107,7 @@ After running `php artisan db:seed`:
 
 ### Terminal 1 (Backend):
 ```powershell
-cd D:\Tutoring-System\backend && php artisan serve
+cd D:\Tutoring-System\backend && php artisan serve --port=8001
 ```
 
 ### Terminal 2 (Frontend):
@@ -126,5 +126,5 @@ Make sure `SANCTUM_STATEFUL_DOMAINS` includes `localhost:3000`
 Check MySQL is running and credentials in `.env` are correct
 
 ### API Not Working
-1. Check backend is running on port 8000
-2. Check `NEXT_PUBLIC_API_URL` in frontend `.env.local`
+1. Check backend is running on port 8001
+2. Check `NEXT_PUBLIC_API_URL` in frontend `.env.local` is set to `http://localhost:8001/api`
