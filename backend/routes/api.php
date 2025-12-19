@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ExamController;
@@ -166,7 +167,20 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Announcements routes (Phase 10)
     Route::prefix('announcements')->group(function () {
-        // Routes will be added in Phase 10
+        Route::get('/', [AnnouncementController::class, 'index']);
+        Route::get('/recent', [AnnouncementController::class, 'recent']);
+        Route::get('/unread', [AnnouncementController::class, 'unread']);
+        Route::get('/statistics', [AnnouncementController::class, 'statistics']);
+        Route::post('/', [AnnouncementController::class, 'store']);
+        Route::get('/{announcement}', [AnnouncementController::class, 'show']);
+        Route::put('/{announcement}', [AnnouncementController::class, 'update']);
+        Route::delete('/{announcement}', [AnnouncementController::class, 'destroy']);
+        Route::post('/{announcement}/publish', [AnnouncementController::class, 'publish']);
+        Route::post('/{announcement}/unpublish', [AnnouncementController::class, 'unpublish']);
+        Route::post('/{announcement}/pin', [AnnouncementController::class, 'pin']);
+        Route::post('/{announcement}/unpin', [AnnouncementController::class, 'unpin']);
+        Route::post('/{announcement}/read', [AnnouncementController::class, 'markAsRead']);
+        Route::post('/mark-all-read', [AnnouncementController::class, 'markAllAsRead']);
     });
 
     // Notifications routes (Phase 11)
