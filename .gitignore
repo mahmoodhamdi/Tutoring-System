@@ -20,6 +20,17 @@ yarn-error.log*
 .env.local
 .env.*.local
 
+# Credentials and tokens
+**/firebase-credentials.json
+**/service-account*.json
+**/credentials*.json
+**/*-key.json
+**/*-token.json
+**/secrets.json
+**/client_secret*.json
+**/*firebase-adminsdk*.json
+**/*-adminsdk-*.json
+
 # Dependencies (handled in subdirectories)
 node_modules/
 vendor/

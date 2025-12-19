@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -49,14 +50,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Students routes (Phase 3)
     Route::prefix('students')->group(function () {
-        // GET /api/students
-        // GET /api/students/{id}
-        // POST /api/students
-        // PUT /api/students/{id}
-        // DELETE /api/students/{id}
-        // GET /api/students/{id}/attendance
-        // GET /api/students/{id}/payments
-        // GET /api/students/{id}/grades
+        Route::get('/', [StudentController::class, 'index']);
+        Route::post('/', [StudentController::class, 'store']);
+        Route::get('/{student}', [StudentController::class, 'show']);
+        Route::put('/{student}', [StudentController::class, 'update']);
+        Route::delete('/{student}', [StudentController::class, 'destroy']);
+        Route::get('/{student}/attendance', [StudentController::class, 'attendance']);
+        Route::get('/{student}/payments', [StudentController::class, 'payments']);
+        Route::get('/{student}/grades', [StudentController::class, 'grades']);
     });
 
     // Groups routes (Phase 4)
