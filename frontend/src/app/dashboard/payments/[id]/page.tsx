@@ -73,13 +73,15 @@ export default function PaymentPage({ params }: PaymentPageProps) {
     );
   }
 
-  if (!payment) {
+  if (!payment?.data) {
     return (
       <div className="p-6">
         <Alert variant="error">الدفعة غير موجودة</Alert>
       </div>
     );
   }
+
+  const paymentData = payment.data;
 
   return (
     <div className="p-6">
@@ -101,14 +103,14 @@ export default function PaymentPage({ params }: PaymentPageProps) {
             <h1 className="text-2xl font-bold text-gray-900">تفاصيل الدفعة</h1>
             <span
               className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium mt-2 ${
-                statusColors[payment.status]
+                statusColors[paymentData.status]
               }`}
             >
-              {payment.status_label}
+              {paymentData.status_label}
             </span>
           </div>
           <div className="flex gap-2">
-            <Link href={`/dashboard/payments/${payment.id}/edit`}>
+            <Link href={`/dashboard/payments/${paymentData.id}/edit`}>
               <Button variant="outline">تعديل</Button>
             </Link>
             <Button
@@ -130,9 +132,9 @@ export default function PaymentPage({ params }: PaymentPageProps) {
           <div className="text-center pb-6 border-b border-gray-200">
             <CurrencyDollarIcon className="h-12 w-12 mx-auto text-primary-600 mb-2" />
             <p className="text-4xl font-bold text-gray-900">
-              {payment.amount.toLocaleString('ar-EG')} ج.م
+              {paymentData.amount.toLocaleString('ar-EG')} ج.م
             </p>
-            <p className="text-sm text-gray-500 mt-1">{payment.period}</p>
+            <p className="text-sm text-gray-500 mt-1">{paymentData.period}</p>
           </div>
 
           {/* Details Grid */}
@@ -141,17 +143,17 @@ export default function PaymentPage({ params }: PaymentPageProps) {
               <UserIcon className="h-5 w-5 text-gray-400 ml-3 mt-0.5" />
               <div>
                 <p className="text-sm text-gray-500">الطالب</p>
-                <p className="font-medium text-gray-900">{payment.student?.name}</p>
-                <p className="text-sm text-gray-500">{payment.student?.phone}</p>
+                <p className="font-medium text-gray-900">{paymentData.student?.name}</p>
+                <p className="text-sm text-gray-500">{paymentData.student?.phone}</p>
               </div>
             </div>
 
-            {payment.group && (
+            {paymentData.group && (
               <div className="flex items-start">
                 <DocumentTextIcon className="h-5 w-5 text-gray-400 ml-3 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-500">المجموعة</p>
-                  <p className="font-medium text-gray-900">{payment.group.name}</p>
+                  <p className="font-medium text-gray-900">{paymentData.group.name}</p>
                 </div>
               </div>
             )}
@@ -161,7 +163,7 @@ export default function PaymentPage({ params }: PaymentPageProps) {
               <div>
                 <p className="text-sm text-gray-500">تاريخ الدفع</p>
                 <p className="font-medium text-gray-900">
-                  {format(new Date(payment.payment_date), 'd MMMM yyyy', {
+                  {format(new Date(paymentData.payment_date), 'd MMMM yyyy', {
                     locale: arSA,
                   })}
                 </p>
@@ -173,30 +175,28 @@ export default function PaymentPage({ params }: PaymentPageProps) {
               <div>
                 <p className="text-sm text-gray-500">طريقة الدفع</p>
                 <p className="font-medium text-gray-900">
-                  {payment.payment_method_label || paymentMethodLabels[payment.payment_method]}
+                  {paymentData.payment_method_label || paymentMethodLabels[paymentData.payment_method]}
                 </p>
               </div>
             </div>
 
-            {payment.receipt_number && (
+            {paymentData.receipt_number && (
               <div className="flex items-start">
                 <DocumentTextIcon className="h-5 w-5 text-gray-400 ml-3 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-500">رقم الإيصال</p>
-                  <p className="font-medium text-gray-900">{payment.receipt_number}</p>
+                  <p className="font-medium text-gray-900">{paymentData.receipt_number}</p>
                 </div>
               </div>
             )}
 
-            {payment.received_by && (
+            {paymentData.received_by_user && (
               <div className="flex items-start">
                 <UserIcon className="h-5 w-5 text-gray-400 ml-3 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-500">استلمها</p>
                   <p className="font-medium text-gray-900">
-                    {typeof payment.received_by === 'object'
-                      ? payment.received_by.name
-                      : payment.received_by}
+                    {paymentData.received_by_user.name}
                   </p>
                 </div>
               </div>
@@ -204,10 +204,10 @@ export default function PaymentPage({ params }: PaymentPageProps) {
           </div>
 
           {/* Notes */}
-          {payment.notes && (
+          {paymentData.notes && (
             <div className="mt-6 pt-6 border-t border-gray-200">
               <p className="text-sm text-gray-500">ملاحظات</p>
-              <p className="mt-1 text-gray-900">{payment.notes}</p>
+              <p className="mt-1 text-gray-900">{paymentData.notes}</p>
             </div>
           )}
         </div>
@@ -217,14 +217,14 @@ export default function PaymentPage({ params }: PaymentPageProps) {
           <div className="flex items-center justify-between text-sm text-gray-500">
             <span>
               تم الإنشاء:{' '}
-              {format(new Date(payment.created_at), 'd MMMM yyyy h:mm a', {
+              {format(new Date(paymentData.created_at), 'd MMMM yyyy h:mm a', {
                 locale: arSA,
               })}
             </span>
-            {payment.updated_at !== payment.created_at && (
+            {paymentData.updated_at !== paymentData.created_at && (
               <span>
                 آخر تحديث:{' '}
-                {format(new Date(payment.updated_at), 'd MMMM yyyy h:mm a', {
+                {format(new Date(paymentData.updated_at), 'd MMMM yyyy h:mm a', {
                   locale: arSA,
                 })}
               </span>
@@ -236,14 +236,14 @@ export default function PaymentPage({ params }: PaymentPageProps) {
       {/* Quick Actions */}
       <div className="mt-6 flex gap-4">
         <Link
-          href={`/dashboard/students/${payment.student_id}`}
+          href={`/dashboard/students/${paymentData.student_id}`}
           className="flex-1 flex items-center justify-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
         >
           <UserIcon className="h-5 w-5 text-gray-400 ml-2" />
           <span className="font-medium text-gray-900">عرض ملف الطالب</span>
         </Link>
         <Link
-          href={`/dashboard/payments?student_id=${payment.student_id}`}
+          href={`/dashboard/payments?student_id=${paymentData.student_id}`}
           className="flex-1 flex items-center justify-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
         >
           <CurrencyDollarIcon className="h-5 w-5 text-gray-400 ml-2" />

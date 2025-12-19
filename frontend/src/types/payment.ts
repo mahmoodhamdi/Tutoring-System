@@ -46,6 +46,8 @@ export interface PaymentListParams {
   start_date?: string;
   end_date?: string;
   search?: string;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
 }
 
 export interface PaymentFormData {

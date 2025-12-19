@@ -50,7 +50,7 @@ export default function EditPaymentPage({ params }: EditPaymentPageProps) {
     );
   }
 
-  if (!payment) {
+  if (!payment?.data) {
     return (
       <div className="p-6">
         <Alert variant="error">الدفعة غير موجودة</Alert>
@@ -85,7 +85,7 @@ export default function EditPaymentPage({ params }: EditPaymentPageProps) {
 
       {/* Form */}
       <PaymentForm
-        payment={payment}
+        payment={payment.data}
         onSubmit={handleSubmit}
         isSubmitting={updatePayment.isPending}
       />

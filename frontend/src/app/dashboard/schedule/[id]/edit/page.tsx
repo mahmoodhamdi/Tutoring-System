@@ -50,13 +50,15 @@ export default function EditSessionPage({ params }: EditSessionPageProps) {
     );
   }
 
-  if (!session) {
+  if (!session?.data) {
     return (
       <div className="p-6">
         <Alert variant="error">الجلسة غير موجودة</Alert>
       </div>
     );
   }
+
+  const sessionData = session.data;
 
   return (
     <div className="p-6">
@@ -72,7 +74,7 @@ export default function EditSessionPage({ params }: EditSessionPageProps) {
           </Link>
           <span>/</span>
           <Link href={`/dashboard/schedule/${sessionId}`} className="hover:text-gray-700">
-            {session.title}
+            {sessionData.title}
           </Link>
           <span>/</span>
           <span className="text-gray-900">تعديل</span>
@@ -85,7 +87,7 @@ export default function EditSessionPage({ params }: EditSessionPageProps) {
 
       {/* Form */}
       <SessionForm
-        session={session}
+        session={sessionData}
         onSubmit={handleSubmit}
         isSubmitting={updateSession.isPending}
       />

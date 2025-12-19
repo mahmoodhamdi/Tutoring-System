@@ -1,5 +1,7 @@
 import { Group } from './group';
 
+export type SessionStatus = 'scheduled' | 'completed' | 'cancelled';
+
 export interface Session {
   id: number;
   group_id: number;
@@ -30,6 +32,8 @@ export interface SessionListParams {
   end_date?: string;
   date?: string;
   search?: string;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
 }
 
 export interface SessionFormData {

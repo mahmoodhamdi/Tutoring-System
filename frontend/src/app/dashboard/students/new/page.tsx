@@ -4,15 +4,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCreateStudent } from '@/hooks/useStudents';
 import { StudentForm } from '@/components/students';
-import { CreateStudentData } from '@/types/student';
+import { CreateStudentData, UpdateStudentData } from '@/types/student';
 
 export default function NewStudentPage() {
   const router = useRouter();
   const createStudent = useCreateStudent();
 
-  const handleSubmit = async (data: CreateStudentData) => {
+  const handleSubmit = async (data: CreateStudentData | UpdateStudentData) => {
     try {
-      await createStudent.mutateAsync(data);
+      await createStudent.mutateAsync(data as CreateStudentData);
       router.push('/dashboard/students');
     } catch {
       // Error is handled by the mutation

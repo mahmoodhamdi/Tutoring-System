@@ -1,4 +1,4 @@
-import api from './axios';
+import { apiClient } from './client';
 import type { DashboardData, QuickStats, RecentActivity } from '@/types/dashboard';
 
 export interface DashboardFilters {
@@ -13,19 +13,19 @@ export const dashboardApi = {
     if (filters?.start_date) params.append('start_date', filters.start_date);
     if (filters?.end_date) params.append('end_date', filters.end_date);
 
-    const response = await api.get(`/dashboard?${params.toString()}`);
+    const response = await apiClient.get(`/dashboard?${params.toString()}`);
     return response.data;
   },
 
   // Get quick stats for header/widgets
   getQuickStats: async (): Promise<QuickStats> => {
-    const response = await api.get('/dashboard/quick-stats');
+    const response = await apiClient.get('/dashboard/quick-stats');
     return response.data;
   },
 
   // Get recent activities
   getRecentActivities: async (limit: number = 10): Promise<RecentActivity[]> => {
-    const response = await api.get(`/dashboard/recent-activities?limit=${limit}`);
+    const response = await apiClient.get(`/dashboard/recent-activities?limit=${limit}`);
     return response.data;
   },
 };

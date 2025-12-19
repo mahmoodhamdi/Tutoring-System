@@ -10,6 +10,7 @@ import {
   useCompleteSession,
 } from '@/hooks/useSessions';
 import { useSessionAttendance, useRecordAttendance } from '@/hooks/useAttendance';
+import type { AttendanceStatus } from '@/types/attendance';
 import { Button } from '@/components/ui/Button';
 import { Alert } from '@/components/ui/Alert';
 import { AttendanceForm } from '@/components/attendance';
@@ -76,11 +77,11 @@ export default function SessionPage({ params }: SessionPageProps) {
     }
   };
 
-  const handleRecordAttendance = async (records: { student_id: number; status: string; notes?: string }[]) => {
+  const handleRecordAttendance = async (attendances: { student_id: number; status: AttendanceStatus; notes?: string }[]) => {
     try {
       await recordAttendance.mutateAsync({
         sessionId,
-        data: { records },
+        data: { attendances },
       });
     } catch {
       // Error is handled by the mutation
@@ -120,13 +121,15 @@ export default function SessionPage({ params }: SessionPageProps) {
     );
   }
 
-  if (!session) {
+  if (!session?.data) {
     return (
       <div className="p-6">
         <Alert variant="error">الجلسة غير موجودة</Alert>
       </div>
     );
   }
+
+  const sessionData = session.data;
 
   return (
     <div className="p-6">
@@ -141,21 +144,21 @@ export default function SessionPage({ params }: SessionPageProps) {
             الجدول
           </Link>
           <span>/</span>
-          <span className="text-gray-900">{session.title}</span>
+          <span className="text-gray-900">{sessionData.title}</span>
         </nav>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{session.title}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{sessionData.title}</h1>
             <span
               className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium mt-2 ${
-                statusColors[session.status]
+                statusColors[sessionData.status]
               }`}
             >
-              {statusLabels[session.status]}
+              {statusLabels[sessionData.status]}
             </span>
           </div>
           <div className="flex gap-2">
-            {session.status === 'scheduled' && (
+            {sessionData.status === 'scheduled' && (
               <>
                 <Button
                   variant="outline"
@@ -195,7 +198,7 @@ export default function SessionPage({ params }: SessionPageProps) {
                 <div>
                   <p className="text-sm text-gray-500">التاريخ</p>
                   <p className="font-medium">
-                    {format(new Date(session.scheduled_at), 'd MMMM yyyy', {
+                    {format(new Date(sessionData.scheduled_at), 'd MMMM yyyy', {
                       locale: arSA,
                     })}
                   </p>
@@ -207,7 +210,7 @@ export default function SessionPage({ params }: SessionPageProps) {
                 <div>
                   <p className="text-sm text-gray-500">الوقت</p>
                   <p className="font-medium">
-                    {format(new Date(session.scheduled_at), 'h:mm a', {
+                    {format(new Date(sessionData.scheduled_at), 'h:mm a', {
                       locale: arSA,
                     })}
                   </p>
@@ -218,16 +221,16 @@ export default function SessionPage({ params }: SessionPageProps) {
                 <ClockIcon className="h-5 w-5 text-gray-400 ml-2" />
                 <div>
                   <p className="text-sm text-gray-500">المدة</p>
-                  <p className="font-medium">{session.duration_minutes} دقيقة</p>
+                  <p className="font-medium">{sessionData.duration_minutes} دقيقة</p>
                 </div>
               </div>
 
-              {session.location && (
+              {sessionData.location && (
                 <div className="flex items-center">
                   <MapPinIcon className="h-5 w-5 text-gray-400 ml-2" />
                   <div>
                     <p className="text-sm text-gray-500">المكان</p>
-                    <p className="font-medium">{session.location}</p>
+                    <p className="font-medium">{sessionData.location}</p>
                   </div>
                 </div>
               )}
@@ -236,29 +239,29 @@ export default function SessionPage({ params }: SessionPageProps) {
                 <UserGroupIcon className="h-5 w-5 text-gray-400 ml-2" />
                 <div>
                   <p className="text-sm text-gray-500">المجموعة</p>
-                  <p className="font-medium">{session.group?.name}</p>
+                  <p className="font-medium">{sessionData.group?.name}</p>
                 </div>
               </div>
             </div>
 
-            {session.description && (
+            {sessionData.description && (
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <p className="text-sm text-gray-500">الوصف</p>
-                <p className="mt-1">{session.description}</p>
+                <p className="mt-1">{sessionData.description}</p>
               </div>
             )}
 
-            {session.notes && (
+            {sessionData.notes && (
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <p className="text-sm text-gray-500">ملاحظات</p>
-                <p className="mt-1">{session.notes}</p>
+                <p className="mt-1">{sessionData.notes}</p>
               </div>
             )}
 
-            {session.status === 'cancelled' && session.cancellation_reason && (
+            {sessionData.status === 'cancelled' && sessionData.cancellation_reason && (
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <p className="text-sm text-red-500">سبب الإلغاء</p>
-                <p className="mt-1 text-red-700">{session.cancellation_reason}</p>
+                <p className="mt-1 text-red-700">{sessionData.cancellation_reason}</p>
               </div>
             )}
           </div>
@@ -275,11 +278,10 @@ export default function SessionPage({ params }: SessionPageProps) {
                   <div key={i} className="h-10 bg-gray-200 rounded" />
                 ))}
               </div>
-            ) : session.status === 'scheduled' ? (
-              attendanceData?.students ? (
+            ) : sessionData.status === 'scheduled' ? (
+              attendanceData?.attendances?.length ? (
                 <AttendanceForm
-                  students={attendanceData.students}
-                  existingRecords={attendanceData.records}
+                  attendances={attendanceData.attendances}
                   onSubmit={handleRecordAttendance}
                   isSubmitting={recordAttendance.isPending}
                 />
@@ -288,24 +290,24 @@ export default function SessionPage({ params }: SessionPageProps) {
               )
             ) : (
               <div className="space-y-2">
-                {attendanceData?.records.map((record) => (
+                {attendanceData?.attendances?.map((attendance) => (
                   <div
-                    key={record.id}
+                    key={attendance.student_id}
                     className="flex items-center justify-between p-2 bg-gray-50 rounded"
                   >
-                    <span className="font-medium">{record.student?.name}</span>
+                    <span className="font-medium">{attendance.student_name}</span>
                     <span
                       className={`text-sm ${
-                        record.status === 'present'
+                        attendance.status === 'present'
                           ? 'text-green-600'
-                          : record.status === 'absent'
+                          : attendance.status === 'absent'
                           ? 'text-red-600'
-                          : record.status === 'late'
+                          : attendance.status === 'late'
                           ? 'text-yellow-600'
                           : 'text-gray-600'
                       }`}
                     >
-                      {record.status_label}
+                      {attendance.status}
                     </span>
                   </div>
                 ))}

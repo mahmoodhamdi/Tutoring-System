@@ -1,4 +1,4 @@
-import api from '../axios';
+import { apiClient } from './client';
 import {
   Student,
   StudentListParams,
@@ -15,7 +15,7 @@ export const studentsApi = {
    * Get list of students with optional filters
    */
   list: async (params?: StudentListParams): Promise<StudentListResponse> => {
-    const response = await api.get<StudentListResponse>('/students', { params });
+    const response = await apiClient.get<StudentListResponse>('/students', { params });
     return response.data;
   },
 
@@ -23,7 +23,7 @@ export const studentsApi = {
    * Get a single student by ID
    */
   get: async (id: number): Promise<Student> => {
-    const response = await api.get<{ data: Student }>(`/students/${id}`);
+    const response = await apiClient.get<{ data: Student }>(`/students/${id}`);
     return response.data.data;
   },
 
@@ -31,7 +31,7 @@ export const studentsApi = {
    * Create a new student
    */
   create: async (data: CreateStudentData): Promise<Student> => {
-    const response = await api.post<{ data: Student }>('/students', data);
+    const response = await apiClient.post<{ data: Student }>('/students', data);
     return response.data.data;
   },
 
@@ -39,7 +39,7 @@ export const studentsApi = {
    * Update an existing student
    */
   update: async (id: number, data: UpdateStudentData): Promise<Student> => {
-    const response = await api.put<{ data: Student }>(`/students/${id}`, data);
+    const response = await apiClient.put<{ data: Student }>(`/students/${id}`, data);
     return response.data.data;
   },
 
@@ -47,7 +47,7 @@ export const studentsApi = {
    * Delete a student
    */
   delete: async (id: number): Promise<void> => {
-    await api.delete(`/students/${id}`);
+    await apiClient.delete(`/students/${id}`);
   },
 
   /**
@@ -72,7 +72,7 @@ export const studentsApi = {
     };
     summary: AttendanceSummary;
   }> => {
-    const response = await api.get(`/students/${id}/attendance`, { params });
+    const response = await apiClient.get(`/students/${id}/attendance`, { params });
     return response.data;
   },
 
@@ -98,7 +98,7 @@ export const studentsApi = {
     };
     summary: PaymentSummary;
   }> => {
-    const response = await api.get(`/students/${id}/payments`, { params });
+    const response = await apiClient.get(`/students/${id}/payments`, { params });
     return response.data;
   },
 
@@ -123,7 +123,7 @@ export const studentsApi = {
     };
     summary: GradesSummary;
   }> => {
-    const response = await api.get(`/students/${id}/grades`, { params });
+    const response = await apiClient.get(`/students/${id}/grades`, { params });
     return response.data;
   },
 };

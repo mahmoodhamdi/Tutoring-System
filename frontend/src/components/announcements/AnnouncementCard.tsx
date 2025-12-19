@@ -9,12 +9,10 @@ import {
   AcademicCapIcon,
   CurrencyDollarIcon,
   StarIcon,
-  PinIcon,
   CheckCircleIcon,
   XCircleIcon,
   EyeIcon,
 } from '@heroicons/react/24/outline';
-import { PushPinIcon } from '@heroicons/react/24/solid';
 
 interface AnnouncementCardProps {
   announcement: Announcement;

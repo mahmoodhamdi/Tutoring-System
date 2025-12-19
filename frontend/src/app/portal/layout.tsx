@@ -37,7 +37,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const [selectedChild, setSelectedChild] = useState<number | undefined>();
 
   const { data: profile } = usePortalProfile();
-  const { data: children } = usePortalChildren();
+  const { data: portalChildren } = usePortalChildren();
 
   // Check authentication
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             </div>
 
             {/* Child Selector (for parents) */}
-            {isParent && children && children.length > 0 && (
+            {isParent && portalChildren && portalChildren.length > 0 && (
               <div className="hidden md:flex items-center gap-2">
                 <UsersIcon className="w-5 h-5 text-gray-400" />
                 <select
@@ -108,7 +108,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                   onChange={(e) => setSelectedChild(e.target.value ? parseInt(e.target.value) : undefined)}
                   className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
                 >
-                  {children.map((child) => (
+                  {portalChildren.map((child) => (
                     <option key={child.id} value={child.id}>
                       {child.name}
                     </option>
@@ -189,7 +189,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                   </button>
                 </div>
                 {/* Child Selector for mobile */}
-                {isParent && children && children.length > 0 && (
+                {isParent && portalChildren && portalChildren.length > 0 && (
                   <div className="mb-4 pb-4 border-b border-gray-200">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       اختر الطالب
@@ -199,7 +199,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                       onChange={(e) => setSelectedChild(e.target.value ? parseInt(e.target.value) : undefined)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                     >
-                      {children.map((child) => (
+                      {portalChildren.map((child) => (
                         <option key={child.id} value={child.id}>
                           {child.name}
                         </option>

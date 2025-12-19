@@ -32,7 +32,7 @@ export const registerSchema = z.object({
   phone: phoneSchema,
   password: passwordSchema,
   password_confirmation: z.string(),
-  role: z.enum(['teacher', 'student', 'parent']).default('student'),
+  role: z.enum(['teacher', 'student', 'parent']),
 }).refine((data) => data.password === data.password_confirmation, {
   message: 'Passwords do not match',
   path: ['password_confirmation'],

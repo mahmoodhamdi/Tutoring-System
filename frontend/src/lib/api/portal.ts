@@ -1,4 +1,4 @@
-import api from './axios';
+import { apiClient } from './client';
 import type {
   PortalLoginResponse,
   PortalProfile,
@@ -14,29 +14,29 @@ import type {
   PortalChild,
 } from '@/types/portal';
 import type { Announcement } from '@/types/announcement';
-import type { PaginatedResponse } from '@/types/api';
+import type { PaginatedResponse } from '@/types';
 
 export const portalApi = {
   // Login
   login: async (identifier: string, password: string): Promise<PortalLoginResponse> => {
-    const response = await api.post('/portal/login', { identifier, password });
+    const response = await apiClient.post('/portal/login', { identifier, password });
     return response.data;
   },
 
   // Logout
   logout: async (): Promise<void> => {
-    await api.post('/portal/logout');
+    await apiClient.post('/portal/logout');
   },
 
   // Get profile
   getProfile: async (): Promise<PortalProfile> => {
-    const response = await api.get('/portal/profile');
+    const response = await apiClient.get('/portal/profile');
     return response.data;
   },
 
   // Update password
   updatePassword: async (currentPassword: string, newPassword: string, newPasswordConfirmation: string): Promise<{ message: string }> => {
-    const response = await api.post('/portal/password', {
+    const response = await apiClient.post('/portal/password', {
       current_password: currentPassword,
       new_password: newPassword,
       new_password_confirmation: newPasswordConfirmation,
@@ -47,7 +47,7 @@ export const portalApi = {
   // Get dashboard
   getDashboard: async (studentId?: number): Promise<PortalDashboard> => {
     const params = studentId ? `?student_id=${studentId}` : '';
-    const response = await api.get(`/portal/dashboard${params}`);
+    const response = await apiClient.get(`/portal/dashboard${params}`);
     return response.data;
   },
 
@@ -70,7 +70,7 @@ export const portalApi = {
     if (params?.per_page) queryParams.append('per_page', params.per_page.toString());
     if (params?.page) queryParams.append('page', params.page.toString());
 
-    const response = await api.get(`/portal/attendance?${queryParams.toString()}`);
+    const response = await apiClient.get(`/portal/attendance?${queryParams.toString()}`);
     return response.data;
   },
 
@@ -91,7 +91,7 @@ export const portalApi = {
     if (params?.per_page) queryParams.append('per_page', params.per_page.toString());
     if (params?.page) queryParams.append('page', params.page.toString());
 
-    const response = await api.get(`/portal/payments?${queryParams.toString()}`);
+    const response = await apiClient.get(`/portal/payments?${queryParams.toString()}`);
     return response.data;
   },
 
@@ -102,7 +102,7 @@ export const portalApi = {
     quizzes: PortalQuizResult[];
   }> => {
     const params = studentId ? `?student_id=${studentId}` : '';
-    const response = await api.get(`/portal/grades${params}`);
+    const response = await apiClient.get(`/portal/grades${params}`);
     return response.data;
   },
 
@@ -120,7 +120,7 @@ export const portalApi = {
     if (params?.start_date) queryParams.append('start_date', params.start_date);
     if (params?.end_date) queryParams.append('end_date', params.end_date);
 
-    const response = await api.get(`/portal/schedule?${queryParams.toString()}`);
+    const response = await apiClient.get(`/portal/schedule?${queryParams.toString()}`);
     return response.data;
   },
 
@@ -136,19 +136,19 @@ export const portalApi = {
     if (params?.per_page) queryParams.append('per_page', params.per_page.toString());
     if (params?.page) queryParams.append('page', params.page.toString());
 
-    const response = await api.get(`/portal/announcements?${queryParams.toString()}`);
+    const response = await apiClient.get(`/portal/announcements?${queryParams.toString()}`);
     return response.data;
   },
 
   // Get single announcement
   getAnnouncement: async (id: number): Promise<Announcement> => {
-    const response = await api.get(`/portal/announcements/${id}`);
+    const response = await apiClient.get(`/portal/announcements/${id}`);
     return response.data;
   },
 
   // Get children (for parents)
   getChildren: async (): Promise<PortalChild[]> => {
-    const response = await api.get('/portal/children');
+    const response = await apiClient.get('/portal/children');
     return response.data;
   },
 };
