@@ -12,6 +12,7 @@ use App\Models\Quiz;
 use App\Models\QuizAttempt;
 use App\Models\Session;
 use App\Models\Student;
+use App\Services\PdfExportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -763,5 +764,163 @@ class ReportsController extends Controller
             'cancelled' => 'ملغي',
             default => $status,
         };
+    }
+
+    /**
+     * Export report to PDF
+     */
+    public function exportPdf(Request $request, PdfExportService $pdfService)
+    {
+        $request->validate([
+            'report_type' => 'required|in:attendance,payments,students,performance',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'group_id' => 'nullable|exists:groups,id',
+            'student_id' => 'nullable|exists:students,id',
+            'status' => 'nullable|string',
+        ]);
+
+        $reportType = $request->input('report_type');
+        $filters = $request->only(['start_date', 'end_date', 'group_id', 'student_id', 'status']);
+
+        // Add group name if group_id is provided
+        if (!empty($filters['group_id'])) {
+            $group = Group::find($filters['group_id']);
+            $filters['group_name'] = $group?->name;
+        }
+
+        // Add student name if student_id is provided
+        if (!empty($filters['student_id'])) {
+            $student = Student::find($filters['student_id']);
+            $filters['student_name'] = $student?->name;
+        }
+
+        $startDate = $request->input('start_date')
+            ? Carbon::parse($request->input('start_date'))
+            : Carbon::now()->startOfMonth();
+        $endDate = $request->input('end_date')
+            ? Carbon::parse($request->input('end_date'))
+            : Carbon::now();
+
+        switch ($reportType) {
+            case 'attendance':
+                $query = Attendance::with(['student:id,name', 'session:id,title,session_date,group_id', 'session.group:id,name'])
+                    ->whereHas('session', function ($q) use ($startDate, $endDate, $request) {
+                        $q->whereBetween('session_date', [$startDate, $endDate]);
+                        if ($request->group_id) {
+                            $q->where('group_id', $request->group_id);
+                        }
+                    });
+
+                if ($request->student_id) {
+                    $query->where('student_id', $request->student_id);
+                }
+                if ($request->status) {
+                    $query->where('status', $request->status);
+                }
+
+                $data = $query->orderBy('created_at', 'desc')->get();
+                $pdf = $pdfService->exportAttendanceReport($data, $filters);
+                break;
+
+            case 'payments':
+                $query = Payment::with(['student:id,name'])
+                    ->whereBetween('created_at', [$startDate, $endDate]);
+
+                if ($request->student_id) {
+                    $query->where('student_id', $request->student_id);
+                }
+                if ($request->status) {
+                    $query->where('status', $request->status);
+                }
+
+                $data = $query->orderBy('created_at', 'desc')->get();
+                $pdf = $pdfService->exportPaymentsReport($data, $filters);
+                break;
+
+            case 'students':
+                $query = Student::with(['groups:id,name']);
+
+                if ($request->status) {
+                    $query->where('status', $request->status);
+                }
+                if ($request->group_id) {
+                    $query->whereHas('groups', function ($q) use ($request) {
+                        $q->where('groups.id', $request->group_id);
+                    });
+                }
+
+                $data = $query->orderBy('name')->get();
+                $pdf = $pdfService->exportStudentsReport($data, $filters);
+                break;
+
+            case 'performance':
+                // Get exam results
+                $examResults = ExamResult::with(['student:id,name', 'exam:id,group_id', 'exam.group:id,name'])
+                    ->whereHas('exam', function ($q) use ($startDate, $endDate, $request) {
+                        $q->whereBetween('exam_date', [$startDate, $endDate]);
+                        if ($request->group_id) {
+                            $q->where('group_id', $request->group_id);
+                        }
+                    });
+
+                if ($request->student_id) {
+                    $examResults->where('student_id', $request->student_id);
+                }
+
+                $examResults = $examResults->get();
+
+                // Get quiz attempts
+                $quizAttempts = QuizAttempt::with(['student:id,name', 'quiz:id,group_id', 'quiz.group:id,name'])
+                    ->whereBetween('submitted_at', [$startDate, $endDate])
+                    ->where('status', 'graded');
+
+                if ($request->group_id) {
+                    $quizAttempts->whereHas('quiz', function ($q) use ($request) {
+                        $q->where('group_id', $request->group_id);
+                    });
+                }
+                if ($request->student_id) {
+                    $quizAttempts->where('student_id', $request->student_id);
+                }
+
+                $quizAttempts = $quizAttempts->get();
+
+                // Build performance data
+                $studentIds = $examResults->pluck('student_id')
+                    ->merge($quizAttempts->pluck('student_id'))
+                    ->unique();
+
+                $data = $studentIds->map(function ($studentId) use ($examResults, $quizAttempts) {
+                    $studentExams = $examResults->where('student_id', $studentId);
+                    $studentQuizzes = $quizAttempts->where('student_id', $studentId);
+                    $student = $studentExams->first()?->student ?? $studentQuizzes->first()?->student;
+
+                    $examAvg = $studentExams->count() > 0 ? round($studentExams->avg('percentage'), 1) : 0;
+                    $quizAvg = $studentQuizzes->count() > 0 ? round($studentQuizzes->avg('percentage'), 1) : 0;
+                    $count = ($examAvg > 0 ? 1 : 0) + ($quizAvg > 0 ? 1 : 0);
+                    $overallAvg = $count > 0 ? round(($examAvg + $quizAvg) / $count, 1) : 0;
+
+                    return (object) [
+                        'name' => $student?->name,
+                        'group_name' => $studentExams->first()?->exam?->group?->name ?? $studentQuizzes->first()?->quiz?->group?->name,
+                        'exam_count' => $studentExams->count(),
+                        'quiz_count' => $studentQuizzes->count(),
+                        'exam_average' => $examAvg,
+                        'quiz_average' => $quizAvg,
+                        'average_score' => $overallAvg,
+                    ];
+                });
+
+                $pdf = $pdfService->exportPerformanceReport(collect($data), $filters);
+                break;
+
+            default:
+                return response()->json(['message' => 'نوع التقرير غير مدعوم'], 400);
+        }
+
+        $filename = "report_{$reportType}_" . now()->format('Y-m-d') . ".pdf";
+
+        return $pdf->download($filename);
     }
 }

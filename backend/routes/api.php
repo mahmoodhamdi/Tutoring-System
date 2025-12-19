@@ -220,6 +220,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/sessions', [ReportsController::class, 'sessions']);
         Route::get('/financial-summary', [ReportsController::class, 'financialSummary']);
         Route::get('/export/csv', [ReportsController::class, 'exportCsv']);
+        Route::get('/export/pdf', [ReportsController::class, 'exportPdf']);
     });
 
     // Settings routes (Phase 14)
