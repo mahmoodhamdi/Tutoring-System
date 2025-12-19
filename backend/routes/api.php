@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\QuizController;
+use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Http\Request;
@@ -208,9 +209,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/recent-activities', [DashboardController::class, 'recentActivities']);
     });
 
-    // Reports routes (Phase 12)
+    // Reports routes (Phase 13)
     Route::prefix('reports')->group(function () {
-        // Routes will be added in Phase 12
+        Route::get('/types', [ReportsController::class, 'types']);
+        Route::get('/attendance', [ReportsController::class, 'attendance']);
+        Route::get('/payments', [ReportsController::class, 'payments']);
+        Route::get('/performance', [ReportsController::class, 'performance']);
+        Route::get('/students', [ReportsController::class, 'students']);
+        Route::get('/sessions', [ReportsController::class, 'sessions']);
+        Route::get('/financial-summary', [ReportsController::class, 'financialSummary']);
+        Route::get('/export/csv', [ReportsController::class, 'exportCsv']);
     });
 
     // Settings routes (Phase 14)
