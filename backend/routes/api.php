@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ExamController;
 use App\Http\Controllers\Api\GroupController;
 use App\Http\Controllers\Api\NotificationController;
@@ -202,7 +203,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Dashboard routes (Phase 12)
     Route::prefix('dashboard')->group(function () {
-        // Routes will be added in Phase 12
+        Route::get('/', [DashboardController::class, 'index']);
+        Route::get('/quick-stats', [DashboardController::class, 'quickStats']);
+        Route::get('/recent-activities', [DashboardController::class, 'recentActivities']);
     });
 
     // Reports routes (Phase 12)
