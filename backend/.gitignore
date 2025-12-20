@@ -5,7 +5,13 @@
 /public/storage
 /storage/*.key
 /storage/app/firebase-credentials.json
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+/bootstrap/cache/*
 /vendor
+/database/*.sqlite
 .env
 .env.backup
 .env.production
@@ -20,3 +26,4 @@ yarn-error.log
 /.idea
 /.vscode
 coverage/
+nul
