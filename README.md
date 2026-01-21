@@ -1,5 +1,9 @@
 # Tutoring Management System
 
+[![Backend CI](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/backend.yml/badge.svg)](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/backend.yml)
+[![Frontend CI](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/frontend.yml/badge.svg)](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/frontend.yml)
+[![E2E Tests](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/e2e.yml/badge.svg)](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/e2e.yml)
+
 A comprehensive Private Tutoring Management System for teachers giving private lessons. The system manages students, groups, sessions, attendance, payments, quizzes, announcements, and exam schedules.
 
 ## Features
@@ -22,6 +26,7 @@ A comprehensive Private Tutoring Management System for teachers giving private l
 - **Framework:** Laravel 11
 - **Authentication:** Laravel Sanctum
 - **Database:** MySQL
+- **Cache:** Redis
 - **PDF Generation:** DomPDF
 - **Excel Export:** Maatwebsite Excel
 - **Permissions:** Spatie Laravel Permission
@@ -34,6 +39,47 @@ A comprehensive Private Tutoring Management System for teachers giving private l
 - **Data Fetching:** TanStack React Query
 - **Forms:** React Hook Form + Zod
 - **UI Components:** Headless UI + Heroicons
+- **E2E Testing:** Playwright
+
+## Quick Start
+
+### Using Make (Recommended)
+
+```bash
+# Install all dependencies
+make install
+
+# Start development servers
+make dev
+```
+
+This will start:
+- Backend API at `http://localhost:8001`
+- Frontend at `http://localhost:3000`
+
+### Using Docker
+
+```bash
+# Copy environment file
+cp .env.docker.example .env.docker
+
+# Start all services
+make docker-up
+
+# Run migrations
+make docker-migrate
+
+# Seed database
+make docker-seed
+```
+
+Docker services:
+- Frontend: `http://localhost:3000`
+- API: `http://localhost/api`
+- MySQL: `localhost:3306`
+- Redis: `localhost:6379`
+
+See [Docker Setup](#docker-setup) for more details.
 
 ## Project Structure
 
@@ -64,22 +110,27 @@ Tutoring-System/
 │   │   ├── lib/            # Utilities
 │   │   ├── store/          # Zustand stores
 │   │   └── types/          # TypeScript types
-│   └── __tests__/
+│   ├── e2e/                # Playwright E2E tests
+│   └── __tests__/          # Unit tests
+├── docker/                  # Docker configuration
 ├── docs/                    # Documentation
-├── CHECKLIST.md            # Development progress
-├── CLAUDE.md               # Claude Code instructions
+├── scripts/                 # Utility scripts
+├── .github/workflows/       # CI/CD pipelines
+├── Makefile                # Common commands
+├── docker-compose.yml      # Docker orchestration
 └── README.md
 ```
 
 ## Prerequisites
 
 - PHP 8.2+
-- Composer
+- Composer 2.x
 - Node.js 18+
-- npm or yarn
+- npm 9+
 - MySQL 8.0+
+- Redis (optional, for caching)
 
-## Installation
+## Manual Installation
 
 ### Backend Setup
 
@@ -110,7 +161,7 @@ php artisan migrate
 php artisan db:seed
 
 # Start development server
-php artisan serve
+php artisan serve --port=8001
 ```
 
 ### Frontend Setup
@@ -119,19 +170,103 @@ php artisan serve
 cd frontend
 
 # Install dependencies
-npm install
+npm ci
 
 # Copy environment file
 cp .env.example .env.local
 
 # Configure API URL in .env.local
-# NEXT_PUBLIC_API_URL=http://localhost:8000/api
+# NEXT_PUBLIC_API_URL=http://localhost:8001/api
 
 # Start development server
 npm run dev
 ```
 
+## Docker Setup
+
+### Prerequisites
+- Docker 20+
+- Docker Compose 2+
+
+### Configuration
+
+1. Copy the Docker environment file:
+   ```bash
+   cp .env.docker.example .env.docker
+   ```
+
+2. Update the environment variables in `.env.docker`
+
+### Starting Services
+
+```bash
+# Start all services in background
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
+
+### Docker Commands
+
+```bash
+# Build images
+make docker-build
+
+# Run migrations
+make docker-migrate
+
+# Seed database
+make docker-seed
+
+# Fresh migrate and seed
+make docker-fresh
+
+# Open shell in backend container
+make docker-shell
+
+# Run artisan commands
+docker-compose exec backend php artisan <command>
+```
+
+### Services
+
+| Service | Port | Description |
+|---------|------|-------------|
+| nginx | 80, 443 | Web server & reverse proxy |
+| backend | 9000 | Laravel PHP-FPM |
+| frontend | 3000 | Next.js application |
+| mysql | 3306 | MySQL database |
+| redis | 6379 | Redis cache |
+| queue | - | Laravel queue worker |
+| scheduler | - | Laravel scheduler |
+
 ## Development
+
+### Available Commands
+
+```bash
+# Show all available commands
+make help
+
+# Install dependencies
+make install
+
+# Start development servers
+make dev
+
+# Run all tests
+make test
+
+# Run linters
+make lint
+
+# Fresh database
+make fresh
+```
 
 ### Running Tests
 
@@ -151,6 +286,13 @@ npm run test:watch        # Run in watch mode
 npm run test:coverage     # Run with coverage
 ```
 
+**E2E Tests:**
+```bash
+cd frontend
+npm run test:e2e          # Run Playwright tests
+npm run test:e2e:ui       # Run with UI
+```
+
 ### Code Quality
 
 **Backend:**
@@ -164,11 +306,31 @@ cd backend
 cd frontend
 npm run lint              # Run ESLint
 npm run lint -- --fix     # Fix linting issues
+npm run type-check        # TypeScript check
 ```
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment.
+
+### Workflows
+
+| Workflow | Trigger | Description |
+|----------|---------|-------------|
+| `backend.yml` | Push to backend/ | Run PHP tests, Pint, PHPStan |
+| `frontend.yml` | Push to frontend/ | Run lint, type-check, tests, build |
+| `e2e.yml` | Push to main | Run Playwright E2E tests |
+| `deploy.yml` | Push to main | Deploy to production |
+
+### Status Badges
+
+See the badges at the top of this README for current CI status.
 
 ## API Documentation
 
-The API follows RESTful conventions with the following main endpoints:
+The API follows RESTful conventions. Full documentation is available at `/api/documentation` when running the application.
+
+### Main Endpoints
 
 - `/api/auth/*` - Authentication (login, register, logout)
 - `/api/students/*` - Student management
@@ -192,7 +354,7 @@ The API follows RESTful conventions with the following main endpoints:
 APP_NAME="Tutoring System"
 APP_ENV=local
 APP_DEBUG=true
-APP_URL=http://localhost:8000
+APP_URL=http://localhost:8001
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -201,23 +363,43 @@ DB_DATABASE=tutoring_system
 DB_USERNAME=root
 DB_PASSWORD=
 
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+
 SANCTUM_STATEFUL_DOMAINS=localhost:3000
 SESSION_DOMAIN=localhost
 ```
 
 ### Frontend (.env.local)
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
+NEXT_PUBLIC_API_URL=http://localhost:8001/api
 NEXT_PUBLIC_APP_NAME="Tutoring System"
 ```
 
+## Deployment
+
+For production deployment instructions, see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+The deployment guide covers:
+- Server requirements and setup
+- SSL configuration with Let's Encrypt
+- Nginx configuration
+- Queue workers with Supervisor
+- PM2 process management
+- Backup strategies
+- Security hardening
+- Monitoring and logging
+- Troubleshooting
+
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
+- Setting up your development environment
+- Branch naming conventions
+- Commit message format
+- Pull request process
+- Coding standards
+- Testing requirements
 
 ## License
 
@@ -225,4 +407,7 @@ This project is licensed under the MIT License.
 
 ## Support
 
-For support, please open an issue in the GitHub repository.
+For support:
+- Open an issue in the GitHub repository
+- Check existing issues and documentation
+- See [docs/](docs/) for additional documentation

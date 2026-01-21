@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
+  // Output mode for Docker optimization
+  output: 'standalone',
+
   // Performance optimizations
   poweredByHeader: false,
   reactStrictMode: true,

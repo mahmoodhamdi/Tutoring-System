@@ -34,3 +34,11 @@ yarn-error.log*
 # Dependencies (handled in subdirectories)
 node_modules/
 vendor/
+
+# Docker
+docker-compose.override.yml
+.env.docker
+docker/data/
+docker/nginx/ssl/*.pem
+docker/nginx/ssl/*.key
+docker/mysql/init/
