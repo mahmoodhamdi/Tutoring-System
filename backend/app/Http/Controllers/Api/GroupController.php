@@ -97,6 +97,20 @@ class GroupController extends Controller
      */
     public function destroy(Group $group): JsonResponse
     {
+        // Only teachers can delete groups
+        if (!auth()->user()->isTeacher()) {
+            return response()->json([
+                'message' => 'غير مصرح لك بحذف المجموعات',
+            ], 403);
+        }
+
+        // Check if group has active students
+        if ($group->activeStudents()->exists()) {
+            return response()->json([
+                'message' => 'لا يمكن حذف المجموعة لأنها تحتوي على طلاب نشطين',
+            ], 422);
+        }
+
         $group->delete();
 
         return response()->json([
@@ -160,15 +174,26 @@ class GroupController extends Controller
      */
     public function removeStudent(Group $group, User $student): JsonResponse
     {
+        // Only teachers can remove students
+        if (!auth()->user()->isTeacher()) {
+            return response()->json([
+                'message' => 'غير مصرح لك بإزالة الطلاب',
+            ], 403);
+        }
+
         if ($student->role !== 'student') {
             return response()->json([
                 'message' => 'المستخدم المحدد ليس طالباً',
             ], 422);
         }
 
-        $exists = $group->students()->where('users.id', $student->id)->exists();
+        // Check if student is an active member of the group
+        $isActiveMember = $group->students()
+            ->where('users.id', $student->id)
+            ->wherePivot('is_active', true)
+            ->exists();
 
-        if (!$exists) {
+        if (!$isActiveMember) {
             return response()->json([
                 'message' => 'الطالب غير موجود في هذه المجموعة',
             ], 404);
@@ -194,14 +219,22 @@ class GroupController extends Controller
     public function students(Group $group, Request $request): AnonymousResourceCollection
     {
         $query = $group->students()
-            ->with('studentProfile')
-            ->when($request->is_active !== null, function ($q) use ($request) {
+            ->with('studentProfile');
+
+        // Handle include_inactive parameter
+        $includeInactive = filter_var($request->include_inactive, FILTER_VALIDATE_BOOLEAN);
+
+        if (!$includeInactive) {
+            // By default, only show active students unless include_inactive=true
+            if ($request->is_active !== null) {
                 $active = filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN);
-                $q->wherePivot('is_active', $active);
-            }, function ($q) {
-                // Default to active students only
-                $q->wherePivot('is_active', true);
-            })
+                $query->wherePivot('is_active', $active);
+            } else {
+                $query->wherePivot('is_active', true);
+            }
+        }
+
+        $query
             ->when($request->search, function ($q, $search) {
                 $q->where(function ($query) use ($search) {
                     $query->where('name', 'like', "%{$search}%")

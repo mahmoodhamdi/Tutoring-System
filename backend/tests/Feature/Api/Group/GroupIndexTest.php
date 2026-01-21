@@ -87,9 +87,21 @@ class GroupIndexTest extends TestCase
 
     public function test_can_search_groups_by_name(): void
     {
-        Group::factory()->create(['name' => 'الرياضيات للصف الأول']);
-        Group::factory()->create(['name' => 'اللغة العربية للصف الثاني']);
-        Group::factory()->create(['name' => 'العلوم للصف الثالث']);
+        Group::factory()->create([
+            'name' => 'الرياضيات للصف الأول',
+            'subject' => 'رياضيات',
+            'description' => 'مجموعة رياضيات',
+        ]);
+        Group::factory()->create([
+            'name' => 'اللغة العربية للصف الثاني',
+            'subject' => 'عربي',
+            'description' => 'مجموعة عربي',
+        ]);
+        Group::factory()->create([
+            'name' => 'العلوم للصف الثالث',
+            'subject' => 'علوم',
+            'description' => 'مجموعة علوم',
+        ]);
 
         Sanctum::actingAs($this->teacher);
 

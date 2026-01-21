@@ -65,7 +65,7 @@ class GroupShowTest extends TestCase
             ->assertJsonPath('data.subject', 'الرياضيات')
             ->assertJsonPath('data.grade_level', 'الصف الأول')
             ->assertJsonPath('data.max_students', 20)
-            ->assertJsonPath('data.monthly_fee', 300.00);
+            ->assertJsonPath('data.monthly_fee', 300);
     }
 
     public function test_student_can_view_group(): void

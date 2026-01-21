@@ -12,7 +12,7 @@ class ExamResultFactory extends Factory
     {
         return [
             'exam_id' => Exam::factory(),
-            'student_id' => User::factory(),
+            'student_id' => User::factory()->state(['role' => 'student']),
             'marks_obtained' => null,
             'percentage' => null,
             'grade' => null,
@@ -26,9 +26,18 @@ class ExamResultFactory extends Factory
     public function graded(): static
     {
         return $this->state(function (array $attributes) {
-            $exam = Exam::find($attributes['exam_id']) ?? Exam::factory()->create();
-            $marks = $this->faker->randomFloat(2, 0, $exam->total_marks);
-            $percentage = ($marks / $exam->total_marks) * 100;
+            $examId = $attributes['exam_id'];
+            if ($examId instanceof \Illuminate\Database\Eloquent\Factories\Factory) {
+                $exam = $examId->create();
+            } elseif ($examId instanceof Exam) {
+                $exam = $examId;
+            } else {
+                $exam = Exam::find($examId) ?? Exam::factory()->create();
+            }
+
+            $totalMarks = $exam->total_marks ?? 100;
+            $marks = $this->faker->randomFloat(2, 0, $totalMarks);
+            $percentage = ($marks / $totalMarks) * 100;
             $grade = match (true) {
                 $percentage >= 95 => 'A+',
                 $percentage >= 90 => 'A',
@@ -41,11 +50,12 @@ class ExamResultFactory extends Factory
             };
 
             return [
+                'exam_id' => $exam->id,
                 'marks_obtained' => $marks,
                 'percentage' => round($percentage, 2),
                 'grade' => $grade,
                 'status' => 'graded',
-                'graded_by' => User::factory(),
+                'graded_by' => User::factory()->state(['role' => 'teacher']),
                 'graded_at' => now(),
             ];
         });
@@ -71,12 +81,22 @@ class ExamResultFactory extends Factory
     public function passed(): static
     {
         return $this->state(function (array $attributes) {
-            $exam = Exam::find($attributes['exam_id']) ?? Exam::factory()->create();
-            $passMarks = $exam->pass_marks ?? ($exam->total_marks * 0.6);
-            $marks = $this->faker->randomFloat(2, $passMarks, $exam->total_marks);
-            $percentage = ($marks / $exam->total_marks) * 100;
+            $examId = $attributes['exam_id'];
+            if ($examId instanceof \Illuminate\Database\Eloquent\Factories\Factory) {
+                $exam = $examId->create();
+            } elseif ($examId instanceof Exam) {
+                $exam = $examId;
+            } else {
+                $exam = Exam::find($examId) ?? Exam::factory()->create();
+            }
+
+            $totalMarks = $exam->total_marks ?? 100;
+            $passMarks = $exam->pass_marks ?? ($totalMarks * 0.6);
+            $marks = $this->faker->randomFloat(2, $passMarks, $totalMarks);
+            $percentage = ($marks / $totalMarks) * 100;
 
             return [
+                'exam_id' => $exam->id,
                 'marks_obtained' => $marks,
                 'percentage' => round($percentage, 2),
                 'grade' => match (true) {
@@ -89,7 +109,7 @@ class ExamResultFactory extends Factory
                     default => 'D',
                 },
                 'status' => 'graded',
-                'graded_by' => User::factory(),
+                'graded_by' => User::factory()->state(['role' => 'teacher']),
                 'graded_at' => now(),
             ];
         });

@@ -51,6 +51,14 @@ class StudentResource extends JsonResource
             }),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
+            'pivot' => $this->when($this->pivot, function () {
+                return [
+                    'joined_at' => $this->pivot->joined_at,
+                    'left_at' => $this->pivot->left_at,
+                    'is_active' => (bool) $this->pivot->is_active,
+                    'notes' => $this->pivot->notes,
+                ];
+            }),
         ];
     }
 }

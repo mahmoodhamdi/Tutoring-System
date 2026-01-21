@@ -10,7 +10,6 @@ use App\Models\Payment;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
 use App\Models\Session;
-use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -20,20 +19,20 @@ class DashboardTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected User $user;
+    protected User $teacher;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create();
-        Sanctum::actingAs($this->user);
+        $this->teacher = User::factory()->teacher()->create();
+        Sanctum::actingAs($this->teacher);
     }
 
     public function test_can_get_dashboard_stats(): void
     {
         // Create test data
-        $group = Group::factory()->create();
-        $students = Student::factory()->count(5)->create(['status' => 'active']);
+        $group = Group::factory()->create(['teacher_id' => $this->teacher->id]);
+        $students = User::factory()->student()->count(5)->create();
         $group->students()->attach($students->pluck('id'));
 
         $session = Session::factory()->create([
@@ -51,6 +50,7 @@ class DashboardTest extends TestCase
 
             Payment::factory()->create([
                 'student_id' => $student->id,
+                'group_id' => $group->id,
                 'status' => 'paid',
             ]);
         }
@@ -127,7 +127,7 @@ class DashboardTest extends TestCase
         $thisMonth = now();
 
         // Create old payment
-        $student = Student::factory()->create();
+        $student = User::factory()->student()->create();
         Payment::factory()->create([
             'student_id' => $student->id,
             'status' => 'paid',
@@ -156,13 +156,15 @@ class DashboardTest extends TestCase
     public function test_can_get_quick_stats(): void
     {
         // Create today's session
+        $group = Group::factory()->create(['teacher_id' => $this->teacher->id]);
         Session::factory()->create([
+            'group_id' => $group->id,
             'session_date' => now()->toDateString(),
             'status' => 'scheduled',
         ]);
 
         // Create pending payment
-        $student = Student::factory()->create();
+        $student = User::factory()->student()->create();
         Payment::factory()->create([
             'student_id' => $student->id,
             'status' => 'pending',
@@ -193,8 +195,8 @@ class DashboardTest extends TestCase
 
     public function test_can_get_recent_activities(): void
     {
-        $group = Group::factory()->create();
-        $student = Student::factory()->create();
+        $group = Group::factory()->create(['teacher_id' => $this->teacher->id]);
+        $student = User::factory()->student()->create();
 
         // Create session
         Session::factory()->create([
@@ -234,8 +236,8 @@ class DashboardTest extends TestCase
 
     public function test_attendance_stats_calculation(): void
     {
-        $group = Group::factory()->create();
-        $students = Student::factory()->count(4)->create();
+        $group = Group::factory()->create(['teacher_id' => $this->teacher->id]);
+        $students = User::factory()->student()->count(4)->create();
         $group->students()->attach($students->pluck('id'));
 
         $session = Session::factory()->create([
@@ -277,7 +279,7 @@ class DashboardTest extends TestCase
 
     public function test_payment_stats_calculation(): void
     {
-        $student = Student::factory()->create();
+        $student = User::factory()->student()->create();
 
         Payment::factory()->create([
             'student_id' => $student->id,
@@ -307,8 +309,8 @@ class DashboardTest extends TestCase
 
     public function test_performance_stats_calculation(): void
     {
-        $group = Group::factory()->create();
-        $students = Student::factory()->count(2)->create();
+        $group = Group::factory()->create(['teacher_id' => $this->teacher->id]);
+        $students = User::factory()->student()->count(2)->create();
         $group->students()->attach($students->pluck('id'));
 
         $exam = Exam::factory()->create([
@@ -347,8 +349,6 @@ class DashboardTest extends TestCase
 
     public function test_requires_authentication(): void
     {
-        // Remove authentication
-        Sanctum::actingAs(null);
         $this->app['auth']->forgetGuards();
 
         $response = $this->getJson('/api/dashboard');

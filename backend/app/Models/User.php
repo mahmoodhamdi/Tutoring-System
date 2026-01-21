@@ -159,6 +159,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Override the default notifications relationship to use our custom Notification model
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+
+    /**
      * Scope to filter only students
      */
     public function scopeStudents($query)

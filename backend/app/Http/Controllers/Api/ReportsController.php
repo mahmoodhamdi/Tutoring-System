@@ -11,7 +11,7 @@ use App\Models\Payment;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
 use App\Models\Session;
-use App\Models\Student;
+use App\Models\User;
 use App\Services\PdfExportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -73,7 +73,7 @@ class ReportsController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'group_id' => 'nullable|exists:groups,id',
-            'student_id' => 'nullable|exists:students,id',
+            'student_id' => 'nullable|exists:users,id',
             'status' => 'nullable|in:present,absent,late,excused',
         ]);
 
@@ -166,7 +166,7 @@ class ReportsController extends Controller
         $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'student_id' => 'nullable|exists:students,id',
+            'student_id' => 'nullable|exists:users,id',
             'status' => 'nullable|in:paid,pending,overdue,cancelled',
             'payment_method' => 'nullable|string',
         ]);
@@ -270,7 +270,7 @@ class ReportsController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'group_id' => 'nullable|exists:groups,id',
-            'student_id' => 'nullable|exists:students,id',
+            'student_id' => 'nullable|exists:users,id',
         ]);
 
         $startDate = $request->input('start_date')
@@ -414,10 +414,18 @@ class ReportsController extends Controller
             'grade_level' => 'nullable|string',
         ]);
 
-        $query = Student::with(['groups:id,name']);
+        $query = User::students()->with(['groups:id,name', 'studentProfile']);
 
         if ($request->status) {
-            $query->where('status', $request->status);
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            } elseif ($request->status === 'graduated') {
+                $query->whereHas('studentProfile', function ($q) {
+                    $q->where('status', 'graduated');
+                });
+            }
         }
 
         if ($request->group_id) {
@@ -427,21 +435,28 @@ class ReportsController extends Controller
         }
 
         if ($request->grade_level) {
-            $query->where('grade_level', $request->grade_level);
+            $query->whereHas('studentProfile', function ($q) use ($request) {
+                $q->where('grade_level', $request->grade_level);
+            });
         }
 
         $students = $query->orderBy('name')->get();
 
         // Summary
+        $allStudents = User::students()->with('studentProfile')->get();
         $summary = [
             'total' => $students->count(),
-            'active' => $students->where('status', 'active')->count(),
-            'inactive' => $students->where('status', 'inactive')->count(),
-            'graduated' => $students->where('status', 'graduated')->count(),
+            'active' => $allStudents->where('is_active', true)->count(),
+            'inactive' => $allStudents->where('is_active', false)->count(),
+            'graduated' => $allStudents->filter(function ($s) {
+                return $s->studentProfile?->status === 'graduated';
+            })->count(),
         ];
 
         // By grade level
-        $byGrade = $students->groupBy('grade_level')->map(function ($items, $grade) {
+        $byGrade = $students->groupBy(function ($student) {
+            return $student->studentProfile?->grade_level ?? 'غير محدد';
+        })->map(function ($items, $grade) {
             return [
                 'grade_level' => $grade,
                 'count' => $items->count(),
@@ -459,13 +474,13 @@ class ReportsController extends Controller
                     'name' => $s->name,
                     'email' => $s->email,
                     'phone' => $s->phone,
-                    'grade_level' => $s->grade_level,
-                    'status' => $s->status,
-                    'status_label' => $this->getStudentStatusLabel($s->status),
+                    'grade_level' => $s->studentProfile?->grade_level,
+                    'status' => $s->is_active ? 'active' : 'inactive',
+                    'status_label' => $this->getStudentStatusLabel($s->is_active ? 'active' : 'inactive'),
                     'groups' => $s->groups->pluck('name')->join(', '),
-                    'parent_name' => $s->parent_name,
-                    'parent_phone' => $s->parent_phone,
-                    'enrollment_date' => $s->enrollment_date?->toDateString(),
+                    'parent_name' => $s->studentProfile?->parent?->name,
+                    'parent_phone' => $s->studentProfile?->parent?->phone,
+                    'enrollment_date' => $s->studentProfile?->enrollment_date,
                     'created_at' => $s->created_at->toDateString(),
                 ];
             }),
@@ -776,7 +791,7 @@ class ReportsController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'group_id' => 'nullable|exists:groups,id',
-            'student_id' => 'nullable|exists:students,id',
+            'student_id' => 'nullable|exists:users,id',
             'status' => 'nullable|string',
         ]);
 
@@ -791,7 +806,7 @@ class ReportsController extends Controller
 
         // Add student name if student_id is provided
         if (!empty($filters['student_id'])) {
-            $student = Student::find($filters['student_id']);
+            $student = User::find($filters['student_id']);
             $filters['student_name'] = $student?->name;
         }
 
@@ -839,10 +854,14 @@ class ReportsController extends Controller
                 break;
 
             case 'students':
-                $query = Student::with(['groups:id,name']);
+                $query = User::students()->with(['groups:id,name', 'studentProfile']);
 
                 if ($request->status) {
-                    $query->where('status', $request->status);
+                    if ($request->status === 'active') {
+                        $query->where('is_active', true);
+                    } elseif ($request->status === 'inactive') {
+                        $query->where('is_active', false);
+                    }
                 }
                 if ($request->group_id) {
                     $query->whereHas('groups', function ($q) use ($request) {

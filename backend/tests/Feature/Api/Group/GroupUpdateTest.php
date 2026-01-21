@@ -85,7 +85,7 @@ class GroupUpdateTest extends TestCase
             ->assertJsonPath('data.subject', 'الفيزياء')
             ->assertJsonPath('data.grade_level', 'الصف الثاني الثانوي')
             ->assertJsonPath('data.max_students', 30)
-            ->assertJsonPath('data.monthly_fee', 400.00)
+            ->assertJsonPath('data.monthly_fee', 400)
             ->assertJsonPath('data.schedule_description', 'كل سبت من 2 إلى 4 مساءً');
     }
 
@@ -223,7 +223,7 @@ class GroupUpdateTest extends TestCase
             ->assertJsonPath('data.name', 'مجموعة الرياضيات')
             ->assertJsonPath('data.subject', 'الرياضيات')
             ->assertJsonPath('data.max_students', 20)
-            ->assertJsonPath('data.monthly_fee', 300.00)
+            ->assertJsonPath('data.monthly_fee', 300)
             ->assertJsonPath('data.description', 'وصف جديد');
     }
 }

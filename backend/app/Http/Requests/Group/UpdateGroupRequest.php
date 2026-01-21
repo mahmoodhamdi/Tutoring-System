@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Group;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateGroupRequest extends FormRequest
@@ -31,6 +32,26 @@ class UpdateGroupRequest extends FormRequest
             'schedule_description' => ['sometimes', 'nullable', 'string', 'max:1000'],
             'is_active' => ['sometimes', 'boolean'],
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            if ($this->has('max_students')) {
+                $group = $this->route('group');
+                $currentStudentCount = $group->activeStudents()->count();
+
+                if ($this->max_students < $currentStudentCount) {
+                    $validator->errors()->add(
+                        'max_students',
+                        'لا يمكن تقليل الحد الأقصى للطلاب إلى أقل من عدد الطلاب الحاليين'
+                    );
+                }
+            }
+        });
     }
 
     /**

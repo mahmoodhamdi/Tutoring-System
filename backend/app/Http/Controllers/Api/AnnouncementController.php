@@ -64,8 +64,9 @@ class AnnouncementController extends Controller
         }
 
         // Order: pinned first, then by priority and date
+        // Using CASE for SQLite compatibility
         $query->orderByDesc('is_pinned')
-            ->orderByRaw("FIELD(priority, 'urgent', 'high', 'normal', 'low')")
+            ->orderByRaw("CASE priority WHEN 'urgent' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 WHEN 'low' THEN 4 ELSE 5 END")
             ->orderByDesc('published_at');
 
         $announcements = $query->paginate($request->get('per_page', 15));
@@ -83,7 +84,7 @@ class AnnouncementController extends Controller
         $announcements = Announcement::with(['author', 'group'])
             ->active()
             ->orderByDesc('is_pinned')
-            ->orderByRaw("FIELD(priority, 'urgent', 'high', 'normal', 'low')")
+            ->orderByRaw("CASE priority WHEN 'urgent' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 WHEN 'low' THEN 4 ELSE 5 END")
             ->orderByDesc('published_at')
             ->limit($limit)
             ->get();
@@ -102,7 +103,7 @@ class AnnouncementController extends Controller
             ->active()
             ->unreadBy($user->id)
             ->orderByDesc('is_pinned')
-            ->orderByRaw("FIELD(priority, 'urgent', 'high', 'normal', 'low')")
+            ->orderByRaw("CASE priority WHEN 'urgent' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 WHEN 'low' THEN 4 ELSE 5 END")
             ->orderByDesc('published_at')
             ->get();
 

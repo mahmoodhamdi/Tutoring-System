@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Student;
+use App\Models\User;
 use App\Models\Group;
 use App\Models\Session;
 use App\Models\Attendance;
@@ -50,12 +50,12 @@ class DashboardController extends Controller
     protected function getOverviewStats(): array
     {
         return [
-            'total_students' => Student::active()->count(),
+            'total_students' => User::students()->where('is_active', true)->count(),
             'total_groups' => Group::active()->count(),
             'total_sessions' => Session::count(),
             'total_exams' => Exam::count(),
             'total_quizzes' => Quiz::where('is_active', true)->count(),
-            'active_announcements' => Announcement::where('is_active', true)
+            'active_announcements' => Announcement::published()
                 ->where(function ($query) {
                     $query->whereNull('expires_at')
                         ->orWhere('expires_at', '>', now());
@@ -68,20 +68,23 @@ class DashboardController extends Controller
      */
     protected function getStudentStats(Carbon $startDate, Carbon $endDate): array
     {
-        $newStudents = Student::whereBetween('created_at', [$startDate, $endDate])->count();
-        $activeStudents = Student::active()->count();
-        $inactiveStudents = Student::where('status', 'inactive')->count();
+        $newStudents = User::students()->whereBetween('created_at', [$startDate, $endDate])->count();
+        $activeStudents = User::students()->where('is_active', true)->count();
+        $inactiveStudents = User::students()->where('is_active', false)->count();
 
         // Students by grade level
-        $byGrade = Student::active()
-            ->select('grade_level', DB::raw('count(*) as count'))
-            ->groupBy('grade_level')
+        $byGrade = User::students()
+            ->where('is_active', true)
+            ->whereHas('studentProfile')
+            ->join('student_profiles', 'users.id', '=', 'student_profiles.user_id')
+            ->select('student_profiles.grade_level', DB::raw('count(*) as count'))
+            ->groupBy('student_profiles.grade_level')
             ->pluck('count', 'grade_level')
             ->toArray();
 
         // Students by group
         $byGroup = Group::withCount(['students' => function ($query) {
-            $query->where('students.status', 'active');
+            $query->where('users.is_active', true);
         }])->get()->map(function ($group) {
             return [
                 'name' => $group->name,
@@ -111,9 +114,9 @@ class DashboardController extends Controller
         $cancelled = (clone $sessions)->where('status', 'cancelled')->count();
         $total = $sessions->count();
 
-        // Sessions by day of week
+        // Sessions by day of week - using strftime for SQLite compatibility
         $byDayOfWeek = Session::whereBetween('session_date', [$startDate, $endDate])
-            ->select(DB::raw('DAYOFWEEK(session_date) as day'), DB::raw('count(*) as count'))
+            ->select(DB::raw("CAST(strftime('%w', session_date) AS INTEGER) + 1 as day"), DB::raw('count(*) as count'))
             ->groupBy('day')
             ->pluck('count', 'day')
             ->toArray();
@@ -218,7 +221,8 @@ class DashboardController extends Controller
      */
     protected function getLowAttendanceStudents(Carbon $startDate, Carbon $endDate, float $threshold = 75): array
     {
-        $students = Student::active()
+        $students = User::students()
+            ->where('is_active', true)
             ->withCount([
                 'attendances as total_attendance' => function ($query) use ($startDate, $endDate) {
                     $query->whereHas('session', function ($q) use ($startDate, $endDate) {
@@ -231,9 +235,12 @@ class DashboardController extends Controller
                     })->whereIn('status', ['present', 'late']);
                 },
             ])
-            ->having('total_attendance', '>', 0)
             ->get()
             ->filter(function ($student) use ($threshold) {
+                // Skip students with no attendance
+                if ($student->total_attendance === 0) {
+                    return false;
+                }
                 $rate = ($student->present_attendance / $student->total_attendance) * 100;
                 return $rate < $threshold;
             })
@@ -278,23 +285,24 @@ class DashboardController extends Controller
         $trend = $this->getPaymentTrend($startDate, $endDate);
 
         // Students with overdue payments
-        $overdueStudents = Student::whereHas('payments', function ($query) {
-            $query->where('status', 'overdue');
-        })
-        ->with(['payments' => function ($query) {
-            $query->where('status', 'overdue');
-        }])
-        ->limit(10)
-        ->get()
-        ->map(function ($student) {
-            $totalOverdue = $student->payments->sum('amount');
-            return [
-                'id' => $student->id,
-                'name' => $student->name,
-                'overdue_amount' => $totalOverdue,
-                'overdue_count' => $student->payments->count(),
-            ];
-        });
+        $overdueStudents = User::students()
+            ->whereHas('payments', function ($query) {
+                $query->where('status', 'overdue');
+            })
+            ->with(['payments' => function ($query) {
+                $query->where('status', 'overdue');
+            }])
+            ->limit(10)
+            ->get()
+            ->map(function ($student) {
+                $totalOverdue = $student->payments->sum('amount');
+                return [
+                    'id' => $student->id,
+                    'name' => $student->name,
+                    'overdue_amount' => $totalOverdue,
+                    'overdue_count' => $student->payments->count(),
+                ];
+            });
 
         return [
             'total_paid' => $totalPaid,
@@ -419,7 +427,8 @@ class DashboardController extends Controller
     protected function getTopPerformers(Carbon $startDate, Carbon $endDate, int $limit = 5): array
     {
         // Combine exam and quiz performance
-        $students = Student::active()
+        $students = User::students()
+            ->where('is_active', true)
             ->withAvg(['examResults as exam_avg' => function ($query) use ($startDate, $endDate) {
                 $query->whereHas('exam', function ($q) use ($startDate, $endDate) {
                     $q->whereBetween('exam_date', [$startDate, $endDate]);
@@ -458,7 +467,8 @@ class DashboardController extends Controller
      */
     protected function getStudentsNeedingAttention(Carbon $startDate, Carbon $endDate, float $threshold = 60, int $limit = 5): array
     {
-        $students = Student::active()
+        $students = User::students()
+            ->where('is_active', true)
             ->withAvg(['examResults as exam_avg' => function ($query) use ($startDate, $endDate) {
                 $query->whereHas('exam', function ($q) use ($startDate, $endDate) {
                     $q->whereBetween('exam_date', [$startDate, $endDate]);
@@ -498,11 +508,6 @@ class DashboardController extends Controller
     protected function getPerformanceByGroup(Carbon $startDate, Carbon $endDate): array
     {
         return Group::active()
-            ->withAvg(['sessions.attendances as attendance_rate' => function ($query) use ($startDate, $endDate) {
-                $query->whereHas('session', function ($q) use ($startDate, $endDate) {
-                    $q->whereBetween('session_date', [$startDate, $endDate]);
-                })->whereIn('status', ['present', 'late']);
-            }], 'status')
             ->get()
             ->map(function ($group) use ($startDate, $endDate) {
                 // Calculate exam average for group
@@ -519,7 +524,7 @@ class DashboardController extends Controller
                 return [
                     'id' => $group->id,
                     'name' => $group->name,
-                    'student_count' => $group->students()->where('students.status', 'active')->count(),
+                    'student_count' => $group->students()->where('users.is_active', true)->count(),
                     'exam_avg' => round($examAvg, 1),
                 ];
             })
@@ -607,7 +612,7 @@ class DashboardController extends Controller
             'unread_notifications' => $request->user()->notifications()
                 ->where('is_read', false)
                 ->count(),
-            'new_students_this_month' => Student::where('created_at', '>=', $thisMonth)->count(),
+            'new_students_this_month' => User::students()->where('created_at', '>=', $thisMonth)->count(),
             'upcoming_exams' => Exam::where('exam_date', '>=', $today)
                 ->where('exam_date', '<=', $today->copy()->addWeek())
                 ->count(),

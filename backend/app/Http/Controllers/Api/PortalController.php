@@ -529,7 +529,7 @@ class PortalController extends Controller
         }
 
         // Mark as read
-        $announcement->markAsReadBy($request->user()->id);
+        $announcement->markAsRead($request->user()->id);
 
         return response()->json($announcement);
     }

@@ -109,7 +109,7 @@ class PaymentTest extends TestCase
         ]);
 
         $response->assertStatus(201)
-            ->assertJsonPath('data.amount', 300.00)
+            ->assertJsonPath('data.amount', 300)
             ->assertJsonPath('data.status', 'paid')
             ->assertJsonPath('data.payment_method', 'cash');
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('group_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
-            $table->date('joined_at');
+            $table->date('joined_at')->nullable();
             $table->date('left_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->text('notes')->nullable();

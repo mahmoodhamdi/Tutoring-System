@@ -11,6 +11,11 @@ class Exam extends Model
 {
     use HasFactory;
 
+    protected $attributes = [
+        'status' => 'scheduled',
+        'is_published' => false,
+    ];
+
     protected $fillable = [
         'group_id',
         'title',
@@ -95,12 +100,12 @@ class Exam extends Model
 
     public function getIsPastAttribute(): bool
     {
-        return $this->exam_date->isPast();
+        return $this->exam_date?->isPast() ?? false;
     }
 
     public function getIsUpcomingAttribute(): bool
     {
-        return $this->exam_date->isFuture() || $this->exam_date->isToday();
+        return ($this->exam_date?->isFuture() || $this->exam_date?->isToday()) ?? false;
     }
 
     public function getResultsCountAttribute(): int
@@ -148,7 +153,7 @@ class Exam extends Model
             'midterm' => 'اختبار نصفي',
             'final' => 'اختبار نهائي',
             'assignment' => 'واجب',
-            default => $this->exam_type,
+            default => $this->exam_type ?? 'غير محدد',
         };
     }
 
@@ -159,7 +164,7 @@ class Exam extends Model
             'in_progress' => 'قيد التنفيذ',
             'completed' => 'مكتمل',
             'cancelled' => 'ملغي',
-            default => $this->status,
+            default => $this->status ?? 'مجدول',
         };
     }
 

@@ -139,7 +139,7 @@ class GroupStudentsTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonPath('message', 'عدد الطلاب سيتجاوز الحد الأقصى للمجموعة');
+            ->assertJsonPath('message', 'لا توجد أماكن كافية في المجموعة');
     }
 
     public function test_cannot_add_student_already_in_group(): void
@@ -157,7 +157,7 @@ class GroupStudentsTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonPath('message', 'بعض الطلاب موجودون بالفعل في المجموعة');
+            ->assertJsonPath('message', 'جميع الطلاب المحددين موجودون بالفعل في المجموعة');
     }
 
     public function test_student_ids_must_be_array(): void
@@ -229,7 +229,7 @@ class GroupStudentsTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'message' => 'تم إزالة الطالب من المجموعة بنجاح',
+                'message' => 'تمت إزالة الطالب من المجموعة بنجاح',
             ]);
 
         $this->assertDatabaseHas('group_student', [
@@ -253,7 +253,7 @@ class GroupStudentsTest extends TestCase
 
         $response->assertStatus(404)
             ->assertJson([
-                'message' => 'الطالب غير موجود في المجموعة',
+                'message' => 'الطالب غير موجود في هذه المجموعة',
             ]);
     }
 
@@ -272,7 +272,7 @@ class GroupStudentsTest extends TestCase
 
         $response->assertStatus(404)
             ->assertJson([
-                'message' => 'الطالب غير موجود في المجموعة',
+                'message' => 'الطالب غير موجود في هذه المجموعة',
             ]);
     }
 

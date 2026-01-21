@@ -158,6 +158,12 @@ class StudentController extends Controller
      */
     public function destroy(User $student): JsonResponse
     {
+        // Only teachers and admins can delete students
+        $user = auth()->user();
+        if (!$user || !in_array($user->role, ['teacher', 'admin'])) {
+            abort(403, 'غير مصرح لك بحذف الطلاب');
+        }
+
         if ($student->role !== 'student') {
             abort(404, 'الطالب غير موجود');
         }

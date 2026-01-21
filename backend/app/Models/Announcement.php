@@ -12,6 +12,13 @@ class Announcement extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $attributes = [
+        'priority' => 'normal',
+        'type' => 'general',
+        'is_pinned' => false,
+        'is_published' => false,
+    ];
+
     protected $fillable = [
         'user_id',
         'group_id',
@@ -47,8 +54,7 @@ class Announcement extends Model
     public function readBy(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'announcement_reads')
-            ->withPivot('read_at')
-            ->withTimestamps();
+            ->withPivot('read_at');
     }
 
     // Scopes
@@ -106,7 +112,7 @@ class Announcement extends Model
             'normal' => 'عادي',
             'high' => 'مرتفع',
             'urgent' => 'عاجل',
-            default => $this->priority,
+            default => $this->priority ?? 'عادي',
         };
     }
 
@@ -118,7 +124,7 @@ class Announcement extends Model
             'exam' => 'اختبار',
             'payment' => 'دفع',
             'event' => 'فعالية',
-            default => $this->type,
+            default => $this->type ?? 'عام',
         };
     }
 

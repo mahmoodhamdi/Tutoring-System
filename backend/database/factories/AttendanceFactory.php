@@ -25,11 +25,11 @@ class AttendanceFactory extends Factory
 
         return [
             'session_id' => Session::factory(),
-            'student_id' => User::factory()->create(['role' => 'student'])->id,
+            'student_id' => User::factory()->state(['role' => 'student']),
             'status' => $status,
             'check_in_time' => in_array($status, ['present', 'late']) ? $this->faker->dateTimeThisMonth() : null,
             'notes' => $this->faker->optional()->sentence(),
-            'marked_by' => User::factory()->create(['role' => 'teacher'])->id,
+            'marked_by' => User::factory()->state(['role' => 'teacher']),
         ];
     }
 

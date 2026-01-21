@@ -13,6 +13,10 @@ class Session extends Model
 
     protected $table = 'tutoring_sessions';
 
+    protected $attributes = [
+        'status' => 'scheduled',
+    ];
+
     protected $fillable = [
         'group_id',
         'session_date',
@@ -127,7 +131,7 @@ class Session extends Model
      */
     public function getEndTimeAttribute()
     {
-        return $this->scheduled_at->copy()->addMinutes($this->duration_minutes);
+        return $this->scheduled_at?->copy()->addMinutes($this->duration_minutes ?? 60);
     }
 
     /**
@@ -135,7 +139,7 @@ class Session extends Model
      */
     public function isPast(): bool
     {
-        return $this->scheduled_at->isPast();
+        return $this->scheduled_at?->isPast() ?? false;
     }
 
     /**
@@ -143,7 +147,7 @@ class Session extends Model
      */
     public function isUpcoming(): bool
     {
-        return $this->scheduled_at->isFuture() && $this->status === 'scheduled';
+        return ($this->scheduled_at?->isFuture() ?? false) && $this->status === 'scheduled';
     }
 
     /**

@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\PortalController;
 use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\Api\SessionController;
+use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,20 +28,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Health check
-Route::get('/health', function () {
-    return response()->json([
-        'status' => 'ok',
-        'timestamp' => now()->toIso8601String(),
-    ]);
+// Health check - public rate limit
+Route::middleware('throttle:public')->group(function () {
+    Route::get('/health', function () {
+        return response()->json([
+            'status' => 'ok',
+            'timestamp' => now()->toIso8601String(),
+        ]);
+    });
+
+    // Public settings (no auth required)
+    Route::get('/settings/public', [SettingController::class, 'publicSettings']);
 });
 
-// Auth routes - Public
+// Auth routes - Public with specific rate limits
 Route::prefix('auth')->group(function () {
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:password-reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:password-reset');
 });
 
 // Auth routes - Protected
@@ -219,20 +225,26 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/students', [ReportsController::class, 'students']);
         Route::get('/sessions', [ReportsController::class, 'sessions']);
         Route::get('/financial-summary', [ReportsController::class, 'financialSummary']);
-        Route::get('/export/csv', [ReportsController::class, 'exportCsv']);
-        Route::get('/export/pdf', [ReportsController::class, 'exportPdf']);
+        // Export routes with stricter rate limiting (expensive operations)
+        Route::get('/export/csv', [ReportsController::class, 'exportCsv'])->middleware('throttle:reports-export')->name('reports.export.csv');
+        Route::get('/export/pdf', [ReportsController::class, 'exportPdf'])->middleware('throttle:reports-export')->name('reports.export.pdf');
     });
 
     // Settings routes (Phase 14)
     Route::prefix('settings')->group(function () {
-        // Routes will be added in Phase 14
+        Route::get('/', [SettingController::class, 'index']);
+        Route::get('/group/{group}', [SettingController::class, 'byGroup']);
+        Route::get('/{key}', [SettingController::class, 'show']);
+        Route::put('/', [SettingController::class, 'update']);
+        Route::put('/{key}', [SettingController::class, 'updateSingle']);
+        Route::post('/clear-cache', [SettingController::class, 'clearCache']);
     });
 });
 
 // Portal routes (Phase 14) - For students/parents
 Route::prefix('portal')->group(function () {
-    // Public routes
-    Route::post('/login', [PortalController::class, 'login']);
+    // Public routes with rate limiting
+    Route::post('/login', [PortalController::class, 'login'])->middleware('throttle:login');
 
     // Protected routes
     Route::middleware('auth:sanctum')->group(function () {

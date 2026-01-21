@@ -81,7 +81,7 @@ class GroupStoreTest extends TestCase
             ->assertJsonPath('data.subject', 'الرياضيات')
             ->assertJsonPath('data.grade_level', 'الصف الأول الثانوي')
             ->assertJsonPath('data.max_students', 25)
-            ->assertJsonPath('data.monthly_fee', 350.00)
+            ->assertJsonPath('data.monthly_fee', 350)
             ->assertJsonPath('data.schedule_description', 'كل أحد وأربعاء من 4 إلى 6 مساءً')
             ->assertJsonPath('data.is_active', true);
 
@@ -165,7 +165,7 @@ class GroupStoreTest extends TestCase
         ]);
 
         $response->assertStatus(201)
-            ->assertJsonPath('data.monthly_fee', 0.0);
+            ->assertJsonPath('data.monthly_fee', 0);
     }
 
     public function test_is_active_defaults_to_true(): void

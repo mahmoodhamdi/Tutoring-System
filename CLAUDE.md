@@ -11,22 +11,14 @@ Private Tutoring Management System - a full-stack application for teachers manag
 - Frontend: Next.js 14 (App Router) with TypeScript
 - Database: MySQL
 
-## Repository Structure
-
-```
-Tutoring-System/
-├── backend/          # Laravel 11 API
-└── frontend/         # Next.js 14 App
-```
-
 ## Commands
 
 ### Backend (Laravel)
 ```bash
 cd backend
 
-# Development server
-php artisan serve
+# Development server (runs on port 8001)
+php artisan serve --port=8001
 
 # Run tests (100% coverage required)
 php artisan test --coverage --min=100
@@ -41,26 +33,20 @@ php artisan test --coverage-html=coverage
 php artisan migrate
 php artisan migrate:fresh --seed
 
-# Create model with migration, factory, seeder, controller
-php artisan make:model ModelName -mfsc
-
-# Create API controller
-php artisan make:controller Api/ControllerName --api
-
-# Create request/resource
-php artisan make:request RequestName
-php artisan make:resource ResourceName
+# Code style (Laravel Pint)
+./vendor/bin/pint
 ```
 
 ### Frontend (Next.js)
 ```bash
 cd frontend
 
-# Development server
+# Development server (runs on port 3000)
 npm run dev
 
 # Run tests
 npm run test
+npm run test:watch
 npm run test:coverage
 
 # Build
@@ -68,6 +54,7 @@ npm run build
 
 # Lint
 npm run lint
+npm run lint -- --fix
 ```
 
 ## Development Workflow
@@ -86,54 +73,61 @@ npm run lint
 ## Architecture
 
 ### Backend Structure
-- **Models:** Eloquent models with relationships (User roles: teacher/student/parent)
-- **Controllers:** API controllers in `app/Http/Controllers/Api/`
-- **Services:** Business logic in service classes (AttendanceService, PaymentService, QuizService, SessionGeneratorService)
-- **Requests:** Form request validation classes
-- **Resources:** API resource transformers
-- **Enums:** AttendanceStatus, PaymentStatus, AnnouncementType
+- **Models:** `app/Models/` - Eloquent models with relationships
+- **Controllers:** `app/Http/Controllers/Api/` - REST API controllers
+- **Requests:** `app/Http/Requests/` - Form request validation classes
+- **Resources:** `app/Http/Resources/` - API response transformers
+- **Enums:** `app/Enums/` - Status enums (UserRole, AttendanceStatus, PaymentStatus, SessionStatus, QuizAttemptStatus)
+- **Services:** `app/Services/` - Business logic (PdfExportService, SmsService)
+- **Policies:** `app/Policies/` - Authorization policies
+
+### Backend Key Patterns
+- User model has roles: teacher, student, parent (via `UserRole` enum)
+- API routes defined in `routes/api.php` with rate limiting middleware (`throttle:public`, `throttle:login`, `throttle:register`, etc.)
+- Tests organized by module in `tests/Feature/Api/{Module}/`
 
 ### Frontend Structure
-- **App Router:** Route groups for (auth), (dashboard), (portal), and quiz
-- **Components:** Organized by domain (ui/, layout/, forms/, students/, groups/, etc.)
-- **Hooks:** Custom React Query hooks per domain (useAuth, useStudents, useGroups, etc.)
-- **Store:** Zustand stores (authStore, uiStore, notificationStore)
-- **Types:** TypeScript interfaces per domain
-- **Lib:** API client (axios), utilities, validations (Zod)
+- **App Router:** `src/app/` with route groups: `(auth)/`, `dashboard/`, `portal/`
+- **Components:** `src/components/` - Organized by domain
+- **Hooks:** `src/hooks/` - React Query hooks per domain (useAuth, useStudents, useGroups, etc.)
+- **Store:** `src/store/` - Zustand stores (authStore, uiStore, notificationStore)
+- **Types:** `src/types/` - TypeScript interfaces per domain
+- **Lib:** `src/lib/` - API client (axios), utilities, Zod validations
+- **Middleware:** `src/middleware.ts` - Auth protection for routes
 
-### Key Packages
-- Backend: Sanctum, Spatie Permission, DomPDF, Maatwebsite Excel
-- Frontend: React Query, Zustand, React Hook Form, Zod, react-big-calendar, Recharts
+### Key Dependencies
+- Backend: Sanctum (auth), Spatie Permission (roles), DomPDF (PDF export), Maatwebsite Excel (CSV export), Laravel Phone (validation)
+- Frontend: TanStack React Query (data fetching), Zustand (state), React Hook Form + Zod (forms), react-big-calendar (scheduling), Recharts (charts), Headless UI (components)
 
-## API Design
+## API Structure
 
-All API endpoints prefixed with `/api/`. Key resource groups:
-- `/auth/*` - Authentication (register, login, logout, refresh, profile)
-- `/students/*` - Student CRUD and related data
-- `/groups/*` - Group management and student assignments
-- `/sessions/*` - Session scheduling (today, week, month views)
-- `/attendance/*` - Attendance tracking per session
-- `/payments/*` - Payment recording and tracking (pending, overdue)
-- `/exams/*` - Exam scheduling and results
-- `/quizzes/*` - Quiz creation, questions, attempts
-- `/announcements/*` - Announcement management
-- `/notifications/*` - User notifications
-- `/dashboard/*` - Dashboard statistics and widgets
-- `/reports/*` - Attendance, payments, grades reports with export
-- `/portal/*` - Student/parent portal endpoints
+All endpoints prefixed with `/api/`. See `backend/routes/api.php` for complete route definitions. Key patterns:
+- Public routes use `throttle:public` middleware
+- Auth routes have specific rate limits (`throttle:login`, `throttle:register`, `throttle:password-reset`)
+- Protected routes use `auth:sanctum` middleware
+- Report exports use `throttle:reports-export` (expensive operations)
+- Portal has separate auth flow via `/portal/login`
 
 ## Testing
 
-### Backend Tests Location
-- `tests/Unit/Models/` - Model unit tests
-- `tests/Unit/Services/` - Service unit tests
-- `tests/Feature/Api/` - API feature tests organized by module
+### Backend Tests
+- Feature tests: `tests/Feature/Api/{Module}/` - Organized by module (Auth, Student, Group, Session, etc.)
+- Unit tests: `tests/Unit/Models/` - Model unit tests
+- Run specific test file: `php artisan test tests/Feature/Api/Auth/LoginTest.php`
 
-### Frontend Tests Location
+### Frontend Tests
 - `__tests__/components/` - Component tests
 - `__tests__/hooks/` - Hook tests
 - `__tests__/pages/` - Page tests
 
-## Progress Tracking
+## Environment
 
-CHECKLIST.md tracks implementation progress across 15 phases with status indicators for each task, test coverage, and documentation status.
+Backend: `http://localhost:8001`, Frontend: `http://localhost:3000`
+
+Key env vars:
+- Backend `.env`: `SANCTUM_STATEFUL_DOMAINS=localhost:3000`
+- Frontend `.env.local`: `NEXT_PUBLIC_API_URL=http://localhost:8001/api`
+
+## Progress
+
+CHECKLIST.md tracks implementation progress across 15 phases. Currently completed: Setup, Auth, Students, Groups (phases 1-4).

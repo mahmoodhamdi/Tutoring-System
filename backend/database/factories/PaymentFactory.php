@@ -22,7 +22,7 @@ class PaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'student_id' => User::factory()->create(['role' => 'student'])->id,
+            'student_id' => User::factory()->state(['role' => 'student']),
             'group_id' => Group::factory(),
             'amount' => $this->faker->randomFloat(2, 100, 500),
             'payment_date' => $this->faker->dateTimeBetween('-1 month', 'now'),
@@ -32,7 +32,7 @@ class PaymentFactory extends Factory
             'period_year' => now()->year,
             'notes' => $this->faker->optional()->sentence(),
             'receipt_number' => Payment::generateReceiptNumber(),
-            'received_by' => User::factory()->create(['role' => 'teacher'])->id,
+            'received_by' => User::factory()->state(['role' => 'teacher']),
         ];
     }
 

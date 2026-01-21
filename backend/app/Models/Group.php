@@ -13,6 +13,15 @@ class Group extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * Default attribute values.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'is_active' => true,
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
