@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
   // Performance optimizations
@@ -65,4 +66,28 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Sentry configuration options
+const sentryWebpackPluginOptions = {
+  // Organization and project for Sentry
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+
+  // Only enable source maps in production
+  silent: process.env.NODE_ENV !== 'production',
+
+  // Upload source maps to Sentry
+  widenClientFileUpload: true,
+
+  // Hide source maps from browsers
+  hideSourceMaps: true,
+
+  // Disable build telemetry
+  telemetry: false,
+};
+
+// Only wrap with Sentry in production or when DSN is set
+const exportedConfig = process.env.NEXT_PUBLIC_SENTRY_DSN
+  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+  : nextConfig;
+
+export default exportedConfig;

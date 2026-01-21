@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\HealthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,12 +31,7 @@ use Illuminate\Support\Facades\Route;
 
 // Health check - public rate limit
 Route::middleware('throttle:public')->group(function () {
-    Route::get('/health', function () {
-        return response()->json([
-            'status' => 'ok',
-            'timestamp' => now()->toIso8601String(),
-        ]);
-    });
+    Route::get('/health', HealthController::class);
 
     // Public settings (no auth required)
     Route::get('/settings/public', [SettingController::class, 'publicSettings']);
