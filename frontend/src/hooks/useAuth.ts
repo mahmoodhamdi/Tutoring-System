@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/axios';
+import api, { fetchCsrfCookie } from '@/lib/axios';
 import { useAuthStore } from '@/store/authStore';
 import type { User } from '@/types';
 import type { LoginInput, RegisterInput, ChangePasswordInput } from '@/lib/validations';
@@ -33,6 +33,8 @@ export function useAuth() {
   // Login mutation
   const loginMutation = useMutation({
     mutationFn: async (data: LoginInput) => {
+      // Fetch CSRF cookie for stateful authentication
+      await fetchCsrfCookie();
       const response = await api.post<AuthResponse>('/auth/login', data);
       return response.data;
     },
@@ -46,6 +48,8 @@ export function useAuth() {
   // Register mutation
   const registerMutation = useMutation({
     mutationFn: async (data: RegisterInput) => {
+      // Fetch CSRF cookie for stateful authentication
+      await fetchCsrfCookie();
       const response = await api.post<AuthResponse>('/auth/register', data);
       return response.data;
     },

@@ -35,6 +35,15 @@ return Application::configure(basePath: dirname(__DIR__))
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
 
+        // Exclude API auth routes from CSRF verification
+        $middleware->validateCsrfTokens(except: [
+            'api/auth/login',
+            'api/auth/register',
+            'api/auth/forgot-password',
+            'api/auth/reset-password',
+            'api/portal/login',
+        ]);
+
         // Rate limiting
         $middleware->throttleApi('60,1');
     })

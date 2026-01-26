@@ -8,53 +8,48 @@ Private Tutoring Management System - a full-stack application for teachers manag
 
 **Tech Stack:**
 - Backend: Laravel 11 (REST API) with Sanctum authentication
-- Frontend: Next.js 14 (App Router) with TypeScript
+- Frontend: Next.js 16.1 (App Router) with TypeScript, React 19
 - Database: MySQL
 
 ## Commands
 
+### Quick Start (Using Makefile)
+```bash
+make install    # Install all dependencies
+make dev        # Start both servers (backend:8001, frontend:3000)
+make test       # Run all tests
+make lint       # Run all linters
+make fresh      # Fresh database migrate and seed
+```
+
 ### Backend (Laravel)
 ```bash
 cd backend
-
-# Development server (runs on port 8001)
-php artisan serve --port=8001
-
-# Run tests (100% coverage required)
-php artisan test --coverage --min=100
-
-# Run specific test
-php artisan test --filter=TestName
-
-# Generate coverage HTML report
-php artisan test --coverage-html=coverage
-
-# Database migrations
-php artisan migrate
-php artisan migrate:fresh --seed
-
-# Code style (Laravel Pint)
-./vendor/bin/pint
+php artisan serve --port=8001          # Dev server
+php artisan test --coverage --min=100  # Tests (100% coverage required)
+php artisan test --filter=TestName     # Specific test
+php artisan test tests/Feature/Api/Auth/LoginTest.php  # Specific file
+./vendor/bin/pint                      # Code style
+php artisan migrate:fresh --seed       # Reset database
 ```
 
 ### Frontend (Next.js)
 ```bash
 cd frontend
+npm run dev              # Dev server (port 3000)
+npm run test             # Run tests
+npm run test:coverage    # With coverage
+npm run lint -- --fix    # Fix lint issues
+npm run type-check       # TypeScript check
+npm run test:e2e         # Playwright E2E tests
+npm run test:e2e:ui      # E2E with UI
+```
 
-# Development server (runs on port 3000)
-npm run dev
-
-# Run tests
-npm run test
-npm run test:watch
-npm run test:coverage
-
-# Build
-npm run build
-
-# Lint
-npm run lint
-npm run lint -- --fix
+### Docker
+```bash
+make docker-up      # Start containers
+make docker-fresh   # Fresh migrate and seed
+make docker-shell   # Shell into backend container
 ```
 
 ## Development Workflow
@@ -73,56 +68,69 @@ npm run lint -- --fix
 ## Architecture
 
 ### Backend Structure
-- **Models:** `app/Models/` - Eloquent models with relationships
-- **Controllers:** `app/Http/Controllers/Api/` - REST API controllers
+- **Controllers:** `app/Http/Controllers/Api/` - One controller per domain
 - **Requests:** `app/Http/Requests/` - Form request validation classes
 - **Resources:** `app/Http/Resources/` - API response transformers
-- **Enums:** `app/Enums/` - Status enums (UserRole, AttendanceStatus, PaymentStatus, SessionStatus, QuizAttemptStatus)
+- **Models:** `app/Models/` - Eloquent models with relationships
+- **Enums:** `app/Enums/` - UserRole, AttendanceStatus, PaymentStatus, SessionStatus, QuizAttemptStatus
 - **Services:** `app/Services/` - Business logic (PdfExportService, SmsService)
 - **Policies:** `app/Policies/` - Authorization policies
 
 ### Backend Key Patterns
 - User model has roles: teacher, student, parent (via `UserRole` enum)
-- API routes defined in `routes/api.php` with rate limiting middleware (`throttle:public`, `throttle:login`, `throttle:register`, etc.)
+- API routes in `routes/api.php` with rate limiting middleware:
+  - `throttle:public` - Public routes (health, public settings)
+  - `throttle:login`, `throttle:register`, `throttle:password-reset` - Auth routes
+  - `throttle:reports-export` - Expensive export operations
+- Route model binding used for resource routes (e.g., `{student}`, `{group}`)
 - Tests organized by module in `tests/Feature/Api/{Module}/`
 
 ### Frontend Structure
-- **App Router:** `src/app/` with route groups: `(auth)/`, `dashboard/`, `portal/`
-- **Components:** `src/components/` - Organized by domain
-- **Hooks:** `src/hooks/` - React Query hooks per domain (useAuth, useStudents, useGroups, etc.)
+- **App Router:** `src/app/` with route groups:
+  - `(auth)/` - Login, register, forgot password, reset password
+  - `dashboard/` - Teacher dashboard with nested routes for all modules
+  - `portal/` - Student/parent portal
+- **Components:** `src/components/` - Organized by domain (students/, groups/, sessions/, etc.)
+- **Hooks:** `src/hooks/` - React Query hooks per domain (useAuth, useStudents, useGroups, useSessions, usePayments, useExams, useQuizzes, useAnnouncements, useNotifications, useReports, usePortal, useSettings, useDashboard)
 - **Store:** `src/store/` - Zustand stores (authStore, uiStore, notificationStore)
 - **Types:** `src/types/` - TypeScript interfaces per domain
 - **Lib:** `src/lib/` - API client (axios), utilities, Zod validations
 - **Middleware:** `src/middleware.ts` - Auth protection for routes
 
 ### Key Dependencies
-- Backend: Sanctum (auth), Spatie Permission (roles), DomPDF (PDF export), Maatwebsite Excel (CSV export), Laravel Phone (validation)
-- Frontend: TanStack React Query (data fetching), Zustand (state), React Hook Form + Zod (forms), react-big-calendar (scheduling), Recharts (charts), Headless UI (components)
+- **Backend:** Sanctum (auth), Spatie Permission (roles), DomPDF (PDF), Maatwebsite Excel (CSV), Laravel Phone (validation), L5-Swagger (API docs), Sentry (error tracking)
+- **Frontend:** TanStack React Query v5 (data fetching), Zustand (state), React Hook Form + Zod v4 (forms), react-big-calendar (scheduling), Recharts (charts), Headless UI v2 + Heroicons v2 (components), Playwright (E2E), date-fns v4
 
-## API Structure
+## API Patterns
 
-All endpoints prefixed with `/api/`. See `backend/routes/api.php` for complete route definitions. Key patterns:
-- Public routes use `throttle:public` middleware
-- Auth routes have specific rate limits (`throttle:login`, `throttle:register`, `throttle:password-reset`)
-- Protected routes use `auth:sanctum` middleware
-- Report exports use `throttle:reports-export` (expensive operations)
-- Portal has separate auth flow via `/portal/login`
+All endpoints prefixed with `/api/`. Key endpoint groups:
+- `/api/auth/*` - Authentication (login, register, logout, password reset)
+- `/api/students/*`, `/api/groups/*`, `/api/sessions/*` - CRUD resources
+- `/api/attendance/*`, `/api/payments/*`, `/api/exams/*`, `/api/quizzes/*` - Domain-specific resources
+- `/api/announcements/*`, `/api/notifications/*` - Communication
+- `/api/dashboard/*` - Dashboard statistics and quick stats
+- `/api/reports/*` - Report generation and export (CSV/PDF)
+- `/api/portal/*` - Student/parent portal (separate login flow)
+- `/api/settings/*` - System settings (public and protected)
 
 ## Testing
 
-### Backend Tests
-- Feature tests: `tests/Feature/Api/{Module}/` - Organized by module (Auth, Student, Group, Session, etc.)
-- Unit tests: `tests/Unit/Models/` - Model unit tests
-- Run specific test file: `php artisan test tests/Feature/Api/Auth/LoginTest.php`
+### Backend
+- Feature tests: `tests/Feature/Api/{Module}/` (Auth, Student, Group, Session, etc.)
+- Unit tests: `tests/Unit/Models/`
+- 100% coverage requirement enforced
 
-### Frontend Tests
-- `__tests__/components/` - Component tests
-- `__tests__/hooks/` - Hook tests
-- `__tests__/pages/` - Page tests
+### Frontend
+- Component tests: `__tests__/components/`
+- Hook tests: `__tests__/hooks/`
+- Page tests: `__tests__/pages/`
+- E2E tests: `e2e/` (Playwright)
 
 ## Environment
 
-Backend: `http://localhost:8001`, Frontend: `http://localhost:3000`
+- Backend: `http://localhost:8001`
+- Frontend: `http://localhost:3000`
+- API Docs: `http://localhost:8001/api/documentation` (Swagger)
 
 Key env vars:
 - Backend `.env`: `SANCTUM_STATEFUL_DOMAINS=localhost:3000`
@@ -130,4 +138,4 @@ Key env vars:
 
 ## Progress
 
-CHECKLIST.md tracks implementation progress across 15 phases. Currently completed: Setup, Auth, Students, Groups (phases 1-4).
+CHECKLIST.md tracks implementation progress across 15 phases. See CHECKLIST.md for detailed status.
