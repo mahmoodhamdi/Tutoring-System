@@ -34,7 +34,7 @@ export function LoginForm() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('Login failed. Please check your credentials.');
+        setError('فشل تسجيل الدخول. تحقق من بياناتك.');
       }
     }
   };
@@ -42,28 +42,28 @@ export function LoginForm() {
   return (
     <div className="bg-white py-8 px-6 shadow rounded-lg">
       <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">
-        Sign in to your account
+        تسجيل الدخول
       </h2>
 
       {(error || loginError) && (
         <Alert variant="error" className="mb-4" onClose={() => setError(null)}>
-          {error || 'Invalid credentials. Please try again.'}
+          {error || 'بيانات الدخول غير صحيحة. حاول مرة أخرى.'}
         </Alert>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
-          label="Phone Number"
+          label="رقم الهاتف"
           type="tel"
-          placeholder="+201234567890"
+          placeholder="01xxxxxxxxx"
           error={errors.phone?.message}
           {...register('phone')}
         />
 
         <Input
-          label="Password"
+          label="كلمة المرور"
           type="password"
-          placeholder="Enter your password"
+          placeholder="أدخل كلمة المرور"
           error={errors.password?.message}
           {...register('password')}
         />
@@ -76,8 +76,8 @@ export function LoginForm() {
               type="checkbox"
               className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-              Remember me
+            <label htmlFor="remember-me" className="mr-2 block text-sm text-gray-700">
+              تذكرني
             </label>
           </div>
 
@@ -85,22 +85,22 @@ export function LoginForm() {
             href="/forgot-password"
             className="text-sm font-medium text-blue-600 hover:text-blue-500"
           >
-            Forgot password?
+            نسيت كلمة المرور؟
           </Link>
         </div>
 
         <Button type="submit" className="w-full" isLoading={isLoading}>
-          Sign in
+          تسجيل الدخول
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-gray-600">
-        Don&apos;t have an account?{' '}
+        ليس لديك حساب؟{' '}
         <Link
           href="/register"
           className="font-medium text-blue-600 hover:text-blue-500"
         >
-          Register now
+          سجل الآن
         </Link>
       </p>
     </div>

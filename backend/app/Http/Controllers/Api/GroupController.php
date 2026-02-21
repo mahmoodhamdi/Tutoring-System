@@ -98,7 +98,7 @@ class GroupController extends Controller
     public function destroy(Group $group): JsonResponse
     {
         // Only teachers can delete groups
-        if (!auth()->user()->isTeacher()) {
+        if (! auth()->user()->isTeacher()) {
             return response()->json([
                 'message' => 'غير مصرح لك بحذف المجموعات',
             ], 403);
@@ -175,7 +175,7 @@ class GroupController extends Controller
     public function removeStudent(Group $group, User $student): JsonResponse
     {
         // Only teachers can remove students
-        if (!auth()->user()->isTeacher()) {
+        if (! auth()->user()->isTeacher()) {
             return response()->json([
                 'message' => 'غير مصرح لك بإزالة الطلاب',
             ], 403);
@@ -193,7 +193,7 @@ class GroupController extends Controller
             ->wherePivot('is_active', true)
             ->exists();
 
-        if (!$isActiveMember) {
+        if (! $isActiveMember) {
             return response()->json([
                 'message' => 'الطالب غير موجود في هذه المجموعة',
             ], 404);
@@ -224,7 +224,7 @@ class GroupController extends Controller
         // Handle include_inactive parameter
         $includeInactive = filter_var($request->include_inactive, FILTER_VALIDATE_BOOLEAN);
 
-        if (!$includeInactive) {
+        if (! $includeInactive) {
             // By default, only show active students unless include_inactive=true
             if ($request->is_active !== null) {
                 $active = filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN);

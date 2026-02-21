@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Exam\RecordExamResultsRequest;
 use App\Http\Requests\Exam\StoreExamRequest;
 use App\Http\Requests\Exam\UpdateExamRequest;
-use App\Http\Requests\Exam\RecordExamResultsRequest;
 use App\Http\Resources\ExamResource;
 use App\Http\Resources\ExamResultResource;
 use App\Models\Exam;
@@ -49,6 +49,7 @@ class ExamController extends Controller
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $request->input('per_page', 15);
+
         return ExamResource::collection($query->paginate($perPage));
     }
 
@@ -64,6 +65,7 @@ class ExamController extends Controller
         }
 
         $limit = $request->input('limit', 10);
+
         return ExamResource::collection($query->limit($limit)->get());
     }
 
@@ -80,6 +82,7 @@ class ExamController extends Controller
         }
 
         $limit = $request->input('limit', 10);
+
         return ExamResource::collection($query->limit($limit)->get());
     }
 
@@ -158,6 +161,7 @@ class ExamController extends Controller
     public function results(Exam $exam): AnonymousResourceCollection
     {
         $results = $exam->results()->with('student')->get();
+
         return ExamResultResource::collection($results);
     }
 
@@ -203,7 +207,7 @@ class ExamController extends Controller
     public function updateResult(Request $request, Exam $exam, int $studentId): JsonResponse
     {
         $request->validate([
-            'marks_obtained' => 'nullable|numeric|min:0|max:' . $exam->total_marks,
+            'marks_obtained' => 'nullable|numeric|min:0|max:'.$exam->total_marks,
             'status' => 'required|in:pending,submitted,graded,absent',
             'feedback' => 'nullable|string|max:1000',
         ], [

@@ -16,7 +16,9 @@ class QuizCrudTest extends TestCase
     use RefreshDatabase;
 
     protected User $teacher;
+
     protected User $student;
+
     protected Group $group;
 
     protected function setUp(): void
@@ -48,7 +50,7 @@ class QuizCrudTest extends TestCase
         Quiz::factory()->count(2)->create(['group_id' => $group1->id]);
         Quiz::factory()->count(3)->create(['group_id' => $group2->id]);
 
-        $response = $this->getJson('/api/quizzes?group_id=' . $group1->id);
+        $response = $this->getJson('/api/quizzes?group_id='.$group1->id);
 
         $response->assertOk()
             ->assertJsonCount(2, 'data');
@@ -106,7 +108,7 @@ class QuizCrudTest extends TestCase
     {
         $quiz = Quiz::factory()->create(['group_id' => $this->group->id]);
 
-        $response = $this->getJson('/api/quizzes/' . $quiz->id);
+        $response = $this->getJson('/api/quizzes/'.$quiz->id);
 
         $response->assertOk()
             ->assertJsonPath('data.id', $quiz->id)
@@ -117,7 +119,7 @@ class QuizCrudTest extends TestCase
     {
         $quiz = Quiz::factory()->create(['group_id' => $this->group->id]);
 
-        $response = $this->putJson('/api/quizzes/' . $quiz->id, [
+        $response = $this->putJson('/api/quizzes/'.$quiz->id, [
             'title' => 'عنوان محدث',
             'duration_minutes' => 45,
         ]);
@@ -131,7 +133,7 @@ class QuizCrudTest extends TestCase
     {
         $quiz = Quiz::factory()->create(['group_id' => $this->group->id]);
 
-        $response = $this->deleteJson('/api/quizzes/' . $quiz->id);
+        $response = $this->deleteJson('/api/quizzes/'.$quiz->id);
 
         $response->assertOk();
         $this->assertDatabaseMissing('quizzes', ['id' => $quiz->id]);
@@ -142,7 +144,7 @@ class QuizCrudTest extends TestCase
         $quiz = Quiz::factory()->unpublished()->create(['group_id' => $this->group->id]);
         QuizQuestion::factory()->multipleChoice()->for($quiz)->create();
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/publish');
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/publish');
 
         $response->assertOk()
             ->assertJsonPath('data.is_published', true);
@@ -152,7 +154,7 @@ class QuizCrudTest extends TestCase
     {
         $quiz = Quiz::factory()->unpublished()->create(['group_id' => $this->group->id]);
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/publish');
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/publish');
 
         $response->assertUnprocessable();
     }
@@ -161,7 +163,7 @@ class QuizCrudTest extends TestCase
     {
         $quiz = Quiz::factory()->published()->create(['group_id' => $this->group->id]);
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/unpublish');
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/unpublish');
 
         $response->assertOk()
             ->assertJsonPath('data.is_published', false);
@@ -175,7 +177,7 @@ class QuizCrudTest extends TestCase
         ]);
         QuizQuestion::factory()->multipleChoice()->for($quiz)->create();
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/duplicate');
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/duplicate');
 
         $response->assertCreated()
             ->assertJsonPath('data.title', 'اختبار أصلي (نسخة)')
@@ -188,7 +190,7 @@ class QuizCrudTest extends TestCase
     {
         $quiz = Quiz::factory()->create(['group_id' => $this->group->id]);
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/questions', [
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/questions', [
             'question_text' => 'ما هو 2 + 2؟',
             'question_type' => 'multiple_choice',
             'marks' => 5,
@@ -217,7 +219,7 @@ class QuizCrudTest extends TestCase
         $quiz = Quiz::factory()->create(['group_id' => $this->group->id]);
         $question = QuizQuestion::factory()->multipleChoice()->for($quiz)->create();
 
-        $response = $this->putJson('/api/quizzes/' . $quiz->id . '/questions/' . $question->id, [
+        $response = $this->putJson('/api/quizzes/'.$quiz->id.'/questions/'.$question->id, [
             'question_text' => 'سؤال محدث',
             'marks' => 10,
         ]);
@@ -236,7 +238,7 @@ class QuizCrudTest extends TestCase
         $quiz = Quiz::factory()->create(['group_id' => $this->group->id]);
         $question = QuizQuestion::factory()->multipleChoice()->for($quiz)->create();
 
-        $response = $this->deleteJson('/api/quizzes/' . $quiz->id . '/questions/' . $question->id);
+        $response = $this->deleteJson('/api/quizzes/'.$quiz->id.'/questions/'.$question->id);
 
         $response->assertOk();
         $this->assertDatabaseMissing('quiz_questions', ['id' => $question->id]);
@@ -249,7 +251,7 @@ class QuizCrudTest extends TestCase
         $q2 = QuizQuestion::factory()->for($quiz)->create(['order_index' => 2]);
         $q3 = QuizQuestion::factory()->for($quiz)->create(['order_index' => 3]);
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/questions/reorder', [
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/questions/reorder', [
             'question_ids' => [$q3->id, $q1->id, $q2->id],
         ]);
 
@@ -267,7 +269,7 @@ class QuizCrudTest extends TestCase
         $quiz = Quiz::factory()->available()->create(['group_id' => $this->group->id]);
         QuizQuestion::factory()->multipleChoice()->for($quiz)->create();
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/start');
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/start');
 
         $response->assertCreated()
             ->assertJsonPath('data.status', 'in_progress');
@@ -285,7 +287,7 @@ class QuizCrudTest extends TestCase
 
         $quiz = Quiz::factory()->unpublished()->create(['group_id' => $this->group->id]);
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/start');
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/start');
 
         $response->assertUnprocessable();
     }
@@ -306,7 +308,7 @@ class QuizCrudTest extends TestCase
             'student_id' => $this->student->id,
         ]);
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/start');
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/start');
 
         $response->assertUnprocessable();
     }
@@ -324,7 +326,7 @@ class QuizCrudTest extends TestCase
             'student_id' => $this->student->id,
         ]);
 
-        $response = $this->postJson('/api/quizzes/' . $quiz->id . '/attempts/' . $attempt->id . '/submit', [
+        $response = $this->postJson('/api/quizzes/'.$quiz->id.'/attempts/'.$attempt->id.'/submit', [
             'answers' => [
                 [
                     'question_id' => $question->id,
@@ -357,7 +359,7 @@ class QuizCrudTest extends TestCase
             'student_id' => User::factory()->create()->id,
         ]);
 
-        $response = $this->getJson('/api/quizzes/' . $quiz->id . '/my-attempts');
+        $response = $this->getJson('/api/quizzes/'.$quiz->id.'/my-attempts');
 
         $response->assertOk()
             ->assertJsonCount(2, 'data');
@@ -372,7 +374,7 @@ class QuizCrudTest extends TestCase
             'quiz_id' => $quiz->id,
         ]);
 
-        $response = $this->getJson('/api/quizzes/' . $quiz->id . '/attempts');
+        $response = $this->getJson('/api/quizzes/'.$quiz->id.'/attempts');
 
         $response->assertOk()
             ->assertJsonCount(5, 'data');
@@ -391,7 +393,7 @@ class QuizCrudTest extends TestCase
         ]);
 
         $response = $this->postJson(
-            '/api/quizzes/' . $quiz->id . '/attempts/' . $attempt->id . '/answers/' . $answer->id . '/grade',
+            '/api/quizzes/'.$quiz->id.'/attempts/'.$attempt->id.'/answers/'.$answer->id.'/grade',
             [
                 'marks_obtained' => 8,
                 'is_correct' => true,

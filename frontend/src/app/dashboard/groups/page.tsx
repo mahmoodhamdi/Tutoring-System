@@ -9,7 +9,6 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 
 export default function GroupsPage() {
   const [filters, setFilters] = useState<GroupListParams>({ page: 1 });
-  const [groupToDelete, setGroupToDelete] = useState<Group | null>(null);
 
   const { data, isLoading, error } = useGroups(filters);
   const deleteGroup = useDeleteGroup();

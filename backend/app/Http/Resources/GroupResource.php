@@ -28,7 +28,7 @@ class GroupResource extends JsonResource
             'available_spots' => $this->max_students - ($this->student_count ?? $this->activeStudents()->count()),
             'students' => $this->when(
                 $this->relationLoaded('activeStudents'),
-                fn() => StudentResource::collection($this->activeStudents)
+                fn () => StudentResource::collection($this->activeStudents)
             ),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),

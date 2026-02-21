@@ -79,7 +79,7 @@ class NotificationCrudTest extends TestCase
     {
         $notification = Notification::factory()->create(['user_id' => $this->user->id]);
 
-        $response = $this->getJson('/api/notifications/' . $notification->id);
+        $response = $this->getJson('/api/notifications/'.$notification->id);
 
         $response->assertOk()
             ->assertJsonPath('data.id', $notification->id);
@@ -90,7 +90,7 @@ class NotificationCrudTest extends TestCase
         $otherUser = User::factory()->create();
         $notification = Notification::factory()->create(['user_id' => $otherUser->id]);
 
-        $response = $this->getJson('/api/notifications/' . $notification->id);
+        $response = $this->getJson('/api/notifications/'.$notification->id);
 
         $response->assertForbidden();
     }
@@ -99,7 +99,7 @@ class NotificationCrudTest extends TestCase
     {
         $notification = Notification::factory()->unread()->create(['user_id' => $this->user->id]);
 
-        $response = $this->postJson('/api/notifications/' . $notification->id . '/read');
+        $response = $this->postJson('/api/notifications/'.$notification->id.'/read');
 
         $response->assertOk()
             ->assertJsonPath('data.is_read', true);
@@ -113,7 +113,7 @@ class NotificationCrudTest extends TestCase
     {
         $notification = Notification::factory()->read()->create(['user_id' => $this->user->id]);
 
-        $response = $this->postJson('/api/notifications/' . $notification->id . '/unread');
+        $response = $this->postJson('/api/notifications/'.$notification->id.'/unread');
 
         $response->assertOk()
             ->assertJsonPath('data.is_read', false);
@@ -140,7 +140,7 @@ class NotificationCrudTest extends TestCase
     {
         $notification = Notification::factory()->create(['user_id' => $this->user->id]);
 
-        $response = $this->deleteJson('/api/notifications/' . $notification->id);
+        $response = $this->deleteJson('/api/notifications/'.$notification->id);
 
         $response->assertOk();
         $this->assertDatabaseMissing('notifications', ['id' => $notification->id]);
@@ -151,7 +151,7 @@ class NotificationCrudTest extends TestCase
         $otherUser = User::factory()->create();
         $notification = Notification::factory()->create(['user_id' => $otherUser->id]);
 
-        $response = $this->deleteJson('/api/notifications/' . $notification->id);
+        $response = $this->deleteJson('/api/notifications/'.$notification->id);
 
         $response->assertForbidden();
     }

@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { useCreateQuiz } from '@/hooks/useQuizzes';
 import { QuizForm } from '@/components/quizzes';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import type { CreateQuizData } from '@/types/quiz';
 
 export default function NewQuizPage() {
   const router = useRouter();
   const createQuiz = useCreateQuiz();
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: CreateQuizData) => {
     try {
       const quiz = await createQuiz.mutateAsync(data);
       router.push(`/dashboard/quizzes/${quiz.id}`);

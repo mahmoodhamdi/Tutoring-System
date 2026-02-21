@@ -135,7 +135,7 @@ class Announcement extends Model
 
     public function getIsActiveAttribute(): bool
     {
-        return $this->is_published && !$this->is_expired;
+        return $this->is_published && ! $this->is_expired;
     }
 
     public function getReadsCountAttribute(): int
@@ -149,30 +149,34 @@ class Announcement extends Model
     {
         $this->is_published = true;
         $this->published_at = now();
+
         return $this->save();
     }
 
     public function unpublish(): bool
     {
         $this->is_published = false;
+
         return $this->save();
     }
 
     public function pin(): bool
     {
         $this->is_pinned = true;
+
         return $this->save();
     }
 
     public function unpin(): bool
     {
         $this->is_pinned = false;
+
         return $this->save();
     }
 
     public function markAsRead(int $userId): void
     {
-        if (!$this->readBy()->where('user_id', $userId)->exists()) {
+        if (! $this->readBy()->where('user_id', $userId)->exists()) {
             $this->readBy()->attach($userId, ['read_at' => now()]);
         }
     }

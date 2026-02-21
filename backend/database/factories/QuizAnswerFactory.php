@@ -37,7 +37,7 @@ class QuizAnswerFactory extends Factory
      */
     public function correct(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_correct' => true,
             'marks_obtained' => fake()->randomFloat(2, 1, 10),
         ]);
@@ -48,7 +48,7 @@ class QuizAnswerFactory extends Factory
      */
     public function incorrect(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_correct' => false,
             'marks_obtained' => 0,
         ]);
@@ -57,9 +57,9 @@ class QuizAnswerFactory extends Factory
     /**
      * Set a selected option.
      */
-    public function withOption(QuizOption $option = null): static
+    public function withOption(?QuizOption $option = null): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'selected_option_id' => $option?->id ?? QuizOption::factory(),
         ]);
     }
@@ -67,9 +67,9 @@ class QuizAnswerFactory extends Factory
     /**
      * Set a text answer.
      */
-    public function withText(string $text = null): static
+    public function withText(?string $text = null): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'answer_text' => $text ?? fake()->paragraph(),
         ]);
     }

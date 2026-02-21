@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAnnouncement, useUpdateAnnouncement } from '@/hooks/useAnnouncements';
 import { AnnouncementForm } from '@/components/announcements';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import type { CreateAnnouncementData } from '@/types/announcement';
 
 export default function EditAnnouncementPage() {
   const params = useParams();
@@ -14,7 +15,7 @@ export default function EditAnnouncementPage() {
   const { data: announcement, isLoading } = useAnnouncement(announcementId);
   const updateAnnouncement = useUpdateAnnouncement();
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: CreateAnnouncementData) => {
     try {
       await updateAnnouncement.mutateAsync({ id: announcementId, data });
       router.push(`/dashboard/announcements/${announcementId}`);

@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { useCreateAnnouncement } from '@/hooks/useAnnouncements';
 import { AnnouncementForm } from '@/components/announcements';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import type { CreateAnnouncementData } from '@/types/announcement';
 
 export default function NewAnnouncementPage() {
   const router = useRouter();
   const createAnnouncement = useCreateAnnouncement();
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: CreateAnnouncementData) => {
     try {
       const announcement = await createAnnouncement.mutateAsync(data);
       router.push(`/dashboard/announcements/${announcement.id}`);

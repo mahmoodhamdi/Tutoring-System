@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { useQuizAttempt, useGradeAnswer } from '@/hooks/useQuizzes';
+import { useQuizAttempt } from '@/hooks/useQuizzes';
 import { QuizResults } from '@/components/quizzes';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
@@ -12,7 +12,6 @@ export default function AttemptDetailPage() {
   const attemptId = parseInt(params.attemptId as string);
 
   const { data: attempt, isLoading } = useQuizAttempt(quizId, attemptId);
-  const gradeAnswer = useGradeAnswer();
 
   if (isLoading) {
     return (

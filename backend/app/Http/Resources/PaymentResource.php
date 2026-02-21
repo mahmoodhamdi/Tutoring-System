@@ -32,7 +32,7 @@ class PaymentResource extends JsonResource
             'received_by' => $this->received_by,
             'student' => $this->when(
                 $this->relationLoaded('student'),
-                fn() => [
+                fn () => [
                     'id' => $this->student->id,
                     'name' => $this->student->name,
                     'phone' => $this->student->phone,
@@ -40,14 +40,14 @@ class PaymentResource extends JsonResource
             ),
             'group' => $this->when(
                 $this->relationLoaded('group'),
-                fn() => $this->group ? [
+                fn () => $this->group ? [
                     'id' => $this->group->id,
                     'name' => $this->group->name,
                 ] : null
             ),
             'received_by_user' => $this->when(
                 $this->relationLoaded('receivedBy'),
-                fn() => $this->receivedBy ? [
+                fn () => $this->receivedBy ? [
                     'id' => $this->receivedBy->id,
                     'name' => $this->receivedBy->name,
                 ] : null
@@ -66,7 +66,9 @@ class PaymentResource extends JsonResource
             'cash' => 'نقداً',
             'bank_transfer' => 'تحويل بنكي',
             'online' => 'دفع إلكتروني',
-            default => $this->payment_method,
+            'card' => 'بطاقة',
+            'check' => 'شيك',
+            default => $this->payment_method ?? '-',
         };
     }
 
@@ -79,8 +81,9 @@ class PaymentResource extends JsonResource
             'paid' => 'مدفوع',
             'pending' => 'معلق',
             'partial' => 'جزئي',
+            'overdue' => 'متأخر',
             'refunded' => 'مسترد',
-            default => $this->status,
+            default => $this->status ?? '-',
         };
     }
 }

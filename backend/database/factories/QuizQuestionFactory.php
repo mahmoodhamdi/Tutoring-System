@@ -22,7 +22,7 @@ class QuizQuestionFactory extends Factory
     {
         return [
             'quiz_id' => Quiz::factory(),
-            'question_text' => fake()->sentence() . '؟',
+            'question_text' => fake()->sentence().'؟',
             'question_type' => 'multiple_choice',
             'marks' => fake()->randomElement([1, 2, 3, 5, 10]),
             'order_index' => 1,
@@ -81,7 +81,7 @@ class QuizQuestionFactory extends Factory
      */
     public function multipleChoice(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'question_type' => 'multiple_choice',
         ]);
     }
@@ -91,7 +91,7 @@ class QuizQuestionFactory extends Factory
      */
     public function trueFalse(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'question_type' => 'true_false',
         ]);
     }
@@ -101,7 +101,7 @@ class QuizQuestionFactory extends Factory
      */
     public function shortAnswer(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'question_type' => 'short_answer',
         ])->afterCreating(function (QuizQuestion $question) {
             // Create correct answer options
@@ -117,7 +117,7 @@ class QuizQuestionFactory extends Factory
      */
     public function essay(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'question_type' => 'essay',
         ]);
     }

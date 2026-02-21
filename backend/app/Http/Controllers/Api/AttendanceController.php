@@ -62,7 +62,7 @@ class AttendanceController extends Controller
         // Map attendance for each student
         $attendanceMap = $attendances->keyBy('student_id');
 
-        $result = $groupStudents->map(function ($student) use ($attendanceMap, $session) {
+        $result = $groupStudents->map(function ($student) use ($attendanceMap) {
             $attendance = $attendanceMap->get($student->id);
 
             return [

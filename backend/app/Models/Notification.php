@@ -28,17 +28,29 @@ class Notification extends Model
 
     // Notification Types
     public const TYPE_SESSION_REMINDER = 'session_reminder';
+
     public const TYPE_SESSION_CANCELLED = 'session_cancelled';
+
     public const TYPE_PAYMENT_DUE = 'payment_due';
+
     public const TYPE_PAYMENT_RECEIVED = 'payment_received';
+
     public const TYPE_PAYMENT_OVERDUE = 'payment_overdue';
+
     public const TYPE_EXAM_REMINDER = 'exam_reminder';
+
     public const TYPE_EXAM_RESULT = 'exam_result';
+
     public const TYPE_QUIZ_AVAILABLE = 'quiz_available';
+
     public const TYPE_QUIZ_RESULT = 'quiz_result';
+
     public const TYPE_ANNOUNCEMENT = 'announcement';
+
     public const TYPE_ATTENDANCE_MARKED = 'attendance_marked';
+
     public const TYPE_GROUP_ADDED = 'group_added';
+
     public const TYPE_GENERAL = 'general';
 
     // Relationships
@@ -112,6 +124,7 @@ class Notification extends Model
     {
         $this->is_read = true;
         $this->read_at = now();
+
         return $this->save();
     }
 
@@ -119,6 +132,7 @@ class Notification extends Model
     {
         $this->is_read = false;
         $this->read_at = null;
+
         return $this->save();
     }
 

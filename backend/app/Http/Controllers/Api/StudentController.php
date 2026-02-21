@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StoreStudentRequest;
 use App\Http\Requests\Student\UpdateStudentRequest;
 use App\Http\Resources\StudentResource;
-use App\Models\StudentProfile;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -122,25 +121,25 @@ class StudentController extends Controller
             $userFields = ['name', 'email', 'phone', 'date_of_birth', 'gender', 'is_active'];
             $userUpdates = array_filter(
                 array_intersect_key($validated, array_flip($userFields)),
-                fn($value) => $value !== null
+                fn ($value) => $value !== null
             );
 
-            if (!empty($validated['password'])) {
+            if (! empty($validated['password'])) {
                 $userUpdates['password'] = Hash::make($validated['password']);
             }
 
-            if (!empty($userUpdates)) {
+            if (! empty($userUpdates)) {
                 $student->update($userUpdates);
             }
 
             $profileFields = [
                 'parent_id', 'grade_level', 'school_name', 'address',
                 'emergency_contact_name', 'emergency_contact_phone',
-                'notes', 'enrollment_date', 'status'
+                'notes', 'enrollment_date', 'status',
             ];
             $profileUpdates = array_intersect_key($validated, array_flip($profileFields));
 
-            if (!empty($profileUpdates)) {
+            if (! empty($profileUpdates)) {
                 $student->studentProfile()->updateOrCreate(
                     ['user_id' => $student->id],
                     $profileUpdates
@@ -160,7 +159,7 @@ class StudentController extends Controller
     {
         // Only teachers and admins can delete students
         $user = auth()->user();
-        if (!$user || !in_array($user->role, ['teacher', 'admin'])) {
+        if (! $user || ! in_array($user->role, ['teacher', 'admin'])) {
             abort(403, 'غير مصرح لك بحذف الطلاب');
         }
 

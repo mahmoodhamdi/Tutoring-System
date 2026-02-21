@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Student, StudentStatus } from '@/types/student';
 
 interface StudentCardProps {
@@ -30,9 +31,11 @@ export function StudentCard({ student, onDelete }: StudentCardProps) {
           <div className="flex-shrink-0">
             <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center">
               {student.avatar ? (
-                <img
+                <Image
                   src={student.avatar}
                   alt={student.name}
+                  width={64}
+                  height={64}
                   className="h-16 w-16 rounded-full object-cover"
                 />
               ) : (

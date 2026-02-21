@@ -14,6 +14,7 @@ class ExamCrudTest extends TestCase
     use RefreshDatabase;
 
     protected User $teacher;
+
     protected Group $group;
 
     protected function setUp(): void
@@ -42,7 +43,7 @@ class ExamCrudTest extends TestCase
         Exam::factory()->count(3)->for($group2)->create();
 
         $response = $this->actingAs($this->teacher)
-            ->getJson('/api/exams?group_id=' . $this->group->id);
+            ->getJson('/api/exams?group_id='.$this->group->id);
 
         $response->assertOk()
             ->assertJsonCount(2, 'data');

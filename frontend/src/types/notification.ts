@@ -23,7 +23,7 @@ export interface Notification {
   message: string;
   data?: {
     link?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   is_read: boolean;
   read_at?: string;

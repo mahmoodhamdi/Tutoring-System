@@ -15,7 +15,9 @@ class AttendanceTest extends TestCase
     use RefreshDatabase;
 
     private User $teacher;
+
     private Group $group;
+
     private Session $session;
 
     protected function setUp(): void

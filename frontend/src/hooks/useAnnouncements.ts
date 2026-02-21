@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { announcementsApi } from '@/lib/api/announcements';
 import type {
-  Announcement,
   CreateAnnouncementData,
   UpdateAnnouncementData,
   AnnouncementsFilters,

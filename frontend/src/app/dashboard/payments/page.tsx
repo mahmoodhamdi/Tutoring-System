@@ -20,8 +20,6 @@ export default function PaymentsPage() {
   const { data: reportData } = usePaymentReport();
   const deletePayment = useDeletePayment();
 
-  const [paymentToDelete, setPaymentToDelete] = useState<number | null>(null);
-
   const handleStatusFilter = useCallback((status?: PaymentStatus) => {
     setParams((prev) => ({ ...prev, status, page: 1 }));
   }, []);

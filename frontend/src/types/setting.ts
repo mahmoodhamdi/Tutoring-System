@@ -13,7 +13,7 @@ export type SettingGroup =
 export interface Setting {
   id: number;
   key: string;
-  value: string | boolean | number | string[] | Record<string, any>;
+  value: string | boolean | number | string[] | Record<string, unknown>;
   type: SettingType;
   group: SettingGroup;
   label: string;
@@ -34,7 +34,7 @@ export interface SettingsResponse {
 
 export interface SettingUpdatePayload {
   key: string;
-  value: string | boolean | number | string[] | Record<string, any>;
+  value: string | boolean | number | string[] | Record<string, unknown>;
 }
 
 export interface BulkUpdatePayload {

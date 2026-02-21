@@ -151,6 +151,7 @@ class QuizAttempt extends Model
     public function abandon(): bool
     {
         $this->status = 'abandoned';
+
         return $this->save();
     }
 }

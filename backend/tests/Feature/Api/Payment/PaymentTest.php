@@ -14,7 +14,9 @@ class PaymentTest extends TestCase
     use RefreshDatabase;
 
     private User $teacher;
+
     private User $student;
+
     private Group $group;
 
     protected function setUp(): void

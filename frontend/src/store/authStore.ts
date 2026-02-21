@@ -2,6 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { User } from '@/types';
 
+function setTokenCookie(token: string | null) {
+  if (token) {
+    document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Lax`;
+  } else {
+    document.cookie = 'token=; path=/; max-age=0';
+  }
+}
+
 interface AuthState {
   user: User | null;
   token: string | null;
@@ -30,11 +38,13 @@ export const useAuthStore = create<AuthState>()(
         } else {
           localStorage.removeItem('token');
         }
+        setTokenCookie(token);
         set({ token });
       },
 
       login: (user, token) => {
         localStorage.setItem('token', token);
+        setTokenCookie(token);
         set({
           user,
           token,
@@ -45,6 +55,7 @@ export const useAuthStore = create<AuthState>()(
 
       logout: () => {
         localStorage.removeItem('token');
+        setTokenCookie(null);
         set({
           user: null,
           token: null,

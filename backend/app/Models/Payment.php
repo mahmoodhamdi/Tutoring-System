@@ -111,7 +111,14 @@ class Payment extends Model
             9 => 'سبتمبر', 10 => 'أكتوبر', 11 => 'نوفمبر', 12 => 'ديسمبر',
         ];
 
-        return $months[$this->period_month] . ' ' . $this->period_year;
+        $month = $this->period_month;
+        $year = $this->period_year;
+
+        if (! $month || ! isset($months[$month])) {
+            return $year ? (string) $year : '-';
+        }
+
+        return $months[$month].' '.$year;
     }
 
     /**

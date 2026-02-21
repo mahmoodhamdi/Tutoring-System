@@ -49,7 +49,7 @@ class AnnouncementFactory extends Factory
      */
     public function published(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => true,
             'published_at' => now(),
         ]);
@@ -60,7 +60,7 @@ class AnnouncementFactory extends Factory
      */
     public function draft(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => false,
             'published_at' => null,
         ]);
@@ -71,7 +71,7 @@ class AnnouncementFactory extends Factory
      */
     public function pinned(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_pinned' => true,
         ]);
     }
@@ -81,7 +81,7 @@ class AnnouncementFactory extends Factory
      */
     public function urgent(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'priority' => 'urgent',
         ]);
     }
@@ -91,7 +91,7 @@ class AnnouncementFactory extends Factory
      */
     public function expired(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => true,
             'published_at' => now()->subWeek(),
             'expires_at' => now()->subDay(),
@@ -103,7 +103,7 @@ class AnnouncementFactory extends Factory
      */
     public function ofType(string $type): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => $type,
         ]);
     }
@@ -113,7 +113,7 @@ class AnnouncementFactory extends Factory
      */
     public function withPriority(string $priority): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'priority' => $priority,
         ]);
     }
@@ -123,7 +123,7 @@ class AnnouncementFactory extends Factory
      */
     public function forGroup(Group $group): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'group_id' => $group->id,
         ]);
     }
@@ -133,7 +133,7 @@ class AnnouncementFactory extends Factory
      */
     public function global(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'group_id' => null,
         ]);
     }

@@ -13,9 +13,9 @@ use App\Models\QuizAttempt;
 use App\Models\Session;
 use App\Models\User;
 use App\Services\PdfExportService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class ReportsController extends Controller
 {
@@ -214,6 +214,7 @@ class ReportsController extends Controller
         // Group by student
         $byStudent = $payments->groupBy('student_id')->map(function ($items) {
             $student = $items->first()->student;
+
             return [
                 'student_id' => $student->id,
                 'student_name' => $student->name,
@@ -529,6 +530,7 @@ class ReportsController extends Controller
             'total_duration_hours' => round($sessions->sum(function ($s) {
                 $start = Carbon::parse($s->start_time);
                 $end = Carbon::parse($s->end_time);
+
                 return $start->diffInMinutes($end) / 60;
             }), 1),
         ];
@@ -536,6 +538,7 @@ class ReportsController extends Controller
         // By group
         $byGroup = $sessions->groupBy('group_id')->map(function ($items) {
             $group = $items->first()->group;
+
             return [
                 'group_id' => $group?->id,
                 'group_name' => $group?->name ?? 'بدون مجموعة',
@@ -715,25 +718,25 @@ class ReportsController extends Controller
         }
 
         // Generate CSV
-        $csv = implode(',', $headers) . "\n";
+        $csv = implode(',', $headers)."\n";
 
         foreach ($data as $row) {
             $values = [];
             foreach ($fields as $field) {
                 $value = $row[$field] ?? '';
                 // Escape quotes and wrap in quotes
-                $value = '"' . str_replace('"', '""', $value) . '"';
+                $value = '"'.str_replace('"', '""', $value).'"';
                 $values[] = $value;
             }
-            $csv .= implode(',', $values) . "\n";
+            $csv .= implode(',', $values)."\n";
         }
 
         // Add BOM for UTF-8
-        $csv = "\xEF\xBB\xBF" . $csv;
+        $csv = "\xEF\xBB\xBF".$csv;
 
         return response($csv)
             ->header('Content-Type', 'text/csv; charset=UTF-8')
-            ->header('Content-Disposition', 'attachment; filename="report_' . $reportType . '_' . now()->format('Y-m-d') . '.csv"');
+            ->header('Content-Disposition', 'attachment; filename="report_'.$reportType.'_'.now()->format('Y-m-d').'.csv"');
     }
 
     /**
@@ -799,13 +802,13 @@ class ReportsController extends Controller
         $filters = $request->only(['start_date', 'end_date', 'group_id', 'student_id', 'status']);
 
         // Add group name if group_id is provided
-        if (!empty($filters['group_id'])) {
+        if (! empty($filters['group_id'])) {
             $group = Group::find($filters['group_id']);
             $filters['group_name'] = $group?->name;
         }
 
         // Add student name if student_id is provided
-        if (!empty($filters['student_id'])) {
+        if (! empty($filters['student_id'])) {
             $student = User::find($filters['student_id']);
             $filters['student_name'] = $student?->name;
         }
@@ -938,7 +941,7 @@ class ReportsController extends Controller
                 return response()->json(['message' => 'نوع التقرير غير مدعوم'], 400);
         }
 
-        $filename = "report_{$reportType}_" . now()->format('Y-m-d') . ".pdf";
+        $filename = "report_{$reportType}_".now()->format('Y-m-d').'.pdf';
 
         return $pdf->download($filename);
     }

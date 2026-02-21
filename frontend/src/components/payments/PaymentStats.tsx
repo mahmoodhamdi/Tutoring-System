@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  CurrencyDollarIcon,
   ClockIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,

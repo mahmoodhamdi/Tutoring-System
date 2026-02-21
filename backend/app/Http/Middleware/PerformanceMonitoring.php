@@ -62,7 +62,7 @@ class PerformanceMonitoring
         }
 
         // Log slow queries
-        if (!empty($slowQueries)) {
+        if (! empty($slowQueries)) {
             Log::channel('performance')->warning('Slow queries detected', [
                 'path' => $request->path(),
                 'method' => $request->method(),

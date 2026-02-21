@@ -24,7 +24,7 @@ class StudentProfileFactory extends Factory
             'user_id' => User::factory()->student(),
             'parent_id' => null,
             'grade_level' => $this->faker->randomElement(['الصف الأول', 'الصف الثاني', 'الصف الثالث', 'الصف الرابع', 'الصف الخامس', 'الصف السادس']),
-            'school_name' => $this->faker->company() . ' School',
+            'school_name' => $this->faker->company().' School',
             'address' => $this->faker->address(),
             'emergency_contact_name' => $this->faker->name(),
             'emergency_contact_phone' => $this->faker->phoneNumber(),
@@ -67,7 +67,7 @@ class StudentProfileFactory extends Factory
     /**
      * Attach a parent to the student.
      */
-    public function withParent(User $parent = null): static
+    public function withParent(?User $parent = null): static
     {
         return $this->state(fn (array $attributes) => [
             'parent_id' => $parent?->id ?? User::factory()->parent(),

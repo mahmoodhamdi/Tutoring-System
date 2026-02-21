@@ -4,7 +4,6 @@ import type {
   SettingsResponse,
   SettingsGrouped,
   SettingUpdatePayload,
-  BulkUpdatePayload,
 } from '@/types/setting';
 
 export const settingsApi = {
@@ -33,7 +32,7 @@ export const settingsApi = {
   },
 
   // Update a single setting
-  update: async (key: string, value: any): Promise<Setting> => {
+  update: async (key: string, value: string | boolean | number | string[] | Record<string, unknown>): Promise<Setting> => {
     const response = await apiClient.put(`/settings/${key}`, { value });
     return response.data.data;
   },

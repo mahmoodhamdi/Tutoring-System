@@ -5,6 +5,14 @@ import { useRouter } from 'next/navigation';
 import { usePortalLogin } from '@/hooks/usePortal';
 import { AcademicCapIcon } from '@heroicons/react/24/outline';
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 export default function PortalLoginPage() {
   const router = useRouter();
   const [identifier, setIdentifier] = useState('');
@@ -28,8 +36,9 @@ export default function PortalLoginPage() {
     try {
       await login.mutateAsync({ identifier, password });
       router.push('/portal/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'حدث خطأ أثناء تسجيل الدخول');
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setError(apiErr.response?.data?.message || 'حدث خطأ أثناء تسجيل الدخول');
     }
   };
 

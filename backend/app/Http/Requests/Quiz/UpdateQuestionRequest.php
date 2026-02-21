@@ -52,8 +52,8 @@ class UpdateQuestionRequest extends FormRequest
 
             // For multiple choice and true/false, ensure at least one correct option
             if (in_array($questionType, ['multiple_choice', 'true_false'])) {
-                $hasCorrectOption = collect($options)->contains(fn($opt) => !empty($opt['is_correct']));
-                if (!$hasCorrectOption) {
+                $hasCorrectOption = collect($options)->contains(fn ($opt) => ! empty($opt['is_correct']));
+                if (! $hasCorrectOption) {
                     $validator->errors()->add('options', 'يجب تحديد إجابة صحيحة واحدة على الأقل');
                 }
             }

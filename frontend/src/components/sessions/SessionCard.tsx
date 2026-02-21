@@ -54,11 +54,20 @@ export function SessionCard({ session, showGroup = true }: SessionCardProps) {
       <div className="mt-4 space-y-2">
         <div className="flex items-center text-sm text-gray-600">
           <CalendarIcon className="h-4 w-4 ml-2" />
-          {format(new Date(session.scheduled_at), 'EEEE d MMMM yyyy', { locale: arSA })}
+          {session.scheduled_at
+            ? format(new Date(session.scheduled_at), 'EEEE d MMMM yyyy', { locale: arSA })
+            : session.session_date
+              ? format(new Date(session.session_date + 'T00:00:00'), 'EEEE d MMMM yyyy', { locale: arSA })
+              : '-'}
         </div>
         <div className="flex items-center text-sm text-gray-600">
           <ClockIcon className="h-4 w-4 ml-2" />
-          {format(new Date(session.scheduled_at), 'h:mm a', { locale: arSA })} - {session.duration_minutes} دقيقة
+          {session.scheduled_at
+            ? format(new Date(session.scheduled_at), 'h:mm a', { locale: arSA })
+            : session.start_time
+              ? session.start_time.substring(0, 5)
+              : '--:--'}{' '}
+          - {session.duration_minutes} دقيقة
         </div>
         {session.location && (
           <div className="flex items-center text-sm text-gray-600">

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useQuiz, useUpdateQuiz } from '@/hooks/useQuizzes';
 import { QuizForm } from '@/components/quizzes';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import type { CreateQuizData } from '@/types/quiz';
 
 export default function EditQuizPage() {
   const params = useParams();
@@ -14,7 +15,7 @@ export default function EditQuizPage() {
   const { data: quiz, isLoading } = useQuiz(quizId);
   const updateQuiz = useUpdateQuiz();
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: CreateQuizData) => {
     try {
       await updateQuiz.mutateAsync({ id: quizId, data });
       router.push(`/dashboard/quizzes/${quizId}`);

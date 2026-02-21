@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { QuizAttempt, QuizQuestion, SubmitQuizData } from '@/types/quiz';
+import { QuizAttempt, SubmitQuizData } from '@/types/quiz';
 import { ClockIcon, CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 interface QuizTakerProps {
@@ -19,6 +19,16 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
   const questions = attempt.quiz?.questions || [];
   const currentQuestion = questions[currentQuestionIndex];
 
+  const handleSubmit = useCallback(() => {
+    const submitData: SubmitQuizData = {
+      answers: Object.entries(answers).map(([questionId, answer]) => ({
+        question_id: parseInt(questionId),
+        ...answer,
+      })),
+    };
+    onSubmit(submitData);
+  }, [answers, onSubmit]);
+
   // Timer
   useEffect(() => {
     if (timeRemaining <= 0 || attempt.status !== 'in_progress') return;
@@ -26,7 +36,6 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
     const timer = setInterval(() => {
       setTimeRemaining((prev) => {
         if (prev <= 1) {
-          // Auto-submit when time runs out
           handleSubmit();
           return 0;
         }
@@ -35,7 +44,7 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeRemaining, attempt.status]);
+  }, [timeRemaining, attempt.status, handleSubmit]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -49,16 +58,6 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
       [questionId]: value,
     }));
   };
-
-  const handleSubmit = useCallback(() => {
-    const submitData: SubmitQuizData = {
-      answers: Object.entries(answers).map(([questionId, answer]) => ({
-        question_id: parseInt(questionId),
-        ...answer,
-      })),
-    };
-    onSubmit(submitData);
-  }, [answers, onSubmit]);
 
   const getAnsweredCount = () => {
     return Object.keys(answers).length;

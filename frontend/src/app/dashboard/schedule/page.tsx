@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { useSessions, useDeleteSession } from '@/hooks/useSessions';
+import { useSessions } from '@/hooks/useSessions';
 import { SessionsList } from '@/components/sessions';
 import { Button } from '@/components/ui/Button';
 import { SessionListParams, SessionStatus } from '@/types/session';
@@ -19,14 +19,9 @@ export default function SchedulePage() {
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
 
   const { data, isLoading, isError, error } = useSessions(params);
-  const deleteSession = useDeleteSession();
 
   const handleStatusFilter = useCallback((status?: SessionStatus) => {
     setParams((prev) => ({ ...prev, status, page: 1 }));
-  }, []);
-
-  const handleGroupFilter = useCallback((groupId?: number) => {
-    setParams((prev) => ({ ...prev, group_id: groupId, page: 1 }));
   }, []);
 
   const handlePageChange = useCallback((page: number) => {

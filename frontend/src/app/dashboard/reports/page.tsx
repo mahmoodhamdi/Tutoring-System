@@ -14,11 +14,178 @@ import {
 import { ReportCard, ReportFiltersComponent } from '@/components/reports';
 import type { ReportFilters } from '@/types/report';
 import { formatCurrency } from '@/lib/utils';
-import {
-  ArrowDownTrayIcon,
-  DocumentTextIcon,
-  ChartBarIcon,
-} from '@heroicons/react/24/outline';
+import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+
+// Report data types
+interface AttendanceStudentRow {
+  student_id: number;
+  student_name: string;
+  total: number;
+  present: number;
+  absent: number;
+  late: number;
+  rate: number;
+}
+
+interface AttendanceDataRow {
+  id: number;
+  student_name: string;
+  session_title: string;
+  session_date: string;
+  status: string;
+  status_label: string;
+}
+
+interface AttendanceReportData {
+  summary: {
+    total: number;
+    present: number;
+    absent: number;
+    late: number;
+    attendance_rate: number;
+  };
+  by_student: AttendanceStudentRow[];
+  data: AttendanceDataRow[];
+}
+
+interface PaymentsStudentRow {
+  student_id: number;
+  student_name: string;
+  total_amount: number;
+  paid_amount: number;
+  pending_amount: number;
+  overdue_amount: number;
+}
+
+interface PaymentsDataRow {
+  id: number;
+  student_name: string;
+  amount: number;
+  status: string;
+  status_label: string;
+  due_date: string | null;
+}
+
+interface PaymentsReportData {
+  summary: {
+    paid_amount: number;
+    paid_count: number;
+    pending_amount: number;
+    pending_count: number;
+    overdue_amount: number;
+    overdue_count: number;
+    collection_rate: number;
+  };
+  by_student: PaymentsStudentRow[];
+  data: PaymentsDataRow[];
+}
+
+interface PerformanceStudentRow {
+  student_id: number;
+  student_name: string;
+  exam_count: number;
+  exam_average: number;
+  quiz_count: number;
+  quiz_average: number;
+  overall_average: number;
+}
+
+interface PerformanceReportData {
+  exam_summary: {
+    total_exams: number;
+    total_results: number;
+    average_percentage: number;
+    pass_count: number;
+    fail_count: number;
+    pass_rate: number;
+  };
+  quiz_summary: {
+    total_exams: number;
+    total_results: number;
+    average_percentage: number;
+    pass_count: number;
+    fail_count: number;
+    pass_rate: number;
+  };
+  by_student: PerformanceStudentRow[];
+}
+
+interface StudentsDataRow {
+  id: number;
+  name: string;
+  phone: string;
+  groups: string | null;
+  status: string;
+  status_label: string;
+  parent_name: string | null;
+}
+
+interface StudentsReportData {
+  summary: {
+    total: number;
+    active: number;
+    inactive: number;
+    graduated: number;
+  };
+  data: StudentsDataRow[];
+}
+
+interface SessionsDataRow {
+  id: number;
+  title: string;
+  group_name: string | null;
+  session_date: string;
+  start_time: string;
+  end_time: string;
+  status: string;
+  status_label: string;
+  attendances_count: number;
+}
+
+interface SessionsReportData {
+  summary: {
+    total: number;
+    completed: number;
+    scheduled: number;
+    cancelled: number;
+    total_duration_hours: number;
+  };
+  data: SessionsDataRow[];
+}
+
+interface MonthlyRow {
+  month: string;
+  label: string;
+  revenue: number;
+  pending: number;
+  overdue: number;
+  count: number;
+}
+
+interface TopStudentRow {
+  student_id: number;
+  student_name: string;
+  total: number;
+}
+
+interface OutstandingStudentRow {
+  student_id: number;
+  student_name: string;
+  outstanding: number;
+}
+
+interface FinancialReportData {
+  summary: {
+    total_revenue: number;
+    total_pending: number;
+    total_overdue: number;
+    total_expected: number;
+    collection_rate: number;
+  };
+  monthly: MonthlyRow[];
+  top_students: TopStudentRow[];
+  outstanding_students: OutstandingStudentRow[];
+}
 
 export default function ReportsPage() {
   const [selectedReport, setSelectedReport] = useState<string>('attendance');
@@ -117,32 +284,32 @@ export default function ReportsPage() {
         <>
           {/* Attendance Report */}
           {selectedReport === 'attendance' && attendanceReport.data && (
-            <AttendanceReportView data={attendanceReport.data} />
+            <AttendanceReportView data={attendanceReport.data as AttendanceReportData} />
           )}
 
           {/* Payments Report */}
           {selectedReport === 'payments' && paymentsReport.data && (
-            <PaymentsReportView data={paymentsReport.data} />
+            <PaymentsReportView data={paymentsReport.data as PaymentsReportData} />
           )}
 
           {/* Performance Report */}
           {selectedReport === 'performance' && performanceReport.data && (
-            <PerformanceReportView data={performanceReport.data} />
+            <PerformanceReportView data={performanceReport.data as PerformanceReportData} />
           )}
 
           {/* Students Report */}
           {selectedReport === 'students' && studentsReport.data && (
-            <StudentsReportView data={studentsReport.data} />
+            <StudentsReportView data={studentsReport.data as StudentsReportData} />
           )}
 
           {/* Sessions Report */}
           {selectedReport === 'sessions' && sessionsReport.data && (
-            <SessionsReportView data={sessionsReport.data} />
+            <SessionsReportView data={sessionsReport.data as SessionsReportData} />
           )}
 
           {/* Financial Summary */}
           {selectedReport === 'financial_summary' && financialReport.data && (
-            <FinancialReportView data={financialReport.data} />
+            <FinancialReportView data={financialReport.data as FinancialReportData} />
           )}
         </>
       )}
@@ -151,7 +318,7 @@ export default function ReportsPage() {
 }
 
 // Attendance Report View
-function AttendanceReportView({ data }: { data: any }) {
+function AttendanceReportView({ data }: { data: AttendanceReportData }) {
   return (
     <div className="space-y-6">
       {/* Summary */}
@@ -198,7 +365,7 @@ function AttendanceReportView({ data }: { data: any }) {
                 </tr>
               </thead>
               <tbody>
-                {data.by_student.map((student: any) => (
+                {data.by_student.map((student: AttendanceStudentRow) => (
                   <tr key={student.student_id} className="border-b border-gray-100">
                     <td className="py-3 px-4 font-medium text-gray-900">{student.student_name}</td>
                     <td className="py-3 px-4 text-center text-gray-600">{student.total}</td>
@@ -242,7 +409,7 @@ function AttendanceReportView({ data }: { data: any }) {
               </tr>
             </thead>
             <tbody>
-              {data.data.slice(0, 100).map((item: any) => (
+              {data.data.slice(0, 100).map((item: AttendanceDataRow) => (
                 <tr key={item.id} className="border-b border-gray-100">
                   <td className="py-3 px-4 text-gray-900">{item.student_name}</td>
                   <td className="py-3 px-4 text-gray-600">{item.session_title}</td>
@@ -273,7 +440,7 @@ function AttendanceReportView({ data }: { data: any }) {
 }
 
 // Payments Report View
-function PaymentsReportView({ data }: { data: any }) {
+function PaymentsReportView({ data }: { data: PaymentsReportData }) {
   return (
     <div className="space-y-6">
       {/* Summary */}
@@ -315,7 +482,7 @@ function PaymentsReportView({ data }: { data: any }) {
                 </tr>
               </thead>
               <tbody>
-                {data.by_student.map((student: any) => (
+                {data.by_student.map((student: PaymentsStudentRow) => (
                   <tr key={student.student_id} className="border-b border-gray-100">
                     <td className="py-3 px-4 font-medium text-gray-900">{student.student_name}</td>
                     <td className="py-3 px-4 text-gray-600">{formatCurrency(student.total_amount)}</td>
@@ -346,7 +513,7 @@ function PaymentsReportView({ data }: { data: any }) {
               </tr>
             </thead>
             <tbody>
-              {data.data.slice(0, 100).map((item: any) => (
+              {data.data.slice(0, 100).map((item: PaymentsDataRow) => (
                 <tr key={item.id} className="border-b border-gray-100">
                   <td className="py-3 px-4 text-gray-900">{item.student_name}</td>
                   <td className="py-3 px-4 font-medium text-gray-900">{formatCurrency(item.amount)}</td>
@@ -375,7 +542,7 @@ function PaymentsReportView({ data }: { data: any }) {
 }
 
 // Performance Report View
-function PerformanceReportView({ data }: { data: any }) {
+function PerformanceReportView({ data }: { data: PerformanceReportData }) {
   return (
     <div className="space-y-6">
       {/* Exam Summary */}
@@ -406,7 +573,7 @@ function PerformanceReportView({ data }: { data: any }) {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">ملخص الاختبارات</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center p-4 bg-blue-50 rounded-lg">
-            <p className="text-2xl font-bold text-blue-600">{data.quiz_summary.total_quizzes}</p>
+            <p className="text-2xl font-bold text-blue-600">{data.quiz_summary.total_exams}</p>
             <p className="text-sm text-blue-700">اختبار</p>
           </div>
           <div className="text-center p-4 bg-purple-50 rounded-lg">
@@ -441,7 +608,7 @@ function PerformanceReportView({ data }: { data: any }) {
                 </tr>
               </thead>
               <tbody>
-                {data.by_student.map((student: any) => (
+                {data.by_student.map((student: PerformanceStudentRow) => (
                   <tr key={student.student_id} className="border-b border-gray-100">
                     <td className="py-3 px-4 font-medium text-gray-900">{student.student_name}</td>
                     <td className="py-3 px-4 text-center text-gray-600">{student.exam_count}</td>
@@ -473,7 +640,7 @@ function PerformanceReportView({ data }: { data: any }) {
 }
 
 // Students Report View
-function StudentsReportView({ data }: { data: any }) {
+function StudentsReportView({ data }: { data: StudentsReportData }) {
   return (
     <div className="space-y-6">
       {/* Summary */}
@@ -516,7 +683,7 @@ function StudentsReportView({ data }: { data: any }) {
               </tr>
             </thead>
             <tbody>
-              {data.data.map((student: any) => (
+              {data.data.map((student: StudentsDataRow) => (
                 <tr key={student.id} className="border-b border-gray-100">
                   <td className="py-3 px-4 font-medium text-gray-900">{student.name}</td>
                   <td className="py-3 px-4 text-gray-600">{student.phone}</td>
@@ -546,7 +713,7 @@ function StudentsReportView({ data }: { data: any }) {
 }
 
 // Sessions Report View
-function SessionsReportView({ data }: { data: any }) {
+function SessionsReportView({ data }: { data: SessionsReportData }) {
   return (
     <div className="space-y-6">
       {/* Summary */}
@@ -594,13 +761,13 @@ function SessionsReportView({ data }: { data: any }) {
               </tr>
             </thead>
             <tbody>
-              {data.data.map((session: any) => (
+              {data.data.map((session: SessionsDataRow) => (
                 <tr key={session.id} className="border-b border-gray-100">
                   <td className="py-3 px-4 font-medium text-gray-900">{session.title}</td>
                   <td className="py-3 px-4 text-gray-600">{session.group_name || '-'}</td>
                   <td className="py-3 px-4 text-center text-gray-600">{session.session_date}</td>
                   <td className="py-3 px-4 text-center text-gray-600">
-                    {session.start_time.substring(0, 5)} - {session.end_time.substring(0, 5)}
+                    {(session.start_time || '--:--').substring(0, 5)} - {(session.end_time || '--:--').substring(0, 5)}
                   </td>
                   <td className="py-3 px-4 text-center">
                     <span
@@ -627,7 +794,7 @@ function SessionsReportView({ data }: { data: any }) {
 }
 
 // Financial Report View
-function FinancialReportView({ data }: { data: any }) {
+function FinancialReportView({ data }: { data: FinancialReportData }) {
   return (
     <div className="space-y-6">
       {/* Summary */}
@@ -673,7 +840,7 @@ function FinancialReportView({ data }: { data: any }) {
                 </tr>
               </thead>
               <tbody>
-                {data.monthly.map((month: any) => (
+                {data.monthly.map((month: MonthlyRow) => (
                   <tr key={month.month} className="border-b border-gray-100">
                     <td className="py-3 px-4 font-medium text-gray-900">{month.label}</td>
                     <td className="py-3 px-4 text-green-600">{formatCurrency(month.revenue)}</td>
@@ -694,7 +861,7 @@ function FinancialReportView({ data }: { data: any }) {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">أعلى المسددين</h3>
             <div className="space-y-3">
-              {data.top_students.map((student: any, index: number) => (
+              {data.top_students.map((student: TopStudentRow, index: number) => (
                 <div key={student.student_id} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span
@@ -723,7 +890,7 @@ function FinancialReportView({ data }: { data: any }) {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">مستحقات متأخرة</h3>
             <div className="space-y-3">
-              {data.outstanding_students.map((student: any) => (
+              {data.outstanding_students.map((student: OutstandingStudentRow) => (
                 <div key={student.student_id} className="flex items-center justify-between p-2 bg-red-50 rounded-lg">
                   <span className="text-gray-900">{student.student_name}</span>
                   <span className="font-medium text-red-600">{formatCurrency(student.outstanding)}</span>

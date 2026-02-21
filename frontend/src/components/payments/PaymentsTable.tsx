@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Payment } from '@/types/payment';
 import { format } from 'date-fns';
 import { arSA } from 'date-fns/locale';
-import { PencilSquareIcon, TrashIcon, EyeIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, EyeIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 
 interface PaymentsTableProps {
   payments: Payment[];
@@ -68,7 +68,9 @@ export function PaymentsTable({ payments, onDelete, isDeleting }: PaymentsTableP
                 {payment.period}
               </td>
               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                {format(new Date(payment.payment_date), 'd MMM yyyy', { locale: arSA })}
+                {payment.payment_date
+                  ? format(new Date(payment.payment_date + 'T00:00:00'), 'd MMM yyyy', { locale: arSA })
+                  : '-'}
               </td>
               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                 {payment.payment_method_label}

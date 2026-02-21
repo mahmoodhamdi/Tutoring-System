@@ -8,6 +8,7 @@ enum QuizAttemptStatus: string
     case COMPLETED = 'completed';
     case TIMED_OUT = 'timed_out';
     case ABANDONED = 'abandoned';
+    case GRADED = 'graded';
 
     /**
      * Get the Arabic label for the status.
@@ -19,6 +20,7 @@ enum QuizAttemptStatus: string
             self::COMPLETED => 'مكتمل',
             self::TIMED_OUT => 'انتهى الوقت',
             self::ABANDONED => 'متروك',
+            self::GRADED => 'تم التصحيح',
         };
     }
 
@@ -40,6 +42,7 @@ enum QuizAttemptStatus: string
             self::COMPLETED => 'green',
             self::TIMED_OUT => 'orange',
             self::ABANDONED => 'gray',
+            self::GRADED => 'purple',
         };
     }
 
@@ -48,7 +51,7 @@ enum QuizAttemptStatus: string
      */
     public function isFinished(): bool
     {
-        return in_array($this, [self::COMPLETED, self::TIMED_OUT, self::ABANDONED]);
+        return in_array($this, [self::COMPLETED, self::TIMED_OUT, self::ABANDONED, self::GRADED]);
     }
 
     /**
@@ -56,7 +59,7 @@ enum QuizAttemptStatus: string
      */
     public function countsTowardLimit(): bool
     {
-        return in_array($this, [self::COMPLETED, self::TIMED_OUT]);
+        return in_array($this, [self::COMPLETED, self::TIMED_OUT, self::GRADED]);
     }
 
     /**
@@ -72,6 +75,6 @@ enum QuizAttemptStatus: string
      */
     public function hasScore(): bool
     {
-        return in_array($this, [self::COMPLETED, self::TIMED_OUT]);
+        return in_array($this, [self::COMPLETED, self::TIMED_OUT, self::GRADED]);
     }
 }

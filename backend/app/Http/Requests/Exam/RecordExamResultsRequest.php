@@ -19,7 +19,7 @@ class RecordExamResultsRequest extends FormRequest
         return [
             'results' => 'required|array|min:1',
             'results.*.student_id' => 'required|exists:users,id',
-            'results.*.marks_obtained' => 'nullable|numeric|min:0|max:' . $maxMarks,
+            'results.*.marks_obtained' => 'nullable|numeric|min:0|max:'.$maxMarks,
             'results.*.status' => 'required|in:pending,submitted,graded,absent',
             'results.*.feedback' => 'nullable|string|max:1000',
         ];

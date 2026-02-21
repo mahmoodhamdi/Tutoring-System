@@ -1,23 +1,30 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { portalApi } from '@/lib/api/portal';
 
+interface PortalParams {
+  student_id?: number;
+  start_date?: string;
+  end_date?: string;
+  status?: string;
+  per_page?: number;
+  page?: number;
+}
+
 export const portalKeys = {
   all: ['portal'] as const,
   profile: () => [...portalKeys.all, 'profile'] as const,
   dashboard: (studentId?: number) => [...portalKeys.all, 'dashboard', studentId] as const,
-  attendance: (params?: any) => [...portalKeys.all, 'attendance', params] as const,
-  payments: (params?: any) => [...portalKeys.all, 'payments', params] as const,
+  attendance: (params?: PortalParams) => [...portalKeys.all, 'attendance', params] as const,
+  payments: (params?: PortalParams) => [...portalKeys.all, 'payments', params] as const,
   grades: (studentId?: number) => [...portalKeys.all, 'grades', studentId] as const,
-  schedule: (params?: any) => [...portalKeys.all, 'schedule', params] as const,
-  announcements: (params?: any) => [...portalKeys.all, 'announcements', params] as const,
+  schedule: (params?: PortalParams) => [...portalKeys.all, 'schedule', params] as const,
+  announcements: (params?: PortalParams) => [...portalKeys.all, 'announcements', params] as const,
   announcement: (id: number) => [...portalKeys.all, 'announcement', id] as const,
   children: () => [...portalKeys.all, 'children'] as const,
 };
 
 // Login mutation
 export function usePortalLogin() {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({ identifier, password }: { identifier: string; password: string }) =>
       portalApi.login(identifier, password),

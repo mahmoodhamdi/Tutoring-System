@@ -14,6 +14,61 @@ interface StudentsTableProps {
   sortOrder?: 'asc' | 'desc';
 }
 
+interface SortIconProps {
+  field: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+const SortIcon = ({ field, sortBy, sortOrder }: SortIconProps) => {
+  if (sortBy !== field) {
+    return (
+      <svg
+        className="w-4 h-4 text-gray-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+        />
+      </svg>
+    );
+  }
+  return sortOrder === 'asc' ? (
+    <svg
+      className="w-4 h-4 text-blue-600"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M5 15l7-7 7 7"
+      />
+    </svg>
+  ) : (
+    <svg
+      className="w-4 h-4 text-blue-600"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M19 9l-7 7-7-7"
+      />
+    </svg>
+  );
+};
+
 const statusColors: Record<StudentStatus, string> = {
   active: 'bg-green-100 text-green-800',
   inactive: 'bg-gray-100 text-gray-800',
@@ -47,55 +102,6 @@ export function StudentsTable({
       onDelete(id);
       setDeleteId(null);
     }
-  };
-
-  const SortIcon = ({ field }: { field: string }) => {
-    if (sortBy !== field) {
-      return (
-        <svg
-          className="w-4 h-4 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-          />
-        </svg>
-      );
-    }
-    return sortOrder === 'asc' ? (
-      <svg
-        className="w-4 h-4 text-blue-600"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M5 15l7-7 7 7"
-        />
-      </svg>
-    ) : (
-      <svg
-        className="w-4 h-4 text-blue-600"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M19 9l-7 7-7-7"
-        />
-      </svg>
-    );
   };
 
   if (isLoading) {
@@ -153,7 +159,7 @@ export function StudentsTable({
               >
                 <div className="flex items-center gap-1">
                   <span>الاسم</span>
-                  <SortIcon field="name" />
+                  <SortIcon field="name" sortBy={sortBy} sortOrder={sortOrder} />
                 </div>
               </th>
               <th
@@ -181,7 +187,7 @@ export function StudentsTable({
               >
                 <div className="flex items-center gap-1">
                   <span>تاريخ التسجيل</span>
-                  <SortIcon field="created_at" />
+                  <SortIcon field="created_at" sortBy={sortBy} sortOrder={sortOrder} />
                 </div>
               </th>
               <th scope="col" className="relative px-6 py-3">

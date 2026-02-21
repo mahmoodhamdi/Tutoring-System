@@ -33,7 +33,7 @@ export default function ForgotPasswordPage() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('Failed to send reset link. Please try again.');
+        setError('فشل إرسال رابط إعادة التعيين. يرجى المحاولة مرة أخرى.');
       }
     } finally {
       setIsLoading(false);
@@ -44,13 +44,13 @@ export default function ForgotPasswordPage() {
     return (
       <div className="bg-white py-8 px-6 shadow rounded-lg">
         <Alert variant="success" className="mb-4">
-          Password reset link has been sent to your email. Please check your inbox.
+          تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني. يرجى التحقق من صندوق الوارد.
         </Alert>
         <Link
           href="/login"
           className="block text-center text-sm font-medium text-blue-600 hover:text-blue-500"
         >
-          Back to login
+          العودة إلى تسجيل الدخول
         </Link>
       </div>
     );
@@ -59,10 +59,10 @@ export default function ForgotPasswordPage() {
   return (
     <div className="bg-white py-8 px-6 shadow rounded-lg">
       <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
-        Forgot your password?
+        نسيت كلمة المرور؟
       </h2>
       <p className="text-center text-gray-600 mb-6">
-        Enter your email address and we&apos;ll send you a link to reset your password.
+        أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.
       </p>
 
       {error && (
@@ -73,7 +73,7 @@ export default function ForgotPasswordPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
-          label="Email Address"
+          label="البريد الإلكتروني"
           type="email"
           placeholder="your@email.com"
           error={errors.email?.message}
@@ -81,17 +81,17 @@ export default function ForgotPasswordPage() {
         />
 
         <Button type="submit" className="w-full" isLoading={isLoading}>
-          Send Reset Link
+          إرسال رابط إعادة التعيين
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-gray-600">
-        Remember your password?{' '}
+        تذكرت كلمة المرور؟{' '}
         <Link
           href="/login"
           className="font-medium text-blue-600 hover:text-blue-500"
         >
-          Sign in
+          تسجيل الدخول
         </Link>
       </p>
     </div>

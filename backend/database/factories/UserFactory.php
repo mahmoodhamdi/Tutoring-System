@@ -33,7 +33,7 @@ class UserFactory extends Factory
             'date_of_birth' => fake()->dateTimeBetween('-25 years', '-10 years'),
             'gender' => fake()->randomElement(['male', 'female']),
             'address' => fake()->address(),
-            'school_name' => fake()->company() . ' School',
+            'school_name' => fake()->company().' School',
             'grade_level' => fake()->randomElement(['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']),
             'is_active' => true,
             'remember_token' => Str::random(10),

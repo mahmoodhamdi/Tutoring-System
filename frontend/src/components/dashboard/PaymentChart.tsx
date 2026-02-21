@@ -112,7 +112,7 @@ export function PaymentChart({ data }: PaymentChartProps) {
                       style={{ width: monthTotal > 0 ? `${(item.overdue / monthTotal) * width}%` : '0%' }}
                     ></div>
                   </div>
-                  <span className="text-xs text-gray-600 w-20 text-left">
+                  <span className="text-xs text-gray-600 w-20 text-right">
                     {formatCurrency(monthTotal)}
                   </span>
                 </div>

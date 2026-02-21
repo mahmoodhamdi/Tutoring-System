@@ -1,16 +1,23 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useState, useMemo } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useQuiz, useStartQuizAttempt, useSubmitQuizAttempt, useMyQuizAttempts } from '@/hooks/useQuizzes';
 import { QuizTaker, QuizResults } from '@/components/quizzes';
 import { QuizAttempt, SubmitQuizData } from '@/types/quiz';
 import { ArrowRightIcon, ClockIcon, AcademicCapIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
+interface ErrorResponse {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 export default function TakeQuizPage() {
   const params = useParams();
-  const router = useRouter();
   const quizId = parseInt(params.id as string);
 
   const { data: quiz, isLoading: quizLoading } = useQuiz(quizId);
@@ -18,31 +25,26 @@ export default function TakeQuizPage() {
   const startAttempt = useStartQuizAttempt();
   const submitAttempt = useSubmitQuizAttempt();
 
-  const [currentAttempt, setCurrentAttempt] = useState<QuizAttempt | null>(null);
   const [completedAttempt, setCompletedAttempt] = useState<QuizAttempt | null>(null);
-  const [showInstructions, setShowInstructions] = useState(true);
 
   const isLoading = quizLoading || attemptsLoading;
 
-  // Check for existing in-progress attempt
-  useEffect(() => {
+  // Find existing in-progress attempt using useMemo instead of useEffect
+  const currentAttempt = useMemo(() => {
     if (myAttempts) {
-      const inProgressAttempt = myAttempts.find((a) => a.status === 'in_progress');
-      if (inProgressAttempt) {
-        setCurrentAttempt(inProgressAttempt);
-        setShowInstructions(false);
-      }
+      return myAttempts.find((a) => a.status === 'in_progress') || null;
     }
+    return null;
   }, [myAttempts]);
 
   const handleStartQuiz = async () => {
     try {
-      const attempt = await startAttempt.mutateAsync(quizId);
-      setCurrentAttempt(attempt);
-      setShowInstructions(false);
-    } catch (error: any) {
+      await startAttempt.mutateAsync(quizId);
+      // The attempt will be picked up automatically via the myAttempts query refetch
+    } catch (error: unknown) {
+      const err = error as ErrorResponse;
       console.error('Failed to start quiz:', error);
-      alert(error.response?.data?.message || 'فشل في بدء الاختبار');
+      alert(err.response?.data?.message || 'فشل في بدء الاختبار');
     }
   };
 
@@ -54,11 +56,11 @@ export default function TakeQuizPage() {
         attemptId: currentAttempt.id,
         data,
       });
-      setCurrentAttempt(null);
       setCompletedAttempt(result);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as ErrorResponse;
       console.error('Failed to submit quiz:', error);
-      alert(error.response?.data?.message || 'فشل في تسليم الاختبار');
+      alert(err.response?.data?.message || 'فشل في تسليم الاختبار');
     }
   };
 
@@ -219,22 +221,22 @@ export default function TakeQuizPage() {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">محاولاتك السابقة</h3>
           <div className="space-y-3">
-            {myAttempts.map((attempt, index) => (
+            {myAttempts.map((prevAttempt, index) => (
               <div
-                key={attempt.id}
+                key={prevAttempt.id}
                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
               >
                 <div>
                   <p className="font-medium text-gray-900">المحاولة {index + 1}</p>
-                  <p className="text-sm text-gray-500">{attempt.status_label}</p>
+                  <p className="text-sm text-gray-500">{prevAttempt.status_label}</p>
                 </div>
-                {attempt.percentage !== null && attempt.percentage !== undefined && (
+                {prevAttempt.percentage !== null && prevAttempt.percentage !== undefined && (
                   <div className="text-left">
-                    <p className={`font-bold ${attempt.is_passed ? 'text-green-600' : 'text-red-600'}`}>
-                      {attempt.percentage.toFixed(1)}%
+                    <p className={`font-bold ${prevAttempt.is_passed ? 'text-green-600' : 'text-red-600'}`}>
+                      {prevAttempt.percentage.toFixed(1)}%
                     </p>
                     <p className="text-sm text-gray-500">
-                      {attempt.score?.toFixed(1)} / {quiz.total_marks}
+                      {prevAttempt.score?.toFixed(1)} / {quiz.total_marks}
                     </p>
                   </div>
                 )}

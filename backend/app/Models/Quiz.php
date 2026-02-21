@@ -105,18 +105,20 @@ class Quiz extends Model
     public function getAverageScoreAttribute(): ?float
     {
         $avg = $this->attempts()->where('status', 'completed')->avg('score');
+
         return $avg ? round($avg, 2) : null;
     }
 
     public function getAveragePercentageAttribute(): ?float
     {
         $avg = $this->attempts()->where('status', 'completed')->avg('percentage');
+
         return $avg ? round($avg, 2) : null;
     }
 
     public function getIsAvailableAttribute(): bool
     {
-        if (!$this->is_published) {
+        if (! $this->is_published) {
             return false;
         }
 
@@ -137,12 +139,14 @@ class Quiz extends Model
     {
         $this->recalculateTotalMarks();
         $this->is_published = true;
+
         return $this->save();
     }
 
     public function unpublish(): bool
     {
         $this->is_published = false;
+
         return $this->save();
     }
 
@@ -154,7 +158,7 @@ class Quiz extends Model
 
     public function canStudentAttempt(int $studentId): bool
     {
-        if (!$this->is_available) {
+        if (! $this->is_available) {
             return false;
         }
 
@@ -177,7 +181,7 @@ class Quiz extends Model
     public function duplicate(): Quiz
     {
         $newQuiz = $this->replicate();
-        $newQuiz->title = $this->title . ' (نسخة)';
+        $newQuiz->title = $this->title.' (نسخة)';
         $newQuiz->is_published = false;
         $newQuiz->save();
 

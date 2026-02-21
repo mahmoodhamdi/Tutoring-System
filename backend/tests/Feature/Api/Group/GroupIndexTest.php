@@ -148,7 +148,7 @@ class GroupIndexTest extends TestCase
 
         Sanctum::actingAs($this->teacher);
 
-        $response = $this->getJson('/api/groups?grade_level=' . urlencode('الصف الأول'));
+        $response = $this->getJson('/api/groups?grade_level='.urlencode('الصف الأول'));
 
         $response->assertStatus(200)
             ->assertJsonCount(2, 'data');

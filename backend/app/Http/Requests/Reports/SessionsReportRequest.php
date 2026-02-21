@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Reports;
 
-use App\Enums\SessionStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

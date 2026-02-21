@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { groupsApi } from '@/lib/api/groups';
 import {
-  Group,
   GroupListParams,
   GroupFormData,
   AddStudentsData,

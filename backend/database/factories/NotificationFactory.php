@@ -69,7 +69,7 @@ class NotificationFactory extends Factory
      */
     public function unread(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_read' => false,
             'read_at' => null,
         ]);
@@ -80,7 +80,7 @@ class NotificationFactory extends Factory
      */
     public function read(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_read' => true,
             'read_at' => now(),
         ]);
@@ -91,7 +91,7 @@ class NotificationFactory extends Factory
      */
     public function ofType(string $type): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => $type,
             'title' => $this->getTitleForType($type),
         ]);

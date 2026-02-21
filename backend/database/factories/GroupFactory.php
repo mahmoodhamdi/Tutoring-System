@@ -23,7 +23,7 @@ class GroupFactory extends Factory
         $gradeLevels = ['الصف الأول', 'الصف الثاني', 'الصف الثالث', 'الصف الرابع', 'الصف الخامس', 'الصف السادس'];
 
         return [
-            'name' => $this->faker->randomElement($subjects) . ' - ' . $this->faker->randomElement($gradeLevels),
+            'name' => $this->faker->randomElement($subjects).' - '.$this->faker->randomElement($gradeLevels),
             'description' => $this->faker->optional()->sentence(),
             'subject' => $this->faker->randomElement($subjects),
             'grade_level' => $this->faker->randomElement($gradeLevels),

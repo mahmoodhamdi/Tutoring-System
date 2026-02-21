@@ -9,7 +9,8 @@ interface UpcomingSessionsProps {
 }
 
 export function UpcomingSessions({ data }: UpcomingSessionsProps) {
-  const formatTime = (time: string) => {
+  const formatTime = (time: string | null | undefined) => {
+    if (!time) return '--:--';
     return time.substring(0, 5);
   };
 

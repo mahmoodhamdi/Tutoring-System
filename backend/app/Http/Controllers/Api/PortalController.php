@@ -10,9 +10,9 @@ use App\Models\Payment;
 use App\Models\QuizAttempt;
 use App\Models\Session;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
 
 class PortalController extends Controller
 {
@@ -33,31 +33,31 @@ class PortalController extends Controller
             $q->where('email', $identifier)
                 ->orWhere('phone', $identifier);
         })
-        ->whereIn('role', ['student', 'parent'])
-        ->first();
+            ->whereIn('role', ['student', 'parent'])
+            ->first();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'message' => 'بيانات الدخول غير صحيحة',
             ], 401);
         }
 
         // Check password
-        if (!Hash::check($request->password, $user->password)) {
+        if (! Hash::check($request->password, $user->password)) {
             return response()->json([
                 'message' => 'كلمة المرور غير صحيحة',
             ], 401);
         }
 
         // Check if user is active
-        if (!$user->is_active) {
+        if (! $user->is_active) {
             return response()->json([
                 'message' => 'حسابك غير نشط. يرجى التواصل مع الإدارة.',
             ], 403);
         }
 
         // Create token
-        $token = $user->createToken('portal-token', ['portal:' . $user->role])->plainTextToken;
+        $token = $user->createToken('portal-token', ['portal:'.$user->role])->plainTextToken;
 
         $userData = [
             'id' => $user->id,
@@ -146,7 +146,7 @@ class PortalController extends Controller
 
         $user = $request->user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (! Hash::check($request->current_password, $user->password)) {
             return response()->json([
                 'message' => 'كلمة المرور الحالية غير صحيحة',
             ], 400);
@@ -169,7 +169,7 @@ class PortalController extends Controller
         $user = $request->user();
         $studentId = $this->getStudentId($request);
 
-        if (!$studentId) {
+        if (! $studentId) {
             return response()->json(['message' => 'الطالب غير موجود'], 404);
         }
 
@@ -286,7 +286,7 @@ class PortalController extends Controller
     {
         $studentId = $this->getStudentId($request);
 
-        if (!$studentId) {
+        if (! $studentId) {
             return response()->json(['message' => 'الطالب غير موجود'], 404);
         }
 
@@ -342,7 +342,7 @@ class PortalController extends Controller
     {
         $studentId = $this->getStudentId($request);
 
-        if (!$studentId) {
+        if (! $studentId) {
             return response()->json(['message' => 'الطالب غير موجود'], 404);
         }
 
@@ -384,7 +384,7 @@ class PortalController extends Controller
     {
         $studentId = $this->getStudentId($request);
 
-        if (!$studentId) {
+        if (! $studentId) {
             return response()->json(['message' => 'الطالب غير موجود'], 404);
         }
 
@@ -451,7 +451,7 @@ class PortalController extends Controller
     {
         $studentId = $this->getStudentId($request);
 
-        if (!$studentId) {
+        if (! $studentId) {
             return response()->json(['message' => 'الطالب غير موجود'], 404);
         }
 
@@ -524,7 +524,7 @@ class PortalController extends Controller
      */
     public function showAnnouncement(Request $request, Announcement $announcement)
     {
-        if (!$announcement->is_active) {
+        if (! $announcement->is_active) {
             return response()->json(['message' => 'الإعلان غير متاح'], 404);
         }
 
@@ -557,7 +557,7 @@ class PortalController extends Controller
                     'name' => $child->name,
                     'grade_level' => $child->studentProfile?->grade_level,
                     'status' => $child->studentProfile?->status,
-                    'groups' => $child->groups->map(fn($g) => [
+                    'groups' => $child->groups->map(fn ($g) => [
                         'id' => $g->id,
                         'name' => $g->name,
                     ]),
@@ -605,6 +605,7 @@ class PortalController extends Controller
                 if ($childExists) {
                     return (int) $request->student_id;
                 }
+
                 return null;
             }
 

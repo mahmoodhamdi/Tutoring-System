@@ -14,7 +14,9 @@ class Setting extends Model
      * Cache key prefix for settings.
      */
     private const CACHE_PREFIX = 'settings:';
+
     private const CACHE_ALL_KEY = 'settings:all';
+
     private const CACHE_TTL = 86400; // 24 hours
 
     /**
@@ -43,12 +45,12 @@ class Setting extends Model
     public static function get(string $key, mixed $default = null): mixed
     {
         $setting = Cache::remember(
-            self::CACHE_PREFIX . $key,
+            self::CACHE_PREFIX.$key,
             self::CACHE_TTL,
             fn () => static::where('key', $key)->first()
         );
 
-        if (!$setting) {
+        if (! $setting) {
             return $default;
         }
 
@@ -109,14 +111,14 @@ class Setting extends Model
     public static function getByGroup(string $group): array
     {
         return Cache::remember(
-            self::CACHE_PREFIX . 'group:' . $group,
+            self::CACHE_PREFIX.'group:'.$group,
             self::CACHE_TTL,
             function () use ($group) {
                 return static::where('group', $group)
                     ->get()
                     ->mapWithKeys(function ($setting) {
                         return [
-                            $setting->key => self::castValue($setting->value, $setting->type)
+                            $setting->key => self::castValue($setting->value, $setting->type),
                         ];
                     })
                     ->toArray();
@@ -130,7 +132,7 @@ class Setting extends Model
     public static function getPublic(): array
     {
         return Cache::remember(
-            self::CACHE_PREFIX . 'public',
+            self::CACHE_PREFIX.'public',
             self::CACHE_TTL,
             function () {
                 return static::where('is_public', true)
@@ -210,12 +212,12 @@ class Setting extends Model
     public static function clearCache(?string $key = null): void
     {
         if ($key) {
-            Cache::forget(self::CACHE_PREFIX . $key);
+            Cache::forget(self::CACHE_PREFIX.$key);
         }
 
         // Always clear the all cache when any setting changes
         Cache::forget(self::CACHE_ALL_KEY);
-        Cache::forget(self::CACHE_PREFIX . 'public');
+        Cache::forget(self::CACHE_PREFIX.'public');
     }
 
     /**
@@ -226,12 +228,12 @@ class Setting extends Model
         $settings = static::all();
 
         foreach ($settings as $setting) {
-            Cache::forget(self::CACHE_PREFIX . $setting->key);
-            Cache::forget(self::CACHE_PREFIX . 'group:' . $setting->group);
+            Cache::forget(self::CACHE_PREFIX.$setting->key);
+            Cache::forget(self::CACHE_PREFIX.'group:'.$setting->group);
         }
 
         Cache::forget(self::CACHE_ALL_KEY);
-        Cache::forget(self::CACHE_PREFIX . 'public');
+        Cache::forget(self::CACHE_PREFIX.'public');
     }
 
     /**

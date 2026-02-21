@@ -41,7 +41,7 @@ class SettingController extends Controller
     {
         $setting = Setting::where('key', $key)->first();
 
-        if (!$setting) {
+        if (! $setting) {
             return response()->json([
                 'message' => 'الإعداد غير موجود',
             ], 404);
@@ -85,7 +85,7 @@ class SettingController extends Controller
     {
         $setting = Setting::where('key', $key)->first();
 
-        if (!$setting) {
+        if (! $setting) {
             return response()->json([
                 'message' => 'الإعداد غير موجود',
             ], 404);

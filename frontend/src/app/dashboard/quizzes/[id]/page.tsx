@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   useQuiz,
@@ -14,7 +14,6 @@ import {
 } from '@/hooks/useQuizzes';
 import { QuestionForm, AttemptsTable } from '@/components/quizzes';
 import { QuizQuestion, CreateQuestionData, QUESTION_TYPE_LABELS } from '@/types/quiz';
-import { formatDate } from '@/lib/utils';
 import {
   ArrowRightIcon,
   PencilIcon,
@@ -29,7 +28,6 @@ import {
 
 export default function QuizDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const quizId = parseInt(params.id as string);
 
   const { data: quiz, isLoading } = useQuiz(quizId);

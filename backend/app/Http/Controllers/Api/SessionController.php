@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Session\CancelSessionRequest;
 use App\Http\Requests\Session\StoreSessionRequest;
 use App\Http\Requests\Session\UpdateSessionRequest;
-use App\Http\Requests\Session\CancelSessionRequest;
 use App\Http\Resources\SessionResource;
 use App\Models\Session;
 use Illuminate\Http\JsonResponse;

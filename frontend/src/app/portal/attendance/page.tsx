@@ -2,6 +2,7 @@
 
 import { usePortalAttendance } from '@/hooks/usePortal';
 import { PORTAL_ATTENDANCE_STATUS_LABELS } from '@/types/portal';
+import type { PortalAttendanceItem } from '@/types/portal';
 import {
   ClipboardDocumentListIcon,
   CheckCircleIcon,
@@ -153,7 +154,7 @@ export default function PortalAttendancePage() {
                 </tr>
               </thead>
               <tbody>
-                {data.data.map((record: any) => (
+                {data.data.map((record: PortalAttendanceItem) => (
                   <tr key={record.id} className="border-b border-gray-100">
                     <td className="py-3 px-4">
                       <p className="font-medium text-gray-900">{record.session?.title}</p>

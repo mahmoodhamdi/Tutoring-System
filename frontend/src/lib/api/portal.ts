@@ -14,7 +14,6 @@ import type {
   PortalChild,
 } from '@/types/portal';
 import type { Announcement } from '@/types/announcement';
-import type { PaginatedResponse } from '@/types';
 
 export const portalApi = {
   // Login

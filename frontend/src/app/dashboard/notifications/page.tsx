@@ -12,15 +12,16 @@ import {
 } from '@/hooks/useNotifications';
 import { NotificationItem } from '@/components/notifications';
 import { NOTIFICATION_TYPE_LABELS } from '@/types/notification';
+import type { NotificationsFilters, NotificationType } from '@/types/notification';
 import { BellIcon, CheckIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 export default function NotificationsPage() {
-  const [filters, setFilters] = useState({
-    is_read: undefined as boolean | undefined,
-    type: undefined as string | undefined,
+  const [filters, setFilters] = useState<NotificationsFilters>({
+    is_read: undefined,
+    type: undefined,
   });
 
-  const { data: notificationsData, isLoading } = useNotifications(filters as any);
+  const { data: notificationsData, isLoading } = useNotifications(filters);
   const { data: unreadCount } = useUnreadNotificationsCount();
 
   const markAsRead = useMarkNotificationAsRead();
@@ -128,7 +129,7 @@ export default function NotificationsPage() {
           {/* Type Filter */}
           <select
             value={filters.type || ''}
-            onChange={(e) => setFilters({ ...filters, type: e.target.value || undefined })}
+            onChange={(e) => setFilters({ ...filters, type: (e.target.value as NotificationType) || undefined })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           >
             <option value="">جميع الأنواع</option>

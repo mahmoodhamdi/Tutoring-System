@@ -38,7 +38,7 @@ export function RegisterForm() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('Registration failed. Please try again.');
+        setError('فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.');
       }
     }
   };
@@ -46,26 +46,26 @@ export function RegisterForm() {
   return (
     <div className="bg-white py-8 px-6 shadow rounded-lg">
       <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">
-        Create your account
+        إنشاء حساب جديد
       </h2>
 
       {(error || registerError) && (
         <Alert variant="error" className="mb-4" onClose={() => setError(null)}>
-          {error || 'Registration failed. Please try again.'}
+          {error || 'فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.'}
         </Alert>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
-          label="Full Name"
+          label="الاسم الكامل"
           type="text"
-          placeholder="Enter your full name"
+          placeholder="أدخل اسمك الكامل"
           error={errors.name?.message}
           {...register('name')}
         />
 
         <Input
-          label="Phone Number"
+          label="رقم الهاتف"
           type="tel"
           placeholder="+201234567890"
           error={errors.phone?.message}
@@ -73,7 +73,7 @@ export function RegisterForm() {
         />
 
         <Input
-          label="Email (Optional)"
+          label="البريد الإلكتروني (اختياري)"
           type="email"
           placeholder="your@email.com"
           error={errors.email?.message}
@@ -81,33 +81,33 @@ export function RegisterForm() {
         />
 
         <Input
-          label="Password"
+          label="كلمة المرور"
           type="password"
-          placeholder="Create a strong password"
+          placeholder="أنشئ كلمة مرور قوية"
           error={errors.password?.message}
-          helperText="At least 8 characters with uppercase, lowercase, and numbers"
+          helperText="8 أحرف على الأقل تتضمن أحرفاً كبيرة وصغيرة وأرقاماً"
           {...register('password')}
         />
 
         <Input
-          label="Confirm Password"
+          label="تأكيد كلمة المرور"
           type="password"
-          placeholder="Confirm your password"
+          placeholder="أعد إدخال كلمة المرور"
           error={errors.password_confirmation?.message}
           {...register('password_confirmation')}
         />
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Account Type
+            نوع الحساب
           </label>
           <select
             className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             {...register('role')}
           >
-            <option value="student">Student</option>
-            <option value="parent">Parent</option>
-            <option value="teacher">Teacher</option>
+            <option value="student">طالب</option>
+            <option value="parent">ولي أمر</option>
+            <option value="teacher">معلم</option>
           </select>
           {errors.role && (
             <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>
@@ -115,17 +115,17 @@ export function RegisterForm() {
         </div>
 
         <Button type="submit" className="w-full" isLoading={isLoading}>
-          Create Account
+          إنشاء حساب
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-gray-600">
-        Already have an account?{' '}
+        لديك حساب بالفعل؟{' '}
         <Link
           href="/login"
           className="font-medium text-blue-600 hover:text-blue-500"
         >
-          Sign in
+          تسجيل الدخول
         </Link>
       </p>
     </div>

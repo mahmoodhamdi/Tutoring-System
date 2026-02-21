@@ -16,18 +16,19 @@ import {
 import { useGroups } from '@/hooks/useGroups';
 import { AnnouncementCard } from '@/components/announcements';
 import { PRIORITY_LABELS, TYPE_LABELS } from '@/types/announcement';
+import type { AnnouncementsFilters, AnnouncementPriority, AnnouncementType } from '@/types/announcement';
 import { PlusIcon, MagnifyingGlassIcon, CheckIcon } from '@heroicons/react/24/outline';
 
 export default function AnnouncementsPage() {
-  const [filters, setFilters] = useState({
-    group_id: undefined as number | undefined,
-    is_published: undefined as boolean | undefined,
-    priority: undefined as string | undefined,
-    type: undefined as string | undefined,
+  const [filters, setFilters] = useState<AnnouncementsFilters>({
+    group_id: undefined,
+    is_published: undefined,
+    priority: undefined,
+    type: undefined,
     search: '',
   });
 
-  const { data: announcementsData, isLoading } = useAnnouncements(filters as any);
+  const { data: announcementsData, isLoading } = useAnnouncements(filters);
   const { data: unreadAnnouncements } = useUnreadAnnouncements();
   const { data: groupsData } = useGroups();
 
@@ -165,7 +166,7 @@ export default function AnnouncementsPage() {
           {/* Priority Filter */}
           <select
             value={filters.priority || ''}
-            onChange={(e) => setFilters({ ...filters, priority: e.target.value || undefined })}
+            onChange={(e) => setFilters({ ...filters, priority: (e.target.value as AnnouncementPriority) || undefined })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           >
             <option value="">جميع الأولويات</option>
@@ -179,7 +180,7 @@ export default function AnnouncementsPage() {
           {/* Type Filter */}
           <select
             value={filters.type || ''}
-            onChange={(e) => setFilters({ ...filters, type: e.target.value || undefined })}
+            onChange={(e) => setFilters({ ...filters, type: (e.target.value as AnnouncementType) || undefined })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           >
             <option value="">جميع الأنواع</option>

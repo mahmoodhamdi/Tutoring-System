@@ -198,9 +198,11 @@ export default function SessionPage({ params }: SessionPageProps) {
                 <div>
                   <p className="text-sm text-gray-500">التاريخ</p>
                   <p className="font-medium">
-                    {format(new Date(sessionData.scheduled_at), 'd MMMM yyyy', {
-                      locale: arSA,
-                    })}
+                    {sessionData.scheduled_at
+                      ? format(new Date(sessionData.scheduled_at), 'd MMMM yyyy', { locale: arSA })
+                      : sessionData.session_date
+                        ? format(new Date(sessionData.session_date + 'T00:00:00'), 'd MMMM yyyy', { locale: arSA })
+                        : '-'}
                   </p>
                 </div>
               </div>
@@ -210,9 +212,11 @@ export default function SessionPage({ params }: SessionPageProps) {
                 <div>
                   <p className="text-sm text-gray-500">الوقت</p>
                   <p className="font-medium">
-                    {format(new Date(sessionData.scheduled_at), 'h:mm a', {
-                      locale: arSA,
-                    })}
+                    {sessionData.scheduled_at
+                      ? format(new Date(sessionData.scheduled_at), 'h:mm a', { locale: arSA })
+                      : sessionData.start_time
+                        ? sessionData.start_time.substring(0, 5)
+                        : '--:--'}
                   </p>
                 </div>
               </div>

@@ -13,6 +13,7 @@ class GroupShowTest extends TestCase
     use RefreshDatabase;
 
     private User $teacher;
+
     private Group $group;
 
     protected function setUp(): void

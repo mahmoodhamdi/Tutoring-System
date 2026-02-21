@@ -71,7 +71,6 @@ test.describe('Authentication', () => {
 
     // Check for validation messages
     const phoneInput = page.locator('input[name="phone"], input[type="tel"]');
-    const passwordInput = page.locator('input[name="password"], input[type="password"]');
 
     // Either HTML5 validation or custom validation
     const hasPhoneError = await page.locator('text=مطلوب, text=required').first().isVisible().catch(() => false);

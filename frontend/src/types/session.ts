@@ -7,8 +7,10 @@ export interface Session {
   group_id: number;
   title: string;
   description: string | null;
-  scheduled_at: string;
-  end_time: string;
+  session_date: string | null;
+  start_time: string | null;
+  scheduled_at: string | null;
+  end_time: string | null;
   duration_minutes: number;
   status: 'scheduled' | 'completed' | 'cancelled';
   location: string | null;

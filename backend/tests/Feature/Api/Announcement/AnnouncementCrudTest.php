@@ -14,7 +14,9 @@ class AnnouncementCrudTest extends TestCase
     use RefreshDatabase;
 
     protected User $teacher;
+
     protected User $student;
+
     protected Group $group;
 
     protected function setUp(): void
@@ -52,7 +54,7 @@ class AnnouncementCrudTest extends TestCase
             'group_id' => $group2->id,
         ]);
 
-        $response = $this->getJson('/api/announcements?group_id=' . $group1->id);
+        $response = $this->getJson('/api/announcements?group_id='.$group1->id);
 
         $response->assertOk()
             ->assertJsonCount(2, 'data');
@@ -129,7 +131,7 @@ class AnnouncementCrudTest extends TestCase
     {
         $announcement = Announcement::factory()->published()->create(['user_id' => $this->teacher->id]);
 
-        $response = $this->getJson('/api/announcements/' . $announcement->id);
+        $response = $this->getJson('/api/announcements/'.$announcement->id);
 
         $response->assertOk()
             ->assertJsonPath('data.id', $announcement->id)
@@ -140,7 +142,7 @@ class AnnouncementCrudTest extends TestCase
     {
         $announcement = Announcement::factory()->create(['user_id' => $this->teacher->id]);
 
-        $response = $this->putJson('/api/announcements/' . $announcement->id, [
+        $response = $this->putJson('/api/announcements/'.$announcement->id, [
             'title' => 'عنوان محدث',
             'content' => 'محتوى محدث',
         ]);
@@ -153,7 +155,7 @@ class AnnouncementCrudTest extends TestCase
     {
         $announcement = Announcement::factory()->create(['user_id' => $this->teacher->id]);
 
-        $response = $this->deleteJson('/api/announcements/' . $announcement->id);
+        $response = $this->deleteJson('/api/announcements/'.$announcement->id);
 
         $response->assertOk();
         $this->assertSoftDeleted('announcements', ['id' => $announcement->id]);
@@ -163,7 +165,7 @@ class AnnouncementCrudTest extends TestCase
     {
         $announcement = Announcement::factory()->draft()->create(['user_id' => $this->teacher->id]);
 
-        $response = $this->postJson('/api/announcements/' . $announcement->id . '/publish');
+        $response = $this->postJson('/api/announcements/'.$announcement->id.'/publish');
 
         $response->assertOk()
             ->assertJsonPath('data.is_published', true);
@@ -177,7 +179,7 @@ class AnnouncementCrudTest extends TestCase
     {
         $announcement = Announcement::factory()->published()->create(['user_id' => $this->teacher->id]);
 
-        $response = $this->postJson('/api/announcements/' . $announcement->id . '/unpublish');
+        $response = $this->postJson('/api/announcements/'.$announcement->id.'/unpublish');
 
         $response->assertOk()
             ->assertJsonPath('data.is_published', false);
@@ -190,7 +192,7 @@ class AnnouncementCrudTest extends TestCase
             'is_pinned' => false,
         ]);
 
-        $response = $this->postJson('/api/announcements/' . $announcement->id . '/pin');
+        $response = $this->postJson('/api/announcements/'.$announcement->id.'/pin');
 
         $response->assertOk()
             ->assertJsonPath('data.is_pinned', true);
@@ -200,7 +202,7 @@ class AnnouncementCrudTest extends TestCase
     {
         $announcement = Announcement::factory()->published()->pinned()->create(['user_id' => $this->teacher->id]);
 
-        $response = $this->postJson('/api/announcements/' . $announcement->id . '/unpin');
+        $response = $this->postJson('/api/announcements/'.$announcement->id.'/unpin');
 
         $response->assertOk()
             ->assertJsonPath('data.is_pinned', false);
@@ -210,7 +212,7 @@ class AnnouncementCrudTest extends TestCase
     {
         $announcement = Announcement::factory()->published()->create(['user_id' => $this->teacher->id]);
 
-        $response = $this->postJson('/api/announcements/' . $announcement->id . '/read');
+        $response = $this->postJson('/api/announcements/'.$announcement->id.'/read');
 
         $response->assertOk();
         $this->assertTrue($announcement->isReadBy($this->teacher->id));

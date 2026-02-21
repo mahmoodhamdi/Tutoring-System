@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Group;
-use App\Models\Session;
+use App\Models\Announcement;
 use App\Models\Attendance;
-use App\Models\Payment;
 use App\Models\Exam;
 use App\Models\ExamResult;
+use App\Models\Group;
+use App\Models\Payment;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
-use App\Models\Announcement;
+use App\Models\Session;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -242,10 +242,12 @@ class DashboardController extends Controller
                     return false;
                 }
                 $rate = ($student->present_attendance / $student->total_attendance) * 100;
+
                 return $rate < $threshold;
             })
             ->map(function ($student) {
                 $rate = round(($student->present_attendance / $student->total_attendance) * 100, 1);
+
                 return [
                     'id' => $student->id,
                     'name' => $student->name,
@@ -296,6 +298,7 @@ class DashboardController extends Controller
             ->get()
             ->map(function ($student) {
                 $totalOverdue = $student->payments->sum('amount');
+
                 return [
                     'id' => $student->id,
                     'name' => $student->name,
@@ -393,7 +396,9 @@ class DashboardController extends Controller
             $query->whereBetween('exam_date', [$startDate, $endDate]);
         })->count();
 
-        if ($total === 0) return 0;
+        if ($total === 0) {
+            return 0;
+        }
 
         $passed = ExamResult::whereHas('exam', function ($query) use ($startDate, $endDate) {
             $query->whereBetween('exam_date', [$startDate, $endDate]);
@@ -411,7 +416,9 @@ class DashboardController extends Controller
             ->where('status', 'graded')
             ->count();
 
-        if ($total === 0) return 0;
+        if ($total === 0) {
+            return 0;
+        }
 
         $passed = QuizAttempt::whereBetween('submitted_at', [$startDate, $endDate])
             ->where('status', 'graded')
@@ -453,7 +460,7 @@ class DashboardController extends Controller
                     'average' => round($average, 1),
                 ];
             })
-            ->filter(fn($s) => $s['average'] > 0)
+            ->filter(fn ($s) => $s['average'] > 0)
             ->sortByDesc('average')
             ->take($limit)
             ->values()
@@ -493,7 +500,7 @@ class DashboardController extends Controller
                     'average' => round($average, 1),
                 ];
             })
-            ->filter(fn($s) => $s['average'] > 0 && $s['average'] < $threshold)
+            ->filter(fn ($s) => $s['average'] > 0 && $s['average'] < $threshold)
             ->sortBy('average')
             ->take($limit)
             ->values()
@@ -516,10 +523,10 @@ class DashboardController extends Controller
                         $q->where('groups.id', $group->id);
                     });
                 })
-                ->whereHas('exam', function ($query) use ($startDate, $endDate) {
-                    $query->whereBetween('exam_date', [$startDate, $endDate]);
-                })
-                ->avg('percentage') ?? 0;
+                    ->whereHas('exam', function ($query) use ($startDate, $endDate) {
+                        $query->whereBetween('exam_date', [$startDate, $endDate]);
+                    })
+                    ->avg('percentage') ?? 0;
 
                 return [
                     'id' => $group->id,
@@ -547,10 +554,10 @@ class DashboardController extends Controller
             ->map(function ($session) {
                 return [
                     'type' => 'session',
-                    'title' => 'جلسة جديدة: ' . $session->title,
+                    'title' => 'جلسة جديدة: '.$session->title,
                     'description' => $session->group?->name ?? 'بدون مجموعة',
                     'date' => $session->created_at,
-                    'link' => '/dashboard/sessions/' . $session->id,
+                    'link' => '/dashboard/sessions/'.$session->id,
                 ];
             });
 
@@ -562,10 +569,10 @@ class DashboardController extends Controller
             ->map(function ($payment) {
                 return [
                     'type' => 'payment',
-                    'title' => 'دفعة: ' . number_format($payment->amount) . ' ج.م',
+                    'title' => 'دفعة: '.number_format($payment->amount).' ج.م',
                     'description' => $payment->student?->name ?? 'طالب',
                     'date' => $payment->created_at,
-                    'link' => '/dashboard/payments/' . $payment->id,
+                    'link' => '/dashboard/payments/'.$payment->id,
                 ];
             });
 
@@ -577,10 +584,10 @@ class DashboardController extends Controller
             ->map(function ($result) {
                 return [
                     'type' => 'exam_result',
-                    'title' => 'نتيجة امتحان: ' . ($result->exam?->title ?? 'امتحان'),
-                    'description' => ($result->student?->name ?? 'طالب') . ' - ' . $result->percentage . '%',
+                    'title' => 'نتيجة امتحان: '.($result->exam?->title ?? 'امتحان'),
+                    'description' => ($result->student?->name ?? 'طالب').' - '.$result->percentage.'%',
                     'date' => $result->created_at,
-                    'link' => '/dashboard/exams/' . $result->exam_id,
+                    'link' => '/dashboard/exams/'.$result->exam_id,
                 ];
             });
 

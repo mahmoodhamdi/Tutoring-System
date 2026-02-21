@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -16,8 +16,8 @@ import {
   Bars3Icon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { usePortalLogout, usePortalProfile, usePortalChildren } from '@/hooks/usePortal';
-import type { PortalUser, PortalChild } from '@/types/portal';
+import { usePortalLogout, usePortalChildren } from '@/hooks/usePortal';
+import type { PortalUser } from '@/types/portal';
 
 const studentNavItems = [
   { href: '/portal/dashboard', label: 'الرئيسية', icon: HomeIcon },
@@ -33,14 +33,13 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname();
   const logout = usePortalLogout();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<PortalUser | null>(null);
   const [selectedChild, setSelectedChild] = useState<number | undefined>();
 
-  const { data: profile } = usePortalProfile();
   const { data: portalChildren } = usePortalChildren();
 
-  // Check authentication
-  useEffect(() => {
+  // Get user from localStorage using useMemo instead of useEffect
+  const user = useMemo<PortalUser | null>(() => {
+    if (typeof window === 'undefined') return null;
     const token = localStorage.getItem('portal_token');
     const storedUser = localStorage.getItem('portal_user');
 
@@ -48,20 +47,21 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
       if (pathname !== '/portal') {
         router.push('/portal');
       }
-      return;
+      return null;
     }
 
     try {
-      setUser(JSON.parse(storedUser));
+      return JSON.parse(storedUser) as PortalUser;
     } catch {
       router.push('/portal');
+      return null;
     }
   }, [pathname, router]);
 
   const handleLogout = async () => {
     try {
       await logout.mutateAsync();
-    } catch (error) {
+    } catch {
       // Even if API fails, clear local storage
     }
     localStorage.removeItem('portal_token');

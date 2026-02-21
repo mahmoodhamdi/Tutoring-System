@@ -48,7 +48,7 @@ function ResetPasswordForm() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('Failed to reset password. Please try again.');
+        setError('فشل إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.');
       }
     } finally {
       setIsLoading(false);
@@ -59,13 +59,13 @@ function ResetPasswordForm() {
     return (
       <div className="bg-white py-8 px-6 shadow rounded-lg">
         <Alert variant="error" className="mb-4">
-          Invalid or missing reset token. Please request a new password reset link.
+          رمز إعادة التعيين غير صالح أو مفقود. يرجى طلب رابط إعادة تعيين جديد.
         </Alert>
         <Link
           href="/forgot-password"
           className="block text-center text-sm font-medium text-blue-600 hover:text-blue-500"
         >
-          Request new reset link
+          طلب رابط إعادة تعيين جديد
         </Link>
       </div>
     );
@@ -75,13 +75,13 @@ function ResetPasswordForm() {
     return (
       <div className="bg-white py-8 px-6 shadow rounded-lg">
         <Alert variant="success" className="mb-4">
-          Your password has been reset successfully. Redirecting to login...
+          تم إعادة تعيين كلمة المرور بنجاح. جاري تحويلك إلى صفحة تسجيل الدخول...
         </Alert>
         <Link
           href="/login"
           className="block text-center text-sm font-medium text-blue-600 hover:text-blue-500"
         >
-          Go to login
+          الذهاب إلى تسجيل الدخول
         </Link>
       </div>
     );
@@ -90,10 +90,10 @@ function ResetPasswordForm() {
   return (
     <div className="bg-white py-8 px-6 shadow rounded-lg">
       <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
-        Reset your password
+        إعادة تعيين كلمة المرور
       </h2>
       <p className="text-center text-gray-600 mb-6">
-        Enter your new password below.
+        أدخل كلمة المرور الجديدة أدناه.
       </p>
 
       {error && (
@@ -106,7 +106,7 @@ function ResetPasswordForm() {
         <input type="hidden" {...register('token')} />
 
         <Input
-          label="Email Address"
+          label="البريد الإلكتروني"
           type="email"
           placeholder="your@email.com"
           error={errors.email?.message}
@@ -114,34 +114,34 @@ function ResetPasswordForm() {
         />
 
         <Input
-          label="New Password"
+          label="كلمة المرور الجديدة"
           type="password"
-          placeholder="Create a strong password"
+          placeholder="أنشئ كلمة مرور قوية"
           error={errors.password?.message}
-          helperText="At least 8 characters with uppercase, lowercase, and numbers"
+          helperText="8 أحرف على الأقل تتضمن أحرفاً كبيرة وصغيرة وأرقاماً"
           {...register('password')}
         />
 
         <Input
-          label="Confirm New Password"
+          label="تأكيد كلمة المرور الجديدة"
           type="password"
-          placeholder="Confirm your new password"
+          placeholder="أعد إدخال كلمة المرور الجديدة"
           error={errors.password_confirmation?.message}
           {...register('password_confirmation')}
         />
 
         <Button type="submit" className="w-full" isLoading={isLoading}>
-          Reset Password
+          إعادة تعيين كلمة المرور
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-gray-600">
-        Remember your password?{' '}
+        تذكرت كلمة المرور؟{' '}
         <Link
           href="/login"
           className="font-medium text-blue-600 hover:text-blue-500"
         >
-          Sign in
+          تسجيل الدخول
         </Link>
       </p>
     </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Student, StudentStatus } from '@/types/student';
 
 interface StudentProfileCardProps {
@@ -29,9 +30,11 @@ export function StudentProfileCard({ student }: StudentProfileCardProps) {
           <div className="flex-shrink-0">
             <div className="h-20 w-20 rounded-full bg-white flex items-center justify-center">
               {student.avatar ? (
-                <img
+                <Image
                   src={student.avatar}
                   alt={student.name}
+                  width={80}
+                  height={80}
                   className="h-20 w-20 rounded-full object-cover"
                 />
               ) : (

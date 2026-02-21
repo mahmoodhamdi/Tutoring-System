@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Quiz\StoreQuizRequest;
-use App\Http\Requests\Quiz\UpdateQuizRequest;
 use App\Http\Requests\Quiz\AddQuestionRequest;
-use App\Http\Requests\Quiz\UpdateQuestionRequest;
+use App\Http\Requests\Quiz\StoreQuizRequest;
 use App\Http\Requests\Quiz\SubmitQuizRequest;
-use App\Http\Resources\QuizResource;
+use App\Http\Requests\Quiz\UpdateQuestionRequest;
+use App\Http\Requests\Quiz\UpdateQuizRequest;
 use App\Http\Resources\QuizAttemptResource;
+use App\Http\Resources\QuizResource;
 use App\Models\Quiz;
-use App\Models\QuizQuestion;
 use App\Models\QuizAttempt;
+use App\Models\QuizQuestion;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -43,7 +43,7 @@ class QuizController extends Controller
 
         // Search by title
         if ($request->has('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            $query->where('title', 'like', '%'.$request->search.'%');
         }
 
         $quizzes = $query->orderBy('created_at', 'desc')->paginate($request->get('per_page', 15));
@@ -259,14 +259,14 @@ class QuizController extends Controller
         $user = auth()->user();
 
         // Check if quiz is available
-        if (!$quiz->is_available) {
+        if (! $quiz->is_available) {
             return response()->json([
                 'message' => 'الاختبار غير متاح حالياً',
             ], 422);
         }
 
         // Check if student can attempt
-        if (!$quiz->canStudentAttempt($user->id)) {
+        if (! $quiz->canStudentAttempt($user->id)) {
             return response()->json([
                 'message' => 'لقد استنفدت عدد المحاولات المسموح بها',
             ], 422);
@@ -336,6 +336,7 @@ class QuizController extends Controller
         // Check if timed out
         if ($attempt->is_timed_out) {
             $attempt->timeout();
+
             return response()->json([
                 'message' => 'انتهى وقت الاختبار',
                 'data' => new QuizAttemptResource($attempt->load(['quiz', 'answers.question', 'answers.selectedOption'])),

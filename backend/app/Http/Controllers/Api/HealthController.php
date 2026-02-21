@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use OpenApi\Attributes as OA;
 
 #[OA\Get(
@@ -27,7 +27,7 @@ use OpenApi\Attributes as OA;
                     new OA\Property(property: 'version', type: 'string', example: '1.0.0'),
                 ]
             )
-        )
+        ),
     ]
 )]
 class HealthController extends Controller

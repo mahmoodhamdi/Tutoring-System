@@ -11,7 +11,6 @@ import {
   MegaphoneIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
-  ClockIcon,
 } from '@heroicons/react/24/outline';
 
 export default function PortalDashboardPage() {
@@ -137,7 +136,7 @@ export default function PortalDashboardPage() {
                   <div className="text-left">
                     <p className="text-sm font-medium text-gray-900">{session.session_date}</p>
                     <p className="text-xs text-gray-500">
-                      {session.start_time.substring(0, 5)} - {session.end_time.substring(0, 5)}
+                      {(session.start_time || '--:--').substring(0, 5)} - {(session.end_time || '--:--').substring(0, 5)}
                     </p>
                   </div>
                 </div>

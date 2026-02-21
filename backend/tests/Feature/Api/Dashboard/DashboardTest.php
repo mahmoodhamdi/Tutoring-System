@@ -7,8 +7,6 @@ use App\Models\Exam;
 use App\Models\ExamResult;
 use App\Models\Group;
 use App\Models\Payment;
-use App\Models\Quiz;
-use App\Models\QuizAttempt;
 use App\Models\Session;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -144,7 +142,7 @@ class DashboardTest extends TestCase
         ]);
 
         // Get stats for this month only
-        $response = $this->getJson('/api/dashboard?' . http_build_query([
+        $response = $this->getJson('/api/dashboard?'.http_build_query([
             'start_date' => $thisMonth->startOfMonth()->toDateString(),
             'end_date' => $thisMonth->endOfMonth()->toDateString(),
         ]));

@@ -95,7 +95,7 @@ class Group extends Model
      */
     public function hasAvailableSpots(): bool
     {
-        return !$this->isFull();
+        return ! $this->isFull();
     }
 
     /**

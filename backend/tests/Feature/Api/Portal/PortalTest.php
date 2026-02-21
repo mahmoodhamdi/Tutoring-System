@@ -4,7 +4,6 @@ namespace Tests\Feature\Api\Portal;
 
 use App\Models\Announcement;
 use App\Models\Attendance;
-use App\Models\ExamResult;
 use App\Models\Group;
 use App\Models\Payment;
 use App\Models\Session;
@@ -20,7 +19,9 @@ class PortalTest extends TestCase
     use RefreshDatabase;
 
     protected User $student;
+
     protected User $parent;
+
     protected User $teacher;
 
     protected function setUp(): void
@@ -201,7 +202,7 @@ class PortalTest extends TestCase
     {
         Sanctum::actingAs($this->parent);
 
-        $response = $this->getJson('/api/portal/dashboard?student_id=' . $this->student->id);
+        $response = $this->getJson('/api/portal/dashboard?student_id='.$this->student->id);
 
         $response->assertOk()
             ->assertJsonPath('student.id', $this->student->id);
@@ -363,7 +364,7 @@ class PortalTest extends TestCase
 
         $announcement = Announcement::factory()->published()->create();
 
-        $response = $this->getJson('/api/portal/announcements/' . $announcement->id);
+        $response = $this->getJson('/api/portal/announcements/'.$announcement->id);
 
         $response->assertOk()
             ->assertJsonPath('id', $announcement->id);
@@ -375,7 +376,7 @@ class PortalTest extends TestCase
 
         $announcement = Announcement::factory()->draft()->create();
 
-        $response = $this->getJson('/api/portal/announcements/' . $announcement->id);
+        $response = $this->getJson('/api/portal/announcements/'.$announcement->id);
 
         $response->assertNotFound();
     }
@@ -441,7 +442,7 @@ class PortalTest extends TestCase
             'parent_id' => null, // No parent
         ]);
 
-        $response = $this->getJson('/api/portal/dashboard?student_id=' . $otherStudent->id);
+        $response = $this->getJson('/api/portal/dashboard?student_id='.$otherStudent->id);
 
         $response->assertNotFound();
     }

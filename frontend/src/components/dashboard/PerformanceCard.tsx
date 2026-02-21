@@ -54,7 +54,7 @@ export function PerformanceCard({ data }: PerformanceCardProps) {
                     style={{ width: `${group.exam_avg}%` }}
                   ></div>
                 </div>
-                <span className="text-sm font-medium text-gray-700 w-12 text-left">
+                <span className="text-sm font-medium text-gray-700 w-12 text-right">
                   {group.exam_avg}%
                 </span>
               </div>

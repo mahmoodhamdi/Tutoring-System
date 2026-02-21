@@ -2,24 +2,22 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\StudentProfile;
-use App\Models\Group;
-use App\Models\Session;
+use App\Models\Announcement;
 use App\Models\Attendance;
-use App\Models\Payment;
 use App\Models\Exam;
 use App\Models\ExamResult;
-use App\Models\Quiz;
-use App\Models\QuizQuestion;
-use App\Models\QuizOption;
-use App\Models\QuizAttempt;
-use App\Models\QuizAnswer;
-use App\Models\Announcement;
+use App\Models\Group;
 use App\Models\Notification;
+use App\Models\Payment;
+use App\Models\Quiz;
+use App\Models\QuizAttempt;
+use App\Models\QuizOption;
+use App\Models\QuizQuestion;
+use App\Models\Session;
+use App\Models\StudentProfile;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
 
 class DemoSeeder extends Seeder
 {
@@ -61,7 +59,7 @@ class DemoSeeder extends Seeder
             $parents[] = User::create([
                 'name' => $name,
                 'email' => "parent{$index}@example.com",
-                'phone' => '0100000000' . ($index + 1),
+                'phone' => '0100000000'.($index + 1),
                 'password' => Hash::make('password'),
                 'role' => 'parent',
                 'is_active' => true,
@@ -83,7 +81,7 @@ class DemoSeeder extends Seeder
             $student = User::create([
                 'name' => $name,
                 'email' => "student{$index}@example.com",
-                'phone' => '0112222222' . $index,
+                'phone' => '0112222222'.$index,
                 'password' => Hash::make('password'),
                 'role' => 'student',
                 'is_active' => true,
@@ -104,7 +102,7 @@ class DemoSeeder extends Seeder
             $students[] = $student;
         }
 
-        $this->command->info('Created ' . count($students) . ' students');
+        $this->command->info('Created '.count($students).' students');
 
         // Create groups
         $groups = [];
@@ -123,7 +121,7 @@ class DemoSeeder extends Seeder
             ]));
         }
 
-        $this->command->info('Created ' . count($groups) . ' groups');
+        $this->command->info('Created '.count($groups).' groups');
 
         // Assign students to groups
         foreach ($students as $index => $student) {
@@ -148,12 +146,12 @@ class DemoSeeder extends Seeder
                 if ($currentDate->isSaturday() || $currentDate->isTuesday()) {
                     $session = Session::create([
                         'group_id' => $group->id,
-                        'title' => 'جلسة ' . $currentDate->format('Y-m-d'),
+                        'title' => 'جلسة '.$currentDate->format('Y-m-d'),
                         'session_date' => $currentDate->toDateString(),
                         'start_time' => '16:00',
                         'end_time' => '18:00',
                         'status' => $currentDate->isPast() ? 'completed' : 'scheduled',
-                        'topic' => 'الموضوع: ' . ['الجبر', 'الهندسة', 'حساب المثلثات', 'التفاضل والتكامل'][rand(0, 3)],
+                        'topic' => 'الموضوع: '.['الجبر', 'الهندسة', 'حساب المثلثات', 'التفاضل والتكامل'][rand(0, 3)],
                         'notes' => null,
                     ]);
                     $sessions[] = $session;
@@ -162,7 +160,7 @@ class DemoSeeder extends Seeder
             }
         }
 
-        $this->command->info('Created ' . count($sessions) . ' sessions');
+        $this->command->info('Created '.count($sessions).' sessions');
 
         // Create attendance records for past sessions
         $attendanceStatuses = ['present', 'present', 'present', 'present', 'late', 'absent', 'excused'];
@@ -200,7 +198,7 @@ class DemoSeeder extends Seeder
                     'paid_at' => $status === 'paid' ? $dueDate->addDays(rand(0, 5)) : null,
                     'status' => $status,
                     'payment_method' => $status === 'paid' ? $paymentMethods[array_rand($paymentMethods)] : null,
-                    'description' => 'أتعاب شهر ' . $dueDate->locale('ar')->translatedFormat('F Y'),
+                    'description' => 'أتعاب شهر '.$dueDate->locale('ar')->translatedFormat('F Y'),
                     'notes' => null,
                 ]);
             }
@@ -216,7 +214,7 @@ class DemoSeeder extends Seeder
                 $examDate = now()->subWeeks(rand(1, 8));
                 $exam = Exam::create([
                     'group_id' => $group->id,
-                    'title' => ($i === 0 ? 'امتحان نصف الترم' : 'امتحان آخر الترم') . ' - ' . $group->name,
+                    'title' => ($i === 0 ? 'امتحان نصف الترم' : 'امتحان آخر الترم').' - '.$group->name,
                     'description' => 'امتحان شامل على المنهج',
                     'exam_date' => $examDate,
                     'duration_minutes' => 90,
@@ -243,7 +241,7 @@ class DemoSeeder extends Seeder
             }
         }
 
-        $this->command->info('Created ' . count($exams) . ' exams with results');
+        $this->command->info('Created '.count($exams).' exams with results');
 
         // Create quizzes
         $quizzes = [];
@@ -251,7 +249,7 @@ class DemoSeeder extends Seeder
             for ($i = 0; $i < 3; $i++) {
                 $quiz = Quiz::create([
                     'group_id' => $group->id,
-                    'title' => 'اختبار قصير ' . ($i + 1) . ' - ' . $group->name,
+                    'title' => 'اختبار قصير '.($i + 1).' - '.$group->name,
                     'description' => 'اختبار قصير على الدرس',
                     'duration_minutes' => 15,
                     'pass_percentage' => 60,
@@ -265,7 +263,7 @@ class DemoSeeder extends Seeder
                 for ($q = 0; $q < 5; $q++) {
                     $question = QuizQuestion::create([
                         'quiz_id' => $quiz->id,
-                        'question_text' => 'سؤال رقم ' . ($q + 1) . ': ما هي الإجابة الصحيحة؟',
+                        'question_text' => 'سؤال رقم '.($q + 1).': ما هي الإجابة الصحيحة؟',
                         'question_type' => 'multiple_choice',
                         'points' => 2,
                         'order' => $q + 1,
@@ -276,7 +274,7 @@ class DemoSeeder extends Seeder
                     for ($o = 0; $o < 4; $o++) {
                         QuizOption::create([
                             'question_id' => $question->id,
-                            'option_text' => 'الإجابة ' . ($o + 1),
+                            'option_text' => 'الإجابة '.($o + 1),
                             'is_correct' => $o === $correctOption,
                             'order' => $o + 1,
                         ]);
@@ -302,7 +300,7 @@ class DemoSeeder extends Seeder
             }
         }
 
-        $this->command->info('Created ' . count($quizzes) . ' quizzes');
+        $this->command->info('Created '.count($quizzes).' quizzes');
 
         // Create announcements
         $announcements = [

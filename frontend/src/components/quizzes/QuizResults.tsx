@@ -1,7 +1,7 @@
 'use client';
 
 import { QuizAttempt, ATTEMPT_STATUS_LABELS, ATTEMPT_STATUS_COLORS } from '@/types/quiz';
-import { CheckCircleIcon, XCircleIcon, ClockIcon, AcademicCapIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
 interface QuizResultsProps {
   attempt: QuizAttempt;

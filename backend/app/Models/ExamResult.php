@@ -27,7 +27,9 @@ class ExamResult extends Model
 
     protected $casts = [
         'marks_obtained' => 'decimal:2',
+        'obtained_marks' => 'decimal:2',
         'percentage' => 'decimal:2',
+        'is_passed' => 'boolean',
         'graded_at' => 'datetime',
     ];
 
@@ -73,27 +75,10 @@ class ExamResult extends Model
     public function scopePassed($query)
     {
         return $query->where('status', 'graded')
-            ->whereColumn('marks_obtained',
-        'obtained_marks',
-        'is_passed',
-        'notes', '>=', function ($q) {
-                $q->selectRaw('COALESCE(exams.pass_marks, exams.total_marks * 0.6)')
-                    ->from('exams')
-                    ->whereColumn('exams.id', 'exam_results.exam_id');
-            });
+            ->where('is_passed', true);
     }
 
     // Accessors
-
-    public function getIsPassedAttribute(): bool
-    {
-        if ($this->status !== 'graded' || $this->marks_obtained === null) {
-            return false;
-        }
-
-        $passMarks = $this->exam->pass_marks ?? ($this->exam->total_marks * 0.6);
-        return $this->marks_obtained >= $passMarks;
-    }
 
     public function getStatusLabelAttribute(): string
     {
@@ -135,9 +120,13 @@ class ExamResult extends Model
 
     public function setMarks(float $marks, ?int $gradedBy = null): bool
     {
+        $passMarks = $this->exam->pass_marks ?? ($this->exam->total_marks * 0.6);
+
         $this->marks_obtained = $marks;
+        $this->obtained_marks = $marks;
         $this->percentage = round(($marks / $this->exam->total_marks) * 100, 2);
         $this->grade = $this->calculateGrade();
+        $this->is_passed = $marks >= $passMarks;
         $this->status = 'graded';
         $this->graded_by = $gradedBy;
         $this->graded_at = now();
@@ -149,8 +138,10 @@ class ExamResult extends Model
     {
         $this->status = 'absent';
         $this->marks_obtained = 0;
+        $this->obtained_marks = 0;
         $this->percentage = 0;
         $this->grade = 'F';
+        $this->is_passed = false;
 
         return $this->save();
     }

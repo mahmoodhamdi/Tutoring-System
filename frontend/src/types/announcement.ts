@@ -43,7 +43,7 @@ export interface CreateAnnouncementData {
   publish?: boolean;
 }
 
-export interface UpdateAnnouncementData extends Partial<CreateAnnouncementData> {}
+export type UpdateAnnouncementData = Partial<CreateAnnouncementData>;
 
 export interface AnnouncementsFilters {
   group_id?: number;

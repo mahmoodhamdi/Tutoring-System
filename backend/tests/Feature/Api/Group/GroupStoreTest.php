@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Api\Group;
 
-use App\Models\Group;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;

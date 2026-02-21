@@ -4,16 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Private Tutoring Management System - a full-stack application for teachers managing private lessons, students, groups, sessions, attendance, payments, quizzes, and announcements.
+Private Tutoring Management System - a full-stack Arabic (RTL) application for teachers managing private lessons, students, groups, sessions, attendance, payments, quizzes, and announcements.
 
 **Tech Stack:**
-- Backend: Laravel 11 (REST API) with Sanctum authentication
-- Frontend: Next.js 16.1 (App Router) with TypeScript, React 19
-- Database: MySQL
+- Backend: Laravel 11 (PHP 8.2+), REST API, Sanctum authentication
+- Frontend: Next.js 16.1 (App Router), TypeScript, React 19, Tailwind CSS 4
+- Database: MySQL (SQLite in-memory for tests)
 
 ## Commands
 
-### Quick Start (Using Makefile)
+### Quick Start
 ```bash
 make install    # Install all dependencies
 make dev        # Start both servers (backend:8001, frontend:3000)
@@ -22,34 +22,28 @@ make lint       # Run all linters
 make fresh      # Fresh database migrate and seed
 ```
 
-### Backend (Laravel)
+### Backend
 ```bash
 cd backend
-php artisan serve --port=8001          # Dev server
-php artisan test --coverage --min=100  # Tests (100% coverage required)
-php artisan test --filter=TestName     # Specific test
-php artisan test tests/Feature/Api/Auth/LoginTest.php  # Specific file
-./vendor/bin/pint                      # Code style
-php artisan migrate:fresh --seed       # Reset database
+php artisan serve --port=8001                          # Dev server
+php artisan test --coverage --min=100                  # Tests (100% coverage required)
+php artisan test --filter=TestName                     # Single test class
+php artisan test tests/Feature/Api/Auth/LoginTest.php  # Single test file
+./vendor/bin/pint                                      # Code style fixer
+php artisan migrate:fresh --seed                       # Reset database
 ```
 
-### Frontend (Next.js)
+### Frontend
 ```bash
 cd frontend
 npm run dev              # Dev server (port 3000)
-npm run test             # Run tests
-npm run test:coverage    # With coverage
-npm run lint -- --fix    # Fix lint issues
+npm run test             # Jest unit tests
+npm run test:watch       # Jest watch mode
+npm run test:coverage    # Coverage report
+npm run lint -- --fix    # ESLint with auto-fix
 npm run type-check       # TypeScript check
 npm run test:e2e         # Playwright E2E tests
-npm run test:e2e:ui      # E2E with UI
-```
-
-### Docker
-```bash
-make docker-up      # Start containers
-make docker-fresh   # Fresh migrate and seed
-make docker-shell   # Shell into backend container
+npm run test:e2e:ui      # E2E with Playwright UI
 ```
 
 ## Development Workflow
@@ -67,75 +61,135 @@ make docker-shell   # Shell into backend container
 
 ## Architecture
 
-### Backend Structure
-- **Controllers:** `app/Http/Controllers/Api/` - One controller per domain
-- **Requests:** `app/Http/Requests/` - Form request validation classes
-- **Resources:** `app/Http/Resources/` - API response transformers
-- **Models:** `app/Models/` - Eloquent models with relationships
-- **Enums:** `app/Enums/` - UserRole, AttendanceStatus, PaymentStatus, SessionStatus, QuizAttemptStatus
-- **Services:** `app/Services/` - Business logic (PdfExportService, SmsService)
-- **Policies:** `app/Policies/` - Authorization policies
+### Localization & RTL
 
-### Backend Key Patterns
-- User model has roles: teacher, student, parent (via `UserRole` enum)
-- API routes in `routes/api.php` with rate limiting middleware:
-  - `throttle:public` - Public routes (health, public settings)
-  - `throttle:login`, `throttle:register`, `throttle:password-reset` - Auth routes
-  - `throttle:reports-export` - Expensive export operations
-- Route model binding used for resource routes (e.g., `{student}`, `{group}`)
-- Tests organized by module in `tests/Feature/Api/{Module}/`
+The entire application is **Arabic-first with RTL layout**:
+- Root HTML: `lang="ar" dir="rtl"` with Tajawal font (Google Fonts)
+- All validation error messages, enum labels, toast notifications, and UI text are in Arabic
+- Backend: FormRequest `messages()` return Arabic errors, Enum classes have Arabic `label()` methods
+- Frontend: Toast notifications use `direction: 'rtl'`, positioned top-left
+- Use RTL-aware Tailwind (e.g., `pr-64` for sidebar spacing, not `pl-64`)
 
-### Frontend Structure
-- **App Router:** `src/app/` with route groups:
-  - `(auth)/` - Login, register, forgot password, reset password
-  - `dashboard/` - Teacher dashboard with nested routes for all modules
-  - `portal/` - Student/parent portal
-- **Components:** `src/components/` - Organized by domain (students/, groups/, sessions/, etc.)
-- **Hooks:** `src/hooks/` - React Query hooks per domain (useAuth, useStudents, useGroups, useSessions, usePayments, useExams, useQuizzes, useAnnouncements, useNotifications, useReports, usePortal, useSettings, useDashboard)
-- **Store:** `src/store/` - Zustand stores (authStore, uiStore, notificationStore)
-- **Types:** `src/types/` - TypeScript interfaces per domain
-- **Lib:** `src/lib/` - API client (axios), utilities, Zod validations
-- **Middleware:** `src/middleware.ts` - Auth protection for routes
+### Authentication Flow
 
-### Key Dependencies
-- **Backend:** Sanctum (auth), Spatie Permission (roles), DomPDF (PDF), Maatwebsite Excel (CSV), Laravel Phone (validation), L5-Swagger (API docs), Sentry (error tracking)
-- **Frontend:** TanStack React Query v5 (data fetching), Zustand (state), React Hook Form + Zod v4 (forms), react-big-calendar (scheduling), Recharts (charts), Headless UI v2 + Heroicons v2 (components), Playwright (E2E), date-fns v4
+**Phone-based auth** (not email) — phone + password is the primary login method:
+- Backend: Sanctum tokens for stateless API auth, CSRF cookies for stateful requests
+- Frontend: `fetchCsrfCookie()` called before login/register, token stored in localStorage + cookies
+- Middleware (`src/middleware.ts`): reads token from cookies, redirects unauthenticated users to `/login`
+- Roles: `admin`, `teacher`, `student`, `parent` (via `UserRole` enum)
+- User model has role helpers: `isTeacher()`, `isStudent()`, `isParent()`
+- Parents can have multiple student children via `parent_id` relationship
 
-## API Patterns
+### Backend Patterns
 
-All endpoints prefixed with `/api/`. Key endpoint groups:
-- `/api/auth/*` - Authentication (login, register, logout, password reset)
-- `/api/students/*`, `/api/groups/*`, `/api/sessions/*` - CRUD resources
-- `/api/attendance/*`, `/api/payments/*`, `/api/exams/*`, `/api/quizzes/*` - Domain-specific resources
-- `/api/announcements/*`, `/api/notifications/*` - Communication
-- `/api/dashboard/*` - Dashboard statistics and quick stats
-- `/api/reports/*` - Report generation and export (CSV/PDF)
-- `/api/portal/*` - Student/parent portal (separate login flow)
-- `/api/settings/*` - System settings (public and protected)
+**Request lifecycle:** Route → Rate Limit Middleware → FormRequest (authorize + validate) → Controller → Eloquent + DB::transaction → Resource → JSON Response
+
+- **Controllers** (`app/Http/Controllers/Api/`): One per domain, 15 total. Use route model binding, return Resources for single items, `AnonymousResourceCollection` for lists. Multi-table writes wrapped in `DB::transaction`.
+- **FormRequests** (`app/Http/Requests/`): Handle both authorization (role checks in `authorize()`) and validation. All `messages()` return Arabic strings.
+- **Resources** (`app/Http/Resources/`): 16 resource classes. Use `$this->when()` for conditional fields, handle pivot data, format dates as ISO 8601.
+- **Enums** (`app/Enums/`): 5 enums (UserRole, AttendanceStatus, PaymentStatus, SessionStatus, QuizAttemptStatus). Each has Arabic `label()`, `color()` for UI, and boolean helper methods.
+- **Services** (`app/Services/`): PdfExportService (DomPDF reports), SmsService. Business logic that doesn't belong in controllers.
+- **Policies** (`app/Policies/`): Minimal — most authorization is inline in FormRequest `authorize()` or controller checks.
+
+**API response shapes:**
+```
+Single:     { "data": { ... } }
+Collection: { "data": [...], "meta": { current_page, last_page, per_page, total } }
+Error:      { "message": "...", "errors": { "field": ["Arabic error"] } }
+Success:    { "message": "Arabic success message" }
+```
+
+**Filtering/pagination:** Controllers accept `search`, `status`, `sort_by`, `sort_order`, `per_page` (max 100, default 15) query params.
+
+**Rate limiting groups** in `routes/api.php`: `throttle:public`, `throttle:login`, `throttle:register`, `throttle:password-reset`, `throttle:reports-export`.
+
+### Frontend Patterns
+
+**Data fetching — React Query with key factories:**
+```typescript
+// Each hook (src/hooks/use{Domain}.ts) defines a key factory:
+const studentKeys = {
+  all: ['students'] as const,
+  lists: () => [...studentKeys.all, 'list'] as const,
+  list: (params) => [...studentKeys.lists(), params] as const,
+  details: () => [...studentKeys.all, 'detail'] as const,
+  detail: (id) => [...studentKeys.details(), id] as const,
+};
+// Mutations invalidate related keys on success
+```
+- QueryClient config: `staleTime: 60s`, `retry: 1` for queries, `0` for mutations, `refetchOnWindowFocus: false`
+- Mutations show Arabic toast notifications on success/error via react-hot-toast
+
+**Forms — React Hook Form + Zod:**
+- Schemas in `src/lib/validations.ts` with Arabic error messages
+- `zodResolver` connects Zod schemas to React Hook Form
+- Type-safe form inputs via `z.infer<typeof schema>`
+
+**State management:**
+- Zustand for client state: `authStore` (user + token, persisted), `uiStore` (sidebar, theme), `notificationStore`
+- React Query for all server state — no manual server data in Zustand
+
+**API client** (`src/lib/axios.ts`):
+- Axios with `withCredentials: true`, auto XSRF token headers
+- Request interceptor adds Bearer token from localStorage
+- Response interceptor handles 401 → clear token → redirect to `/login`
+- Domain-specific API modules in `src/lib/api/` (students.ts, groups.ts, etc.)
+
+**Error handling** (`src/lib/errorHandler.ts`):
+- `getErrorMessage()` extracts messages from Axios/Error responses
+- `getValidationErrors()` extracts 422 field errors
+- Predefined Arabic message maps: `SUCCESS_MESSAGES`, `ERROR_MESSAGES`, `FIELD_ERRORS`
+
+**Component conventions:**
+- `'use client'` directive on interactive components
+- UI primitives in `src/components/ui/` (Button, Input with variants, loading states, `cn()` class merging via clsx + twMerge)
+- Domain components in `src/components/{domain}/` (StudentForm, GroupCard, etc.)
+- `src/lib/utils.ts`: `formatDate()`, `formatTime()` (12h), `formatCurrency(amount, 'EGP')`, `debounce()`, `getInitials()`
+
+### App Router Structure
+
+```
+src/app/
+├── (auth)/           # Auth pages (centered layout)
+│   ├── login/        # Phone + password login
+│   ├── register/
+│   ├── forgot-password/
+│   └── reset-password/
+├── dashboard/        # Teacher dashboard (sidebar layout)
+│   ├── students/     # CRUD: list, [id], [id]/edit, new
+│   ├── groups/       # Same CRUD pattern
+│   ├── schedule/     # Sessions calendar
+│   ├── payments/
+│   ├── exams/
+│   ├── quizzes/
+│   ├── announcements/
+│   ├── notifications/
+│   ├── reports/
+│   └── settings/
+└── portal/           # Student/parent portal (separate layout)
+```
 
 ## Testing
 
 ### Backend
-- Feature tests: `tests/Feature/Api/{Module}/` (Auth, Student, Group, Session, etc.)
-- Unit tests: `tests/Unit/Models/`
-- 100% coverage requirement enforced
+- Feature tests in `tests/Feature/Api/{Module}/` — one directory per domain (Auth, Student, Group, Session, Dashboard, Exam, Notification, Payment, Portal, Quiz, Reports, Settings)
+- Unit tests in `tests/Unit/Models/`
+- Pattern: `RefreshDatabase` trait, `User::factory()->teacher()->create()` for setup, `actingAs()` + `postJson()`/`putJson()` for requests, `assertJsonPath()` + `assertDatabaseHas()` for assertions
+- **100% coverage requirement enforced**
 
 ### Frontend
-- Component tests: `__tests__/components/`
-- Hook tests: `__tests__/hooks/`
-- Page tests: `__tests__/pages/`
-- E2E tests: `e2e/` (Playwright)
+- Unit/component tests: `frontend/__tests__/` (Jest + Testing Library)
+- E2E tests: `frontend/e2e/` (Playwright across Chromium, Firefox, WebKit, mobile viewports)
+- E2E auth fixture: `e2e/fixtures/auth.fixture.ts` provides `authenticatedPage`, `adminPage`, `studentPage` helpers
 
 ## Environment
 
 - Backend: `http://localhost:8001`
 - Frontend: `http://localhost:3000`
-- API Docs: `http://localhost:8001/api/documentation` (Swagger)
-
-Key env vars:
+- API Docs (Swagger): `http://localhost:8001/api/documentation`
 - Backend `.env`: `SANCTUM_STATEFUL_DOMAINS=localhost:3000`
 - Frontend `.env.local`: `NEXT_PUBLIC_API_URL=http://localhost:8001/api`
 
 ## Progress
 
-CHECKLIST.md tracks implementation progress across 15 phases. See CHECKLIST.md for detailed status.
+CHECKLIST.md tracks implementation across 15 phases. Phases 1-4 (Setup, Auth, Students, Groups) are complete. Phase 5 (Sessions & Schedule) is next.

@@ -28,9 +28,9 @@ class QuizFactory extends Factory
         return [
             'group_id' => Group::factory(),
             'title' => fake()->randomElement([
-                'اختبار ' . fake()->word(),
-                'مراجعة الوحدة ' . fake()->numberBetween(1, 10),
-                'تقييم ' . fake()->word(),
+                'اختبار '.fake()->word(),
+                'مراجعة الوحدة '.fake()->numberBetween(1, 10),
+                'تقييم '.fake()->word(),
             ]),
             'description' => fake()->optional()->paragraph(),
             'instructions' => fake()->optional()->paragraph(),
@@ -53,7 +53,7 @@ class QuizFactory extends Factory
      */
     public function published(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => true,
             'available_from' => now()->subDay(),
             'available_until' => now()->addWeek(),
@@ -65,7 +65,7 @@ class QuizFactory extends Factory
      */
     public function unpublished(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => false,
         ]);
     }
@@ -75,7 +75,7 @@ class QuizFactory extends Factory
      */
     public function available(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => true,
             'available_from' => now()->subHour(),
             'available_until' => now()->addWeek(),
@@ -87,7 +87,7 @@ class QuizFactory extends Factory
      */
     public function expired(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => true,
             'available_from' => now()->subWeek(),
             'available_until' => now()->subDay(),
@@ -99,7 +99,7 @@ class QuizFactory extends Factory
      */
     public function scheduled(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => true,
             'available_from' => now()->addDay(),
             'available_until' => now()->addWeek(),

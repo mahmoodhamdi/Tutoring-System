@@ -17,7 +17,9 @@ import {
   CheckIcon,
 } from '@heroicons/react/24/outline';
 
-const GROUP_ICONS: Record<string, React.ComponentType<any>> = {
+type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+
+const GROUP_ICONS: Record<string, IconComponent> = {
   general: Cog6ToothIcon,
   sessions: CalendarIcon,
   payments: CreditCardIcon,
@@ -28,19 +30,21 @@ const GROUP_ICONS: Record<string, React.ComponentType<any>> = {
   notifications: BellIcon,
 };
 
+type SettingValue = string | number | boolean | string[];
+
 function SettingInput({
   setting,
   onUpdate,
   isUpdating,
 }: {
   setting: Setting;
-  onUpdate: (key: string, value: any) => void;
+  onUpdate: (key: string, value: SettingValue) => void;
   isUpdating: boolean;
 }) {
-  const [localValue, setLocalValue] = useState(setting.value);
+  const [localValue, setLocalValue] = useState<SettingValue>(setting.value as SettingValue);
   const [isDirty, setIsDirty] = useState(false);
 
-  const handleChange = (newValue: any) => {
+  const handleChange = (newValue: SettingValue) => {
     setLocalValue(newValue);
     setIsDirty(true);
   };
@@ -105,7 +109,7 @@ function SettingInput({
   }
 
   if (setting.type === 'json') {
-    const arrayValue = Array.isArray(localValue) ? localValue : [];
+    const arrayValue = Array.isArray(localValue) ? (localValue as string[]) : [];
     return (
       <div className="space-y-2">
         <label className="block font-medium text-gray-900">{setting.label}</label>
@@ -176,7 +180,7 @@ function SettingsGroup({
 }: {
   group: string;
   settings: Setting[];
-  onUpdate: (key: string, value: any) => void;
+  onUpdate: (key: string, value: SettingValue) => void;
   isUpdating: boolean;
 }) {
   const Icon = GROUP_ICONS[group] || Cog6ToothIcon;
@@ -210,19 +214,19 @@ export default function SettingsPage() {
   const clearCache = useClearSettingsCache();
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
 
-  const handleUpdate = async (key: string, value: any) => {
+  const handleUpdate = async (key: string, value: SettingValue) => {
     try {
       await updateSetting.mutateAsync({ key, value });
-    } catch (error) {
-      console.error('Failed to update setting:', error);
+    } catch (updateError) {
+      console.error('Failed to update setting:', updateError);
     }
   };
 
   const handleClearCache = async () => {
     try {
       await clearCache.mutateAsync();
-    } catch (error) {
-      console.error('Failed to clear cache:', error);
+    } catch (cacheError) {
+      console.error('Failed to clear cache:', cacheError);
     }
   };
 

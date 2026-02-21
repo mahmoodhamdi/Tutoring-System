@@ -13,7 +13,7 @@ export default function NewGroupPage() {
     try {
       await createGroup.mutateAsync(data);
       router.push('/dashboard/groups');
-    } catch (error) {
+    } catch {
       // Error is handled by the mutation's onError callback
     }
   };

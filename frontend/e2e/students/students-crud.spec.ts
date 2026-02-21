@@ -79,9 +79,6 @@ test.describe('Students Management', () => {
     await page.goto('/dashboard/students');
     await page.waitForLoadState('networkidle');
 
-    // Get initial count
-    const initialRows = await page.locator('table tbody tr, [data-testid="student-row"]').count();
-
     // Click delete on last student (to avoid deleting important test data)
     const deleteButton = page.locator(
       '[data-testid="delete-student"], button:has-text("حذف"), button:has-text("Delete"), .delete-button'

@@ -111,7 +111,7 @@ class ReportsTest extends TestCase
         $this->assertEquals(1, count($response->json('data')));
 
         // Filter by student
-        $response = $this->getJson('/api/reports/attendance?student_id=' . $student->id);
+        $response = $this->getJson('/api/reports/attendance?student_id='.$student->id);
 
         $response->assertOk();
         $this->assertEquals(1, count($response->json('data')));
@@ -251,7 +251,7 @@ class ReportsTest extends TestCase
             'status' => 'scheduled',
         ]);
 
-        $response = $this->getJson('/api/reports/sessions?' . http_build_query([
+        $response = $this->getJson('/api/reports/sessions?'.http_build_query([
             'start_date' => now()->startOfMonth()->toDateString(),
             'end_date' => now()->endOfMonth()->toDateString(),
         ]));

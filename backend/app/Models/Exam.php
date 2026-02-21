@@ -121,12 +121,14 @@ class Exam extends Model
     public function getAverageMarksAttribute(): ?float
     {
         $avg = $this->results()->where('status', 'graded')->avg('marks_obtained');
+
         return $avg ? round($avg, 2) : null;
     }
 
     public function getAveragePercentageAttribute(): ?float
     {
         $avg = $this->results()->where('status', 'graded')->avg('percentage');
+
         return $avg ? round($avg, 2) : null;
     }
 
@@ -173,23 +175,26 @@ class Exam extends Model
     public function publish(): bool
     {
         $this->is_published = true;
+
         return $this->save();
     }
 
     public function cancel(): bool
     {
         $this->status = 'cancelled';
+
         return $this->save();
     }
 
     public function complete(): bool
     {
         $this->status = 'completed';
+
         return $this->save();
     }
 
     public function canBeEdited(): bool
     {
-        return in_array($this->status, ['scheduled']) && !$this->is_past;
+        return in_array($this->status, ['scheduled']) && ! $this->is_past;
     }
 }

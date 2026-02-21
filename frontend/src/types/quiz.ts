@@ -109,7 +109,7 @@ export interface CreateQuizData {
   available_until?: string;
 }
 
-export interface UpdateQuizData extends Partial<CreateQuizData> {}
+export type UpdateQuizData = Partial<CreateQuizData>;
 
 export interface CreateQuestionData {
   question_text: string;
@@ -122,7 +122,7 @@ export interface CreateQuestionData {
   }[];
 }
 
-export interface UpdateQuestionData extends Partial<CreateQuestionData> {}
+export type UpdateQuestionData = Partial<CreateQuestionData>;
 
 export interface SubmitQuizData {
   answers: {

@@ -25,11 +25,11 @@ class AttendanceResource extends JsonResource
             'marked_by' => $this->marked_by,
             'session' => $this->when(
                 $this->relationLoaded('session'),
-                fn() => new SessionResource($this->session)
+                fn () => new SessionResource($this->session)
             ),
             'student' => $this->when(
                 $this->relationLoaded('student'),
-                fn() => [
+                fn () => [
                     'id' => $this->student->id,
                     'name' => $this->student->name,
                     'phone' => $this->student->phone,

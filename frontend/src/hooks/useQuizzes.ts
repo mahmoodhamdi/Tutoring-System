@@ -1,8 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { quizzesApi } from '@/lib/api/quizzes';
 import type {
-  Quiz,
-  QuizAttempt,
   CreateQuizData,
   UpdateQuizData,
   CreateQuestionData,

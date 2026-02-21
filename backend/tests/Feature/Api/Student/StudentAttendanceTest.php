@@ -12,6 +12,7 @@ class StudentAttendanceTest extends TestCase
     use RefreshDatabase;
 
     protected User $teacher;
+
     protected User $student;
 
     protected function setUp(): void

@@ -49,7 +49,7 @@ export function useUpdateSetting() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ key, value }: { key: string; value: any }) =>
+    mutationFn: ({ key, value }: { key: string; value: string | boolean | number | string[] | Record<string, unknown> }) =>
       settingsApi.update(key, value),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: settingKeys.grouped() });

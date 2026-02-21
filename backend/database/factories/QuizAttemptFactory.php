@@ -39,7 +39,7 @@ class QuizAttemptFactory extends Factory
      */
     public function inProgress(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'status' => 'in_progress',
             'started_at' => now()->subMinutes(fake()->numberBetween(1, 30)),
             'completed_at' => null,
@@ -56,7 +56,7 @@ class QuizAttemptFactory extends Factory
         $timeTaken = $startedAt->diffInSeconds($completedAt);
         $percentage = fake()->numberBetween(30, 100);
 
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'status' => 'completed',
             'started_at' => $startedAt,
             'completed_at' => $completedAt,
@@ -74,7 +74,7 @@ class QuizAttemptFactory extends Factory
     {
         $percentage = fake()->numberBetween(10, 60);
 
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'status' => 'timed_out',
             'started_at' => now()->subMinutes(60),
             'completed_at' => now(),
@@ -90,7 +90,7 @@ class QuizAttemptFactory extends Factory
      */
     public function abandoned(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'status' => 'abandoned',
             'started_at' => now()->subHours(2),
             'completed_at' => null,
@@ -102,7 +102,7 @@ class QuizAttemptFactory extends Factory
      */
     public function passed(): static
     {
-        return $this->completed()->state(fn(array $attributes) => [
+        return $this->completed()->state(fn (array $attributes) => [
             'percentage' => fake()->numberBetween(60, 100),
             'is_passed' => true,
         ]);
@@ -113,7 +113,7 @@ class QuizAttemptFactory extends Factory
      */
     public function failed(): static
     {
-        return $this->completed()->state(fn(array $attributes) => [
+        return $this->completed()->state(fn (array $attributes) => [
             'percentage' => fake()->numberBetween(0, 59),
             'is_passed' => false,
         ]);

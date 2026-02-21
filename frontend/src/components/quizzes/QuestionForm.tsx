@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -99,6 +98,7 @@ export function QuestionForm({ question, onSubmit, onCancel, isSubmitting }: Que
   };
 
   const handleCorrectOptionChange = (index: number) => {
+    // eslint-disable-next-line react-hooks/incompatible-library
     const currentOptions = watch('options') || [];
     if (questionType === 'multiple_choice' || questionType === 'true_false') {
       // For MCQ and true/false, only one option can be correct

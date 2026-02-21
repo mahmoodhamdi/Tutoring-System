@@ -19,6 +19,8 @@ class SessionResource extends JsonResource
             'group_id' => $this->group_id,
             'title' => $this->title,
             'description' => $this->description,
+            'session_date' => $this->session_date?->toDateString(),
+            'start_time' => $this->start_time,
             'scheduled_at' => $this->scheduled_at?->toISOString(),
             'end_time' => $this->end_time?->toISOString(),
             'duration_minutes' => $this->duration_minutes,
@@ -31,15 +33,15 @@ class SessionResource extends JsonResource
             'is_upcoming' => $this->isUpcoming(),
             'group' => $this->when(
                 $this->relationLoaded('group'),
-                fn() => new GroupResource($this->group)
+                fn () => new GroupResource($this->group)
             ),
             'attendances' => $this->when(
                 $this->relationLoaded('attendances'),
-                fn() => AttendanceResource::collection($this->attendances)
+                fn () => AttendanceResource::collection($this->attendances)
             ),
             'attendance_count' => $this->when(
                 $this->relationLoaded('attendances'),
-                fn() => $this->attendances->count()
+                fn () => $this->attendances->count()
             ),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
