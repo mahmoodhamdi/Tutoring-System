@@ -1,0 +1,411 @@
+{
+  "timestamp": "2026-01-26T06:21:50.090Z",
+  "project": "Tutoring System",
+  "summary": {
+    "totalTests": 20,
+    "passed": 2,
+    "failed": 0,
+    "partial": 7,
+    "bugs": 1
+  },
+  "results": [
+    {
+      "test": "Login - teacher",
+      "status": "✅ PASS",
+      "url": "http://localhost:3000/login?redirect=%2Fdashboard"
+    },
+    {
+      "page": "Dashboard",
+      "url": "http://localhost:3000/dashboard",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Students",
+      "url": "http://localhost:3000/dashboard/students",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Groups",
+      "url": "http://localhost:3000/dashboard/groups",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Schedule",
+      "url": "http://localhost:3000/dashboard/schedule",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Payments",
+      "url": "http://localhost:3000/dashboard/payments",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Exams",
+      "url": "http://localhost:3000/dashboard/exams",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Quizzes",
+      "url": "http://localhost:3000/dashboard/quizzes",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Announcements",
+      "url": "http://localhost:3000/dashboard/announcements",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Notifications",
+      "url": "http://localhost:3000/dashboard/notifications",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Reports",
+      "url": "http://localhost:3000/dashboard/reports",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "page": "Settings",
+      "url": "http://localhost:3000/dashboard/settings",
+      "tests": [
+        {
+          "element": "buttons",
+          "count": 1
+        },
+        {
+          "element": "links",
+          "count": 3
+        },
+        {
+          "element": "forms",
+          "count": 1
+        },
+        {
+          "element": "inputs",
+          "count": 3
+        },
+        {
+          "element": "tables",
+          "count": 0
+        }
+      ],
+      "consoleErrors": 0
+    },
+    {
+      "test": "CRUD - Students",
+      "status": "⚠️ PARTIAL",
+      "details": {
+        "module": "Students",
+        "create": false,
+        "read": true,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "test": "CRUD - Groups",
+      "status": "⚠️ PARTIAL",
+      "details": {
+        "module": "Groups",
+        "create": false,
+        "read": true,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "test": "CRUD - Sessions",
+      "status": "⚠️ PARTIAL",
+      "details": {
+        "module": "Sessions",
+        "create": false,
+        "read": true,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "test": "CRUD - Payments",
+      "status": "⚠️ PARTIAL",
+      "details": {
+        "module": "Payments",
+        "create": false,
+        "read": true,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "test": "CRUD - Exams",
+      "status": "⚠️ PARTIAL",
+      "details": {
+        "module": "Exams",
+        "create": false,
+        "read": true,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "test": "CRUD - Quizzes",
+      "status": "⚠️ PARTIAL",
+      "details": {
+        "module": "Quizzes",
+        "create": false,
+        "read": true,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "test": "CRUD - Announcements",
+      "status": "⚠️ PARTIAL",
+      "details": {
+        "module": "Announcements",
+        "create": false,
+        "read": true,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "test": "Responsive Design",
+      "status": "✅ PASS",
+      "viewports": [
+        "desktop-full",
+        "desktop",
+        "tablet-landscape",
+        "tablet-portrait",
+        "mobile-large",
+        "mobile"
+      ]
+    }
+  ],
+  "bugs": [
+    {
+      "type": "network_error",
+      "url": "http://localhost:3000/login?redirect=%2Fdashboard",
+      "timestamp": "2026-01-26T06:19:41.205Z"
+    }
+  ]
+}

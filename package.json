@@ -1,0 +1,26 @@
+{
+  "name": "tutoring-system",
+  "version": "1.0.0",
+  "description": "[![Backend CI](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/backend.yml/badge.svg)](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/backend.yml)\r [![Frontend CI](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/frontend.yml/badge.svg)](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/frontend.yml)\r [![E2E Tests](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/e2e.yml/badge.svg)](https://github.com/YOUR_USERNAME/Tutoring-System/actions/workflows/e2e.yml)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mahmoodhamdi/Tutoring-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mahmoodhamdi/Tutoring-System/issues"
+  },
+  "homepage": "https://github.com/mahmoodhamdi/Tutoring-System#readme",
+  "devDependencies": {
+    "puppeteer": "^24.36.0"
+  }
+}

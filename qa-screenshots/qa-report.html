@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QA Test Report - Tutoring System</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #1a1a2e; color: #eee; line-height: 1.6; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    .header { text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #16213e, #0f3460); border-radius: 15px; margin-bottom: 30px; }
+    .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+    .header p { color: #8892b0; }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .card { background: #16213e; padding: 25px; border-radius: 12px; text-align: center; transition: transform 0.2s; }
+    .card:hover { transform: translateY(-5px); }
+    .card h3 { font-size: 2.5em; margin-bottom: 5px; }
+    .card.pass { border-left: 4px solid #00ff00; }
+    .card.fail { border-left: 4px solid #ff0000; }
+    .card.partial { border-left: 4px solid #ffaa00; }
+    .card.bug { border-left: 4px solid #ff6b6b; }
+    .section { background: #16213e; border-radius: 12px; padding: 25px; margin-bottom: 20px; }
+    .section h2 { margin-bottom: 20px; color: #00ff00; }
+    .result-item { background: #0f3460; padding: 15px 20px; margin: 10px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .pass { color: #00ff00; }
+    .fail { color: #ff0000; }
+    .partial { color: #ffaa00; }
+    .screenshots { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+    .screenshot-item { background: #0f3460; border-radius: 8px; overflow: hidden; }
+    .screenshot-item img { width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: opacity 0.2s; }
+    .screenshot-item img:hover { opacity: 0.8; }
+    .screenshot-item p { padding: 10px; font-size: 0.85em; color: #8892b0; word-break: break-all; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+    .modal img { max-width: 95%; max-height: 95%; object-fit: contain; }
+    .modal.active { display: flex; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎯 QA Test Report</h1>
+      <p>Tutoring System - 2026-01-26T06:21:50.090Z</p>
+    </div>
+
+    <div class="summary">
+      <div class="card"><h3>20</h3><p>Total Tests</p></div>
+      <div class="card pass"><h3>2</h3><p>Passed</p></div>
+      <div class="card fail"><h3>0</h3><p>Failed</p></div>
+      <div class="card partial"><h3>7</h3><p>Partial</p></div>
+      <div class="card bug"><h3>1</h3><p>Bugs Found</p></div>
+    </div>
+
+    <div class="section">
+      <h2>📋 Test Results</h2>
+      
+        <div class="result-item">
+          <strong>Login - teacher</strong>
+          <span class="pass">✅ PASS</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Dashboard</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Students</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Groups</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Schedule</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Payments</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Exams</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Quizzes</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Announcements</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Notifications</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Reports</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Settings</strong>
+          <span class="partial">Completed</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>CRUD - Students</strong>
+          <span class="partial">⚠️ PARTIAL</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>CRUD - Groups</strong>
+          <span class="partial">⚠️ PARTIAL</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>CRUD - Sessions</strong>
+          <span class="partial">⚠️ PARTIAL</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>CRUD - Payments</strong>
+          <span class="partial">⚠️ PARTIAL</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>CRUD - Exams</strong>
+          <span class="partial">⚠️ PARTIAL</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>CRUD - Quizzes</strong>
+          <span class="partial">⚠️ PARTIAL</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>CRUD - Announcements</strong>
+          <span class="partial">⚠️ PARTIAL</span>
+        </div>
+      
+        <div class="result-item">
+          <strong>Responsive Design</strong>
+          <span class="pass">✅ PASS</span>
+        </div>
+      
+    </div>
+
+    
+    <div class="section">
+      <h2>🐛 Bugs Found</h2>
+      
+        <div class="result-item">
+          <div>
+            <strong>network_error</strong><br>
+            <small style="color: #8892b0;">http://localhost:3000/login?redirect=%2Fdashboard</small>
+          </div>
+          <small>2026-01-26T06:19:41.205Z</small>
+        </div>
+      
+    </div>
+    
+
+    <div class="section">
+      <h2>📸 Screenshots (85)</h2>
+      <div class="screenshots">
+        
+          <div class="screenshot-item">
+            <img src="1769407592807-page-login-teacher.png" alt="1769407592807-page-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407592807-page-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407601985-login-filled-teacher.png" alt="1769407601985-login-filled-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407601985-login-filled-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407607423-after-login-teacher.png" alt="1769407607423-after-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407607423-after-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407608354-page-portal-home.png" alt="1769407608354-page-portal-home.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407608354-page-portal-home.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407782279-error-login-teacher.png" alt="1769407782279-error-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407782279-error-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407783752-login-filled-teacher.png" alt="1769407783752-login-filled-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407783752-login-filled-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407787215-after-login-teacher.png" alt="1769407787215-after-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407787215-after-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407790606-error-Dashboard.png" alt="1769407790606-error-Dashboard.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407790606-error-Dashboard.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407795506-error-Students.png" alt="1769407795506-error-Students.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407795506-error-Students.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407800423-error-Groups.png" alt="1769407800423-error-Groups.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407800423-error-Groups.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407805325-error-Schedule.png" alt="1769407805325-error-Schedule.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407805325-error-Schedule.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407810227-error-Payments.png" alt="1769407810227-error-Payments.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407810227-error-Payments.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407815171-error-Exams.png" alt="1769407815171-error-Exams.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407815171-error-Exams.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407820076-error-Quizzes.png" alt="1769407820076-error-Quizzes.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407820076-error-Quizzes.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407824997-error-Announcements.png" alt="1769407824997-error-Announcements.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407824997-error-Announcements.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407829915-error-Notifications.png" alt="1769407829915-error-Notifications.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407829915-error-Notifications.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407834834-error-Reports.png" alt="1769407834834-error-Reports.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407834834-error-Reports.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407839751-error-Settings.png" alt="1769407839751-error-Settings.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407839751-error-Settings.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407900179-page-login-teacher.png" alt="1769407900179-page-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407900179-page-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407909380-login-filled-teacher.png" alt="1769407909380-login-filled-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407909380-login-filled-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407914817-after-login-teacher.png" alt="1769407914817-after-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407914817-after-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769407915727-page-portal-home.png" alt="1769407915727-page-portal-home.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769407915727-page-portal-home.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408027678-page-login-teacher.png" alt="1769408027678-page-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408027678-page-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408036880-login-filled-teacher.png" alt="1769408036880-login-filled-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408036880-login-filled-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408042316-after-login-teacher.png" alt="1769408042316-after-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408042316-after-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408043213-page-portal-home.png" alt="1769408043213-page-portal-home.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408043213-page-portal-home.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408078692-page-login-teacher.png" alt="1769408078692-page-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408078692-page-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408087911-login-filled-teacher.png" alt="1769408087911-login-filled-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408087911-login-filled-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408093347-after-login-teacher.png" alt="1769408093347-after-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408093347-after-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408094273-page-portal-home.png" alt="1769408094273-page-portal-home.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408094273-page-portal-home.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408167925-page-login-teacher.png" alt="1769408167925-page-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408167925-page-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408177116-login-filled-teacher.png" alt="1769408177116-login-filled-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408177116-login-filled-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408182539-after-login-teacher.png" alt="1769408182539-after-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408182539-after-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408183492-page-portal-home.png" alt="1769408183492-page-portal-home.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408183492-page-portal-home.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408214546-page-login-teacher.png" alt="1769408214546-page-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408214546-page-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408223731-login-filled-teacher.png" alt="1769408223731-login-filled-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408223731-login-filled-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408231161-after-login-teacher.png" alt="1769408231161-after-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408231161-after-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408235281-page-Dashboard.png" alt="1769408235281-page-Dashboard.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408235281-page-Dashboard.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408241734-page-Students.png" alt="1769408241734-page-Students.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408241734-page-Students.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408248151-page-Groups.png" alt="1769408248151-page-Groups.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408248151-page-Groups.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408254593-page-Schedule.png" alt="1769408254593-page-Schedule.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408254593-page-Schedule.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408261017-page-Payments.png" alt="1769408261017-page-Payments.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408261017-page-Payments.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408267457-page-Exams.png" alt="1769408267457-page-Exams.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408267457-page-Exams.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408273905-page-Quizzes.png" alt="1769408273905-page-Quizzes.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408273905-page-Quizzes.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408280318-page-Announcements.png" alt="1769408280318-page-Announcements.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408280318-page-Announcements.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408286754-page-Notifications.png" alt="1769408286754-page-Notifications.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408286754-page-Notifications.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408293151-page-Reports.png" alt="1769408293151-page-Reports.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408293151-page-Reports.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408299517-page-Settings.png" alt="1769408299517-page-Settings.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408299517-page-Settings.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408305972-page-Students-list.png" alt="1769408305972-page-Students-list.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408305972-page-Students-list.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408369898-page-login-teacher.png" alt="1769408369898-page-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408369898-page-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408379075-login-filled-teacher.png" alt="1769408379075-login-filled-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408379075-login-filled-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408386496-after-login-teacher.png" alt="1769408386496-after-login-teacher.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408386496-after-login-teacher.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408390925-page-Dashboard.png" alt="1769408390925-page-Dashboard.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408390925-page-Dashboard.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408397365-page-Students.png" alt="1769408397365-page-Students.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408397365-page-Students.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408403814-page-Groups.png" alt="1769408403814-page-Groups.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408403814-page-Groups.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408410236-page-Schedule.png" alt="1769408410236-page-Schedule.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408410236-page-Schedule.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408416658-page-Payments.png" alt="1769408416658-page-Payments.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408416658-page-Payments.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408423061-page-Exams.png" alt="1769408423061-page-Exams.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408423061-page-Exams.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408429515-page-Quizzes.png" alt="1769408429515-page-Quizzes.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408429515-page-Quizzes.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408435968-page-Announcements.png" alt="1769408435968-page-Announcements.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408435968-page-Announcements.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408442384-page-Notifications.png" alt="1769408442384-page-Notifications.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408442384-page-Notifications.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408448816-page-Reports.png" alt="1769408448816-page-Reports.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408448816-page-Reports.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408455233-page-Settings.png" alt="1769408455233-page-Settings.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408455233-page-Settings.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408461687-page-Students-list.png" alt="1769408461687-page-Students-list.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408461687-page-Students-list.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408463213-Students-crud.png" alt="1769408463213-Students-crud.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408463213-Students-crud.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408465730-page-Groups-list.png" alt="1769408465730-page-Groups-list.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408465730-page-Groups-list.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408467251-Groups-crud.png" alt="1769408467251-Groups-crud.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408467251-Groups-crud.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408469747-page-Sessions-list.png" alt="1769408469747-page-Sessions-list.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408469747-page-Sessions-list.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408471267-Sessions-crud.png" alt="1769408471267-Sessions-crud.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408471267-Sessions-crud.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408473773-page-Payments-list.png" alt="1769408473773-page-Payments-list.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408473773-page-Payments-list.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408475302-Payments-crud.png" alt="1769408475302-Payments-crud.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408475302-Payments-crud.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408477786-page-Exams-list.png" alt="1769408477786-page-Exams-list.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408477786-page-Exams-list.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408479306-Exams-crud.png" alt="1769408479306-Exams-crud.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408479306-Exams-crud.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408481789-page-Quizzes-list.png" alt="1769408481789-page-Quizzes-list.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408481789-page-Quizzes-list.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408483313-Quizzes-crud.png" alt="1769408483313-Quizzes-crud.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408483313-Quizzes-crud.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408485842-page-Announcements-list.png" alt="1769408485842-page-Announcements-list.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408485842-page-Announcements-list.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408487368-Announcements-crud.png" alt="1769408487368-Announcements-crud.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408487368-Announcements-crud.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408488284-page-students-for-search.png" alt="1769408488284-page-students-for-search.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408488284-page-students-for-search.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408495297-responsive-desktop-full.png" alt="1769408495297-responsive-desktop-full.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408495297-responsive-desktop-full.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408497611-responsive-desktop.png" alt="1769408497611-responsive-desktop.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408497611-responsive-desktop.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408499905-responsive-tablet-landscape.png" alt="1769408499905-responsive-tablet-landscape.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408499905-responsive-tablet-landscape.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408502195-responsive-tablet-portrait.png" alt="1769408502195-responsive-tablet-portrait.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408502195-responsive-tablet-portrait.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408504482-responsive-mobile-large.png" alt="1769408504482-responsive-mobile-large.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408504482-responsive-mobile-large.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408506765-responsive-mobile.png" alt="1769408506765-responsive-mobile.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408506765-responsive-mobile.png</p>
+          </div>
+        
+          <div class="screenshot-item">
+            <img src="1769408509953-page-portal-home.png" alt="1769408509953-page-portal-home.png" onclick="openModal(this.src)" loading="lazy">
+            <p>1769408509953-page-portal-home.png</p>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal" onclick="closeModal()">
+    <img id="modalImg" src="" alt="Screenshot">
+  </div>
+
+  <script>
+    function openModal(src) {
+      document.getElementById('modalImg').src = src;
+      document.getElementById('modal').classList.add('active');
+    }
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
+    
