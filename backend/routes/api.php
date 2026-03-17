@@ -46,7 +46,7 @@ Route::prefix('auth')->group(function () {
 });
 
 // Auth routes - Protected
-Route::prefix('auth')->middleware('auth:sanctum')->group(function () {
+Route::prefix('auth')->middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class, \App\Http\Middleware\ApiAuthenticate::class])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/me', [AuthController::class, 'me']);
@@ -54,8 +54,8 @@ Route::prefix('auth')->middleware('auth:sanctum')->group(function () {
     Route::post('/change-password', [AuthController::class, 'changePassword']);
 });
 
-// Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+// Protected routes - Use custom API auth middleware
+Route::middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class, \App\Http\Middleware\ApiAuthenticate::class])->group(function () {
     // Get authenticated user
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -243,7 +243,7 @@ Route::prefix('portal')->group(function () {
     Route::post('/login', [PortalController::class, 'login'])->middleware('throttle:login');
 
     // Protected routes
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class, \App\Http\Middleware\ApiAuthenticate::class])->group(function () {
         Route::post('/logout', [PortalController::class, 'logout']);
         Route::get('/profile', [PortalController::class, 'profile']);
         Route::post('/password', [PortalController::class, 'updatePassword']);

@@ -15,6 +15,13 @@ class SecurityHeaders
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Disable X-Powered-By header in PHP
+        if (function_exists('header_remove')) {
+            header_remove('X-Powered-By');
+        } else {
+            header('X-Powered-By: ');
+        }
+
         $response = $next($request);
 
         // Security headers
