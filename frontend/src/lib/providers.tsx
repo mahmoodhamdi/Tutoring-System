@@ -1,8 +1,18 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+
+function ThemeInit() {
+  useEffect(() => {
+    const stored = localStorage.getItem('theme');
+    if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  }, []);
+  return null;
+}
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -10,7 +20,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000, // 1 minute
+            staleTime: 60 * 1000,
             retry: 1,
             refetchOnWindowFocus: false,
           },
@@ -23,6 +33,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeInit />
       {children}
       <Toaster
         position="top-left"
@@ -34,27 +45,32 @@ export function Providers({ children }: { children: React.ReactNode }) {
         toastOptions={{
           duration: 4000,
           style: {
-            background: '#363636',
-            color: '#fff',
+            background: '#1E293B',
+            color: '#F1F5F9',
             direction: 'rtl',
             fontFamily: 'inherit',
+            borderRadius: '14px',
+            padding: '14px 18px',
+            fontSize: '14px',
+            fontWeight: '500',
+            boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1)',
           },
           success: {
             style: {
-              background: '#22c55e',
+              background: '#059669',
             },
             iconTheme: {
               primary: '#fff',
-              secondary: '#22c55e',
+              secondary: '#059669',
             },
           },
           error: {
             style: {
-              background: '#ef4444',
+              background: '#DC2626',
             },
             iconTheme: {
               primary: '#fff',
-              secondary: '#ef4444',
+              secondary: '#DC2626',
             },
           },
         }}
