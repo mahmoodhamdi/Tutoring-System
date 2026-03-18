@@ -37,7 +37,6 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
   const { data: portalChildren } = usePortalChildren();
 
-  // Get user from localStorage using useMemo instead of useEffect
   const user = useMemo<PortalUser | null>(() => {
     if (typeof window === 'undefined') return null;
     const token = localStorage.getItem('portal_token');
@@ -69,16 +68,17 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     router.push('/portal');
   };
 
-  // If on login page, just render children
   if (pathname === '/portal') {
     return children;
   }
 
-  // If not authenticated, show nothing (will redirect)
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full"></div>
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 rounded-full border-4 border-primary-200 border-t-primary-600 animate-spin" />
+          <p className="text-neutral-500 text-sm">جاري التحميل...</p>
+        </div>
       </div>
     );
   }
@@ -86,27 +86,30 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const isParent = user.role === 'parent';
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
+    <div className="min-h-screen bg-neutral-50" dir="rtl">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-40">
+      <header className="glass sticky top-0 z-40 border-b border-neutral-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-[72px]">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-bl from-secondary-500 to-secondary-700 flex items-center justify-center shadow-[0_4px_12px_rgba(20,184,166,0.3)]">
                 <AcademicCapIcon className="w-6 h-6 text-white" />
               </div>
-              <span className="font-bold text-lg text-gray-900">بوابة الطلاب</span>
+              <div>
+                <span className="font-extrabold text-lg text-neutral-800">بوابة الطلاب</span>
+                <p className="text-[11px] text-neutral-400 -mt-0.5">منصة التعلم</p>
+              </div>
             </div>
 
             {/* Child Selector (for parents) */}
             {isParent && portalChildren && portalChildren.length > 0 && (
               <div className="hidden md:flex items-center gap-2">
-                <UsersIcon className="w-5 h-5 text-gray-400" />
+                <UsersIcon className="w-5 h-5 text-neutral-400" />
                 <select
                   value={selectedChild || ''}
                   onChange={(e) => setSelectedChild(e.target.value ? parseInt(e.target.value) : undefined)}
-                  className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                  className="px-3 py-1.5 border-2 border-neutral-200 rounded-xl text-sm focus:border-primary-500 focus:ring-0 transition-colors bg-white"
                 >
                   {portalChildren.map((child) => (
                     <option key={child.id} value={child.id}>
@@ -118,22 +121,25 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             )}
 
             {/* User Info & Logout */}
-            <div className="flex items-center gap-4">
-              <div className="hidden md:flex items-center gap-2">
-                <UserIcon className="w-5 h-5 text-gray-400" />
-                <span className="text-sm text-gray-700">{user.name}</span>
+            <div className="flex items-center gap-3">
+              <div className="hidden md:flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-bl from-primary-400 to-primary-600 flex items-center justify-center shadow-sm">
+                  <UserIcon className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-sm font-semibold text-neutral-700">{user.name}</span>
               </div>
+              <div className="h-8 w-px bg-neutral-200 hidden md:block" />
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-error-600 hover:bg-error-50 rounded-xl transition-all duration-200"
               >
                 <ArrowRightOnRectangleIcon className="w-5 h-5" />
-                <span className="hidden md:inline">خروج</span>
+                <span className="hidden md:inline text-sm font-semibold">خروج</span>
               </button>
               {/* Mobile menu button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                className="md:hidden p-2.5 text-neutral-500 hover:bg-neutral-100 rounded-xl transition-colors"
               >
                 {mobileMenuOpen ? (
                   <XMarkIcon className="w-6 h-6" />
@@ -150,7 +156,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         <div className="flex gap-6">
           {/* Sidebar - Desktop */}
           <aside className="hidden md:block w-64 flex-shrink-0">
-            <nav className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sticky top-24">
+            <nav className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-3 sticky top-24">
               <ul className="space-y-1">
                 {studentNavItems.map((item) => {
                   const isActive = pathname === item.href;
@@ -158,14 +164,21 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                           isActive
-                            ? 'bg-primary-50 text-primary-600'
-                            : 'text-gray-600 hover:bg-gray-50'
+                            ? 'bg-primary-50 text-primary-700 shadow-sm'
+                            : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700'
                         }`}
                       >
-                        <item.icon className="w-5 h-5" />
-                        <span className="font-medium">{item.label}</span>
+                        <item.icon
+                          className={`w-5 h-5 flex-shrink-0 ${
+                            isActive ? 'text-primary-600' : 'text-neutral-400'
+                          }`}
+                        />
+                        <span className="font-semibold text-sm">{item.label}</span>
+                        {isActive && (
+                          <span className="mr-auto w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" />
+                        )}
                       </Link>
                     </li>
                   );
@@ -174,30 +187,41 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             </nav>
           </aside>
 
-          {/* Mobile Navigation */}
+          {/* Mobile Navigation Drawer */}
           {mobileMenuOpen && (
             <div className="fixed inset-0 z-50 md:hidden">
-              <div className="fixed inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)}></div>
-              <div className="fixed right-0 top-0 bottom-0 w-64 bg-white shadow-xl p-4">
+              <div
+                className="fixed inset-0 bg-neutral-900/50 backdrop-blur-sm"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+              <div className="fixed right-0 top-0 bottom-0 w-72 bg-white shadow-2xl p-4 animate-slide-in-right">
                 <div className="flex items-center justify-between mb-6">
-                  <span className="font-bold text-lg">القائمة</span>
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-bl from-secondary-500 to-secondary-700 flex items-center justify-center">
+                      <AcademicCapIcon className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="font-extrabold text-base text-neutral-800">القائمة</span>
+                  </div>
                   <button
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                    className="p-2 text-neutral-500 hover:bg-neutral-100 rounded-xl transition-colors"
                   >
                     <XMarkIcon className="w-6 h-6" />
                   </button>
                 </div>
+
                 {/* Child Selector for mobile */}
                 {isParent && portalChildren && portalChildren.length > 0 && (
-                  <div className="mb-4 pb-4 border-b border-gray-200">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="mb-4 pb-4 border-b border-neutral-100">
+                    <label className="block text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">
                       اختر الطالب
                     </label>
                     <select
                       value={selectedChild || ''}
-                      onChange={(e) => setSelectedChild(e.target.value ? parseInt(e.target.value) : undefined)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                      onChange={(e) =>
+                        setSelectedChild(e.target.value ? parseInt(e.target.value) : undefined)
+                      }
+                      className="w-full px-3 py-2.5 border-2 border-neutral-200 rounded-xl text-sm focus:border-primary-500 focus:ring-0 bg-white"
                     >
                       {portalChildren.map((child) => (
                         <option key={child.id} value={child.id}>
@@ -207,6 +231,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                     </select>
                   </div>
                 )}
+
                 <ul className="space-y-1">
                   {studentNavItems.map((item) => {
                     const isActive = pathname === item.href;
@@ -215,25 +240,51 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                         <Link
                           href={item.href}
                           onClick={() => setMobileMenuOpen(false)}
-                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                          className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                             isActive
-                              ? 'bg-primary-50 text-primary-600'
-                              : 'text-gray-600 hover:bg-gray-50'
+                              ? 'bg-primary-50 text-primary-700 shadow-sm'
+                              : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700'
                           }`}
                         >
-                          <item.icon className="w-5 h-5" />
-                          <span className="font-medium">{item.label}</span>
+                          <item.icon
+                            className={`w-5 h-5 flex-shrink-0 ${
+                              isActive ? 'text-primary-600' : 'text-neutral-400'
+                            }`}
+                          />
+                          <span className="font-semibold text-sm">{item.label}</span>
+                          {isActive && (
+                            <span className="mr-auto w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" />
+                          )}
                         </Link>
                       </li>
                     );
                   })}
                 </ul>
+
+                {/* Mobile user info footer */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-neutral-100 bg-neutral-50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-bl from-primary-400 to-primary-600 flex items-center justify-center shadow-sm">
+                      <UserIcon className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-neutral-900 truncate">{user.name}</p>
+                      <p className="text-xs text-neutral-400">{isParent ? 'ولي أمر' : 'طالب'}</p>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="p-2 text-error-600 hover:bg-error-50 rounded-xl transition-colors"
+                    >
+                      <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           )}
 
           {/* Main Content */}
-          <main className="flex-1 min-w-0">{children}</main>
+          <main className="flex-1 min-w-0 animate-fade-in">{children}</main>
         </div>
       </div>
     </div>
