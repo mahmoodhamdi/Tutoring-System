@@ -35,32 +35,32 @@ export default function NotificationsPage() {
   const handleMarkAsRead = async (id: number) => {
     try {
       await markAsRead.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to mark as read:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleMarkAsUnread = async (id: number) => {
     try {
       await markAsUnread.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to mark as unread:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleMarkAllAsRead = async () => {
     try {
       await markAllAsRead.mutateAsync();
-    } catch (error) {
-      console.error('Failed to mark all as read:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleDelete = async (id: number) => {
     try {
       await deleteNotification.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to delete notification:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
@@ -68,8 +68,8 @@ export default function NotificationsPage() {
     if (!confirm('هل أنت متأكد من حذف جميع الإشعارات المقروءة؟')) return;
     try {
       await deleteRead.mutateAsync();
-    } catch (error) {
-      console.error('Failed to delete read notifications:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

@@ -219,8 +219,8 @@ export default function ReportsPage() {
     if (['attendance', 'payments', 'students', 'sessions'].includes(selectedReport)) {
       try {
         await exportCsv.mutateAsync({ reportType: selectedReport, filters });
-      } catch (error) {
-        console.error('Export failed:', error);
+      } catch {
+        // handled by global mutation error handler
       }
     }
   };

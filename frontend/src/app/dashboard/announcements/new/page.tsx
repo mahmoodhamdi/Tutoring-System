@@ -15,8 +15,8 @@ export default function NewAnnouncementPage() {
     try {
       const announcement = await createAnnouncement.mutateAsync(data);
       router.push(`/dashboard/announcements/${announcement.id}`);
-    } catch (error) {
-      console.error('Failed to create announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

@@ -40,14 +40,19 @@ api.interceptors.request.use(
 );
 
 // Response interceptor to handle errors
+let isRedirecting = false;
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized - redirect to login
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+      if (typeof window !== 'undefined' && !isRedirecting) {
+        const isOnLoginPage = window.location.pathname === '/login' || window.location.pathname === '/register';
+        if (!isOnLoginPage) {
+          isRedirecting = true;
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);

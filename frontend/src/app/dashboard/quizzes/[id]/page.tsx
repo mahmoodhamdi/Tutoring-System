@@ -47,16 +47,16 @@ export default function QuizDetailPage() {
   const handlePublish = async () => {
     try {
       await publishQuiz.mutateAsync(quizId);
-    } catch (error) {
-      console.error('Failed to publish quiz:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleUnpublish = async () => {
     try {
       await unpublishQuiz.mutateAsync(quizId);
-    } catch (error) {
-      console.error('Failed to unpublish quiz:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
@@ -64,8 +64,8 @@ export default function QuizDetailPage() {
     try {
       await addQuestion.mutateAsync({ quizId, data });
       setShowQuestionForm(false);
-    } catch (error) {
-      console.error('Failed to add question:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
@@ -74,8 +74,8 @@ export default function QuizDetailPage() {
     try {
       await updateQuestion.mutateAsync({ quizId, questionId: editingQuestion.id, data });
       setEditingQuestion(null);
-    } catch (error) {
-      console.error('Failed to update question:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
@@ -83,8 +83,8 @@ export default function QuizDetailPage() {
     if (!confirm('هل أنت متأكد من حذف هذا السؤال؟')) return;
     try {
       await deleteQuestion.mutateAsync({ quizId, questionId });
-    } catch (error) {
-      console.error('Failed to delete question:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

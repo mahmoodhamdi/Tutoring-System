@@ -3,6 +3,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { getErrorMessage } from '@/lib/errorHandler';
+import toast from 'react-hot-toast';
 
 function ThemeInit() {
   useEffect(() => {
@@ -26,6 +29,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
           },
           mutations: {
             retry: 0,
+            onError: (error: unknown) => {
+              toast.error(getErrorMessage(error));
+            },
           },
         },
       })
@@ -34,7 +40,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeInit />
-      {children}
+      <ErrorBoundary>{children}</ErrorBoundary>
       <Toaster
         position="top-left"
         reverseOrder={false}

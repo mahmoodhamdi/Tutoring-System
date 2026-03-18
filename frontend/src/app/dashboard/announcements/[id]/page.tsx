@@ -38,32 +38,32 @@ export default function AnnouncementDetailPage() {
   const handlePublish = async () => {
     try {
       await publishAnnouncement.mutateAsync(announcementId);
-    } catch (error) {
-      console.error('Failed to publish announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleUnpublish = async () => {
     try {
       await unpublishAnnouncement.mutateAsync(announcementId);
-    } catch (error) {
-      console.error('Failed to unpublish announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handlePin = async () => {
     try {
       await pinAnnouncement.mutateAsync(announcementId);
-    } catch (error) {
-      console.error('Failed to pin announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleUnpin = async () => {
     try {
       await unpinAnnouncement.mutateAsync(announcementId);
-    } catch (error) {
-      console.error('Failed to unpin announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
@@ -72,8 +72,8 @@ export default function AnnouncementDetailPage() {
     try {
       await deleteAnnouncement.mutateAsync(announcementId);
       router.push('/dashboard/announcements');
-    } catch (error) {
-      console.error('Failed to delete announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

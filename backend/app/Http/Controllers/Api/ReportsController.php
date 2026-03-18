@@ -20,6 +20,16 @@ use Illuminate\Support\Facades\DB;
 class ReportsController extends Controller
 {
     /**
+     * Ensure only teachers can access reports.
+     */
+    private function authorizeTeacher(Request $request): void
+    {
+        if (! $request->user() || ! $request->user()->isTeacher()) {
+            abort(403, 'غير مصرح لك بالوصول إلى التقارير');
+        }
+    }
+
+    /**
      * Get available report types
      */
     public function types()
@@ -69,6 +79,8 @@ class ReportsController extends Controller
      */
     public function attendance(Request $request)
     {
+        $this->authorizeTeacher($request);
+
         $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -163,6 +175,8 @@ class ReportsController extends Controller
      */
     public function payments(Request $request)
     {
+        $this->authorizeTeacher($request);
+
         $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -267,6 +281,8 @@ class ReportsController extends Controller
      */
     public function performance(Request $request)
     {
+        $this->authorizeTeacher($request);
+
         $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -409,6 +425,8 @@ class ReportsController extends Controller
      */
     public function students(Request $request)
     {
+        $this->authorizeTeacher($request);
+
         $request->validate([
             'status' => 'nullable|in:active,inactive,graduated',
             'group_id' => 'nullable|exists:groups,id',
@@ -443,14 +461,13 @@ class ReportsController extends Controller
 
         $students = $query->orderBy('name')->get();
 
-        // Summary
-        $allStudents = User::students()->with('studentProfile')->get();
+        // Summary — use counts from DB to avoid loading all students
         $summary = [
             'total' => $students->count(),
-            'active' => $allStudents->where('is_active', true)->count(),
-            'inactive' => $allStudents->where('is_active', false)->count(),
-            'graduated' => $allStudents->filter(function ($s) {
-                return $s->studentProfile?->status === 'graduated';
+            'active' => User::students()->where('is_active', true)->count(),
+            'inactive' => User::students()->where('is_active', false)->count(),
+            'graduated' => User::students()->whereHas('studentProfile', function ($q) {
+                $q->where('status', 'graduated');
             })->count(),
         ];
 
@@ -493,6 +510,8 @@ class ReportsController extends Controller
      */
     public function sessions(Request $request)
     {
+        $this->authorizeTeacher($request);
+
         $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -578,6 +597,8 @@ class ReportsController extends Controller
      */
     public function financialSummary(Request $request)
     {
+        $this->authorizeTeacher($request);
+
         $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -676,6 +697,8 @@ class ReportsController extends Controller
      */
     public function exportCsv(Request $request)
     {
+        $this->authorizeTeacher($request);
+
         $request->validate([
             'report_type' => 'required|in:attendance,payments,performance,students,sessions',
         ]);
@@ -789,6 +812,8 @@ class ReportsController extends Controller
      */
     public function exportPdf(Request $request, PdfExportService $pdfService)
     {
+        $this->authorizeTeacher($request);
+
         $request->validate([
             'report_type' => 'required|in:attendance,payments,students,performance',
             'start_date' => 'nullable|date',

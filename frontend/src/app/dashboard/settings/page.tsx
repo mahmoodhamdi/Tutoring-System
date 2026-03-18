@@ -216,16 +216,16 @@ export default function SettingsPage() {
   const handleUpdate = async (key: string, value: SettingValue) => {
     try {
       await updateSetting.mutateAsync({ key, value });
-    } catch (updateError) {
-      console.error('Failed to update setting:', updateError);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleClearCache = async () => {
     try {
       await clearCache.mutateAsync();
-    } catch (cacheError) {
-      console.error('Failed to clear cache:', cacheError);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

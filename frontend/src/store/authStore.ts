@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import type { User } from '@/types';
 
 function setTokenCookie(token: string | null) {
+  if (typeof window === 'undefined') return;
   if (token) {
     const secure = window.location.protocol === 'https:' ? '; Secure' : '';
     document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Lax${secure}`;

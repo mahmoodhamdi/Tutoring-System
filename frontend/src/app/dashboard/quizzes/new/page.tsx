@@ -15,8 +15,8 @@ export default function NewQuizPage() {
     try {
       const quiz = await createQuiz.mutateAsync(data);
       router.push(`/dashboard/quizzes/${quiz.id}`);
-    } catch (error) {
-      console.error('Failed to create quiz:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

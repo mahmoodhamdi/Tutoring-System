@@ -212,8 +212,8 @@ Route::middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreSta
         Route::get('/recent-activities', [DashboardController::class, 'recentActivities']);
     });
 
-    // Reports routes (Phase 13)
-    Route::prefix('reports')->group(function () {
+    // Reports routes (Phase 13) — all rate-limited (expensive aggregations)
+    Route::prefix('reports')->middleware('throttle:reports-export')->group(function () {
         Route::get('/types', [ReportsController::class, 'types']);
         Route::get('/attendance', [ReportsController::class, 'attendance']);
         Route::get('/payments', [ReportsController::class, 'payments']);
@@ -221,9 +221,8 @@ Route::middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreSta
         Route::get('/students', [ReportsController::class, 'students']);
         Route::get('/sessions', [ReportsController::class, 'sessions']);
         Route::get('/financial-summary', [ReportsController::class, 'financialSummary']);
-        // Export routes with stricter rate limiting (expensive operations)
-        Route::get('/export/csv', [ReportsController::class, 'exportCsv'])->middleware('throttle:reports-export')->name('reports.export.csv');
-        Route::get('/export/pdf', [ReportsController::class, 'exportPdf'])->middleware('throttle:reports-export')->name('reports.export.pdf');
+        Route::get('/export/csv', [ReportsController::class, 'exportCsv'])->name('reports.export.csv');
+        Route::get('/export/pdf', [ReportsController::class, 'exportPdf'])->name('reports.export.pdf');
     });
 
     // Settings routes (Phase 14)

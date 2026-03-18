@@ -19,8 +19,8 @@ export default function EditQuizPage() {
     try {
       await updateQuiz.mutateAsync({ id: quizId, data });
       router.push(`/dashboard/quizzes/${quizId}`);
-    } catch (error) {
-      console.error('Failed to update quiz:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

@@ -19,8 +19,8 @@ export default function EditAnnouncementPage() {
     try {
       await updateAnnouncement.mutateAsync({ id: announcementId, data });
       router.push(`/dashboard/announcements/${announcementId}`);
-    } catch (error) {
-      console.error('Failed to update announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

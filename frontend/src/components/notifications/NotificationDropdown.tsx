@@ -35,16 +35,16 @@ export function NotificationDropdown() {
   const handleMarkAsRead = async (id: number) => {
     try {
       await markAsRead.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to mark as read:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleMarkAllAsRead = async () => {
     try {
       await markAllAsRead.mutateAsync();
-    } catch (error) {
-      console.error('Failed to mark all as read:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

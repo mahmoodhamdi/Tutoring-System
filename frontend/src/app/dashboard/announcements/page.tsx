@@ -47,32 +47,32 @@ export default function AnnouncementsPage() {
   const handlePublish = async (id: number) => {
     try {
       await publishAnnouncement.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to publish announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleUnpublish = async (id: number) => {
     try {
       await unpublishAnnouncement.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to unpublish announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handlePin = async (id: number) => {
     try {
       await pinAnnouncement.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to pin announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleUnpin = async (id: number) => {
     try {
       await unpinAnnouncement.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to unpin announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
@@ -80,24 +80,24 @@ export default function AnnouncementsPage() {
     if (!confirm('هل أنت متأكد من حذف هذا الإعلان؟')) return;
     try {
       await deleteAnnouncement.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to delete announcement:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleMarkAsRead = async (id: number) => {
     try {
       await markAsRead.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to mark as read:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleMarkAllAsRead = async () => {
     try {
       await markAllAsRead.mutateAsync();
-    } catch (error) {
-      console.error('Failed to mark all as read:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

@@ -28,24 +28,24 @@ export default function QuizzesPage() {
   const handlePublish = async (id: number) => {
     try {
       await publishQuiz.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to publish quiz:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleUnpublish = async (id: number) => {
     try {
       await unpublishQuiz.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to unpublish quiz:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
   const handleDuplicate = async (id: number) => {
     try {
       await duplicateQuiz.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to duplicate quiz:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 
@@ -53,8 +53,8 @@ export default function QuizzesPage() {
     if (!confirm('هل أنت متأكد من حذف هذا الاختبار؟')) return;
     try {
       await deleteQuiz.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to delete quiz:', error);
+    } catch {
+      // handled by global mutation error handler
     }
   };
 

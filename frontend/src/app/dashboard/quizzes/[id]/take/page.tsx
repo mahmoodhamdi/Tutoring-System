@@ -43,7 +43,7 @@ export default function TakeQuizPage() {
       // The attempt will be picked up automatically via the myAttempts query refetch
     } catch (error: unknown) {
       const err = error as ErrorResponse;
-      console.error('Failed to start quiz:', error);
+      // handled by global mutation error handler
       alert(err.response?.data?.message || 'فشل في بدء الاختبار');
     }
   };
@@ -59,7 +59,7 @@ export default function TakeQuizPage() {
       setCompletedAttempt(result);
     } catch (error: unknown) {
       const err = error as ErrorResponse;
-      console.error('Failed to submit quiz:', error);
+      // handled by global mutation error handler
       alert(err.response?.data?.message || 'فشل في تسليم الاختبار');
     }
   };
