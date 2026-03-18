@@ -4,7 +4,8 @@ import type { User } from '@/types';
 
 function setTokenCookie(token: string | null) {
   if (token) {
-    document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Lax`;
+    const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Lax${secure}`;
   } else {
     document.cookie = 'token=; path=/; max-age=0';
   }
