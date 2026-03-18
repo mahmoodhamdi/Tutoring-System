@@ -64,12 +64,12 @@ export const SETTING_GROUP_ICONS: Record<SettingGroup, string> = {
 };
 
 export const SETTING_GROUP_COLORS: Record<SettingGroup, string> = {
-  general: 'bg-gray-100 text-gray-800',
-  sessions: 'bg-blue-100 text-blue-800',
-  payments: 'bg-green-100 text-green-800',
-  registration: 'bg-purple-100 text-purple-800',
-  email: 'bg-yellow-100 text-yellow-800',
-  sms: 'bg-orange-100 text-orange-800',
-  appearance: 'bg-pink-100 text-pink-800',
-  notifications: 'bg-indigo-100 text-indigo-800',
+  general: 'bg-neutral-100 text-neutral-800',
+  sessions: 'bg-primary-100 text-primary-800',
+  payments: 'bg-success-100 text-success-800',
+  registration: 'bg-secondary-100 text-secondary-800',
+  email: 'bg-warning-100 text-warning-800',
+  sms: 'bg-accent-100 text-accent-800',
+  appearance: 'bg-primary-100 text-primary-800',
+  notifications: 'bg-info-100 text-info-800',
 };

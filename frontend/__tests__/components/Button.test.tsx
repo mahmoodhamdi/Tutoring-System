@@ -10,36 +10,36 @@ describe('Button', () => {
   it('renders with primary variant by default', () => {
     render(<Button>Primary</Button>);
     const button = screen.getByRole('button');
-    expect(button).toHaveClass('bg-blue-600');
+    expect(button.className).toMatch(/primary/);
   });
 
   it('renders with secondary variant', () => {
     render(<Button variant="secondary">Secondary</Button>);
     const button = screen.getByRole('button');
-    expect(button).toHaveClass('bg-gray-100');
+    expect(button.className).toMatch(/neutral/);
   });
 
   it('renders with outline variant', () => {
     render(<Button variant="outline">Outline</Button>);
     const button = screen.getByRole('button');
-    expect(button).toHaveClass('border');
+    expect(button).toHaveClass('border-2');
   });
 
   it('renders with danger variant', () => {
     render(<Button variant="danger">Danger</Button>);
     const button = screen.getByRole('button');
-    expect(button).toHaveClass('bg-red-600');
+    expect(button.className).toMatch(/error/);
   });
 
   it('renders with different sizes', () => {
     const { rerender } = render(<Button size="sm">Small</Button>);
-    expect(screen.getByRole('button')).toHaveClass('h-8');
+    expect(screen.getByRole('button')).toHaveClass('h-9');
 
     rerender(<Button size="md">Medium</Button>);
-    expect(screen.getByRole('button')).toHaveClass('h-10');
+    expect(screen.getByRole('button')).toHaveClass('h-11');
 
     rerender(<Button size="lg">Large</Button>);
-    expect(screen.getByRole('button')).toHaveClass('h-12');
+    expect(screen.getByRole('button')).toHaveClass('h-13');
   });
 
   it('handles click events', () => {
@@ -59,11 +59,18 @@ describe('Button', () => {
     render(<Button isLoading>Loading</Button>);
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    expect(screen.getByText(/جاري التحميل/)).toBeInTheDocument();
   });
 
   it('applies custom className', () => {
     render(<Button className="custom-class">Custom</Button>);
     expect(screen.getByRole('button')).toHaveClass('custom-class');
+  });
+
+  it('renders with icon', () => {
+    render(
+      <Button icon={<span data-testid="icon">*</span>}>With Icon</Button>
+    );
+    expect(screen.getByTestId('icon')).toBeInTheDocument();
   });
 });

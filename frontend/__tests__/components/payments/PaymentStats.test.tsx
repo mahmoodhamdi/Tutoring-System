@@ -43,7 +43,7 @@ describe('PaymentStats', () => {
   it('renders three stat cards', () => {
     render(<PaymentStats summary={mockSummary} />);
 
-    const cards = document.querySelectorAll('.bg-white.rounded-lg.shadow');
+    const cards = document.querySelectorAll('.bg-white.rounded-2xl');
     expect(cards.length).toBe(3);
   });
 

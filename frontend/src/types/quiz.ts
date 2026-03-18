@@ -161,8 +161,8 @@ export const ATTEMPT_STATUS_LABELS: Record<QuizAttempt['status'], string> = {
 };
 
 export const ATTEMPT_STATUS_COLORS: Record<QuizAttempt['status'], string> = {
-  in_progress: 'bg-blue-100 text-blue-800',
-  completed: 'bg-green-100 text-green-800',
-  timed_out: 'bg-orange-100 text-orange-800',
-  abandoned: 'bg-gray-100 text-gray-800',
+  in_progress: 'bg-primary-100 text-primary-800',
+  completed: 'bg-success-100 text-success-800',
+  timed_out: 'bg-accent-100 text-accent-800',
+  abandoned: 'bg-neutral-100 text-neutral-800',
 };

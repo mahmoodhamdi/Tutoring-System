@@ -75,10 +75,10 @@ export const PRIORITY_LABELS: Record<AnnouncementPriority, string> = {
 };
 
 export const PRIORITY_COLORS: Record<AnnouncementPriority, string> = {
-  low: 'bg-gray-100 text-gray-800',
-  normal: 'bg-blue-100 text-blue-800',
-  high: 'bg-orange-100 text-orange-800',
-  urgent: 'bg-red-100 text-red-800',
+  low: 'bg-neutral-100 text-neutral-800',
+  normal: 'bg-primary-100 text-primary-800',
+  high: 'bg-accent-100 text-accent-800',
+  urgent: 'bg-error-100 text-error-800',
 };
 
 export const TYPE_LABELS: Record<AnnouncementType, string> = {

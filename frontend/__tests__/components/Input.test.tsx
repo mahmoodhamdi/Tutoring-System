@@ -38,7 +38,7 @@ describe('Input', () => {
   it('applies error styles when error is present', () => {
     render(<Input label="Email" name="email" error="Error" />);
     const input = screen.getByLabelText('Email');
-    expect(input).toHaveClass('border-red-500');
+    expect(input.className).toMatch(/error/);
   });
 
   it('applies custom className', () => {

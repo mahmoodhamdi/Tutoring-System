@@ -16,42 +16,42 @@ describe('Alert', () => {
   it('renders success variant', () => {
     render(<Alert variant="success">Success message</Alert>);
     const alert = screen.getByRole('alert');
-    expect(alert).toHaveClass('bg-green-50');
+    expect(alert.className).toMatch(/success/);
   });
 
   it('renders error variant', () => {
     render(<Alert variant="error">Error message</Alert>);
     const alert = screen.getByRole('alert');
-    expect(alert).toHaveClass('bg-red-50');
+    expect(alert.className).toMatch(/error/);
   });
 
   it('renders warning variant', () => {
     render(<Alert variant="warning">Warning message</Alert>);
     const alert = screen.getByRole('alert');
-    expect(alert).toHaveClass('bg-yellow-50');
+    expect(alert.className).toMatch(/warning/);
   });
 
   it('renders info variant by default', () => {
     render(<Alert>Info message</Alert>);
     const alert = screen.getByRole('alert');
-    expect(alert).toHaveClass('bg-blue-50');
+    expect(alert.className).toMatch(/info/);
   });
 
   it('shows close button when onClose is provided', () => {
     const handleClose = jest.fn();
     render(<Alert onClose={handleClose}>Test message</Alert>);
-    expect(screen.getByRole('button', { name: /dismiss/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /إغلاق/i })).toBeInTheDocument();
   });
 
   it('hides close button when onClose is not provided', () => {
     render(<Alert>Test message</Alert>);
-    expect(screen.queryByRole('button', { name: /dismiss/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
   it('calls onClose when close button is clicked', () => {
     const handleClose = jest.fn();
     render(<Alert onClose={handleClose}>Test message</Alert>);
-    fireEvent.click(screen.getByRole('button', { name: /dismiss/i }));
+    fireEvent.click(screen.getByRole('button', { name: /إغلاق/i }));
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
 
