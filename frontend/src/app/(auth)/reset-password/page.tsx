@@ -57,13 +57,13 @@ function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <div className="bg-white py-8 px-6 shadow rounded-lg">
-        <Alert variant="error" className="mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 py-8 px-6 animate-scale-in">
+        <Alert variant="error" className="mb-5">
           رمز إعادة التعيين غير صالح أو مفقود. يرجى طلب رابط إعادة تعيين جديد.
         </Alert>
         <Link
           href="/forgot-password"
-          className="block text-center text-sm font-medium text-blue-600 hover:text-blue-500"
+          className="block text-center text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
         >
           طلب رابط إعادة تعيين جديد
         </Link>
@@ -73,13 +73,13 @@ function ResetPasswordForm() {
 
   if (success) {
     return (
-      <div className="bg-white py-8 px-6 shadow rounded-lg">
-        <Alert variant="success" className="mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 py-8 px-6 animate-scale-in">
+        <Alert variant="success" className="mb-5">
           تم إعادة تعيين كلمة المرور بنجاح. جاري تحويلك إلى صفحة تسجيل الدخول...
         </Alert>
         <Link
           href="/login"
-          className="block text-center text-sm font-medium text-blue-600 hover:text-blue-500"
+          className="block text-center text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
         >
           الذهاب إلى تسجيل الدخول
         </Link>
@@ -88,16 +88,16 @@ function ResetPasswordForm() {
   }
 
   return (
-    <div className="bg-white py-8 px-6 shadow rounded-lg">
-      <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
+    <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 py-8 px-6 animate-fade-in-up">
+      <h2 className="text-2xl font-extrabold text-center text-neutral-900 mb-2">
         إعادة تعيين كلمة المرور
       </h2>
-      <p className="text-center text-gray-600 mb-6">
+      <p className="text-center text-neutral-500 text-sm mb-6">
         أدخل كلمة المرور الجديدة أدناه.
       </p>
 
       {error && (
-        <Alert variant="error" className="mb-4" onClose={() => setError(null)}>
+        <Alert variant="error" className="mb-5" onClose={() => setError(null)}>
           {error}
         </Alert>
       )}
@@ -135,11 +135,11 @@ function ResetPasswordForm() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-neutral-500">
         تذكرت كلمة المرور؟{' '}
         <Link
           href="/login"
-          className="font-medium text-blue-600 hover:text-blue-500"
+          className="font-semibold text-primary-600 hover:text-primary-700 transition-colors"
         >
           تسجيل الدخول
         </Link>
@@ -150,20 +150,22 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={
-      <div className="bg-white py-8 px-6 shadow rounded-lg">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto mb-4" />
-          <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-6" />
-          <div className="space-y-4">
-            <div className="h-10 bg-gray-200 rounded" />
-            <div className="h-10 bg-gray-200 rounded" />
-            <div className="h-10 bg-gray-200 rounded" />
-            <div className="h-10 bg-gray-200 rounded" />
+    <Suspense
+      fallback={
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 py-8 px-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-neutral-100 rounded-xl w-3/4 mx-auto" />
+            <div className="h-4 bg-neutral-100 rounded-xl w-1/2 mx-auto" />
+            <div className="space-y-3 mt-6">
+              <div className="h-11 bg-neutral-100 rounded-xl" />
+              <div className="h-11 bg-neutral-100 rounded-xl" />
+              <div className="h-11 bg-neutral-100 rounded-xl" />
+              <div className="h-11 bg-neutral-100 rounded-xl" />
+            </div>
           </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <ResetPasswordForm />
     </Suspense>
   );

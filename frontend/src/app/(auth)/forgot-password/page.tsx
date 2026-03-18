@@ -42,13 +42,13 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="bg-white py-8 px-6 shadow rounded-lg">
-        <Alert variant="success" className="mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 py-8 px-6 animate-scale-in">
+        <Alert variant="success" className="mb-5">
           تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني. يرجى التحقق من صندوق الوارد.
         </Alert>
         <Link
           href="/login"
-          className="block text-center text-sm font-medium text-blue-600 hover:text-blue-500"
+          className="block text-center text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
         >
           العودة إلى تسجيل الدخول
         </Link>
@@ -57,16 +57,16 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="bg-white py-8 px-6 shadow rounded-lg">
-      <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
+    <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 py-8 px-6 animate-fade-in-up">
+      <h2 className="text-2xl font-extrabold text-center text-neutral-900 mb-2">
         نسيت كلمة المرور؟
       </h2>
-      <p className="text-center text-gray-600 mb-6">
+      <p className="text-center text-neutral-500 text-sm mb-6">
         أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.
       </p>
 
       {error && (
-        <Alert variant="error" className="mb-4" onClose={() => setError(null)}>
+        <Alert variant="error" className="mb-5" onClose={() => setError(null)}>
           {error}
         </Alert>
       )}
@@ -85,11 +85,11 @@ export default function ForgotPasswordPage() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-neutral-500">
         تذكرت كلمة المرور؟{' '}
         <Link
           href="/login"
-          className="font-medium text-blue-600 hover:text-blue-500"
+          className="font-semibold text-primary-600 hover:text-primary-700 transition-colors"
         >
           تسجيل الدخول
         </Link>

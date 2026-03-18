@@ -19,7 +19,10 @@ export default function PortalDashboardPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full"></div>
+        <div className="flex flex-col items-center gap-3">
+          <div className="animate-spin w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full"></div>
+          <p className="text-neutral-500 text-sm">جاري التحميل...</p>
+        </div>
       </div>
     );
   }
@@ -27,86 +30,94 @@ export default function PortalDashboardPage() {
   if (error || !data) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600">حدث خطأ في تحميل البيانات</p>
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-error-50 rounded-2xl mb-3">
+          <ExclamationTriangleIcon className="w-7 h-7 text-error-500" />
+        </div>
+        <p className="text-error-600 font-semibold">حدث خطأ في تحميل البيانات</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Welcome */}
-      <div className="bg-gradient-to-l from-primary-600 to-primary-700 rounded-2xl p-6 text-white">
-        <h1 className="text-2xl font-bold">مرحباً، {data.student.name}</h1>
-        <p className="text-primary-100 mt-1">هذه نظرة عامة على حالتك الدراسية</p>
+    <div className="space-y-6 animate-fade-in">
+      {/* Welcome Banner */}
+      <div className="relative overflow-hidden bg-gradient-to-l from-primary-600 via-primary-700 to-primary-800 rounded-2xl p-6 text-white shadow-[0_8px_24px_rgba(79,70,229,0.25)]">
+        {/* Decorative blobs */}
+        <div className="absolute top-0 left-0 w-48 h-48 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl pointer-events-none" />
+        <div className="absolute bottom-0 right-12 w-32 h-32 bg-secondary-400/20 rounded-full translate-y-1/2 blur-2xl pointer-events-none" />
+        <div className="relative">
+          <h1 className="text-2xl font-extrabold">مرحباً، {data.student.name}</h1>
+          <p className="text-primary-200 mt-1 text-sm">هذه نظرة عامة على حالتك الدراسية</p>
+        </div>
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
         {/* Attendance Rate */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-4 card-hover">
           <div className="flex items-center gap-3">
             <div
-              className={`p-3 rounded-lg ${
+              className={`p-3 rounded-xl ${
                 data.attendance.rate >= 80
-                  ? 'bg-green-50 text-green-600'
+                  ? 'bg-success-50 text-success-600'
                   : data.attendance.rate >= 60
-                  ? 'bg-yellow-50 text-yellow-600'
-                  : 'bg-red-50 text-red-600'
+                  ? 'bg-warning-50 text-warning-600'
+                  : 'bg-error-50 text-error-600'
               }`}
             >
               <ClipboardDocumentListIcon className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{data.attendance.rate}%</p>
-              <p className="text-sm text-gray-500">نسبة الحضور</p>
+              <p className="text-2xl font-extrabold text-neutral-900">{data.attendance.rate}%</p>
+              <p className="text-xs text-neutral-500 mt-0.5">نسبة الحضور</p>
             </div>
           </div>
         </div>
 
         {/* Pending Payments */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-4 card-hover">
           <div className="flex items-center gap-3">
             <div
-              className={`p-3 rounded-lg ${
+              className={`p-3 rounded-xl ${
                 data.payments.pending_amount > 0
-                  ? 'bg-yellow-50 text-yellow-600'
-                  : 'bg-green-50 text-green-600'
+                  ? 'bg-warning-50 text-warning-600'
+                  : 'bg-success-50 text-success-600'
               }`}
             >
               <BanknotesIcon className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-xl font-bold text-gray-900">
+              <p className="text-xl font-extrabold text-neutral-900">
                 {formatCurrency(data.payments.pending_amount)}
               </p>
-              <p className="text-sm text-gray-500">مستحقات معلقة</p>
+              <p className="text-xs text-neutral-500 mt-0.5">مستحقات معلقة</p>
             </div>
           </div>
         </div>
 
         {/* Upcoming Sessions */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-4 card-hover">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-lg bg-blue-50 text-blue-600">
+            <div className="p-3 rounded-xl bg-info-50 text-info-600">
               <CalendarDaysIcon className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{data.upcoming_sessions.length}</p>
-              <p className="text-sm text-gray-500">جلسات قادمة</p>
+              <p className="text-2xl font-extrabold text-neutral-900">{data.upcoming_sessions.length}</p>
+              <p className="text-xs text-neutral-500 mt-0.5">جلسات قادمة</p>
             </div>
           </div>
         </div>
 
         {/* Overdue Payments Warning */}
         {data.payments.overdue_count > 0 && (
-          <div className="bg-red-50 rounded-xl border border-red-200 p-4">
+          <div className="bg-error-50 rounded-2xl border border-error-100 p-4 card-hover">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-red-100 text-red-600">
+              <div className="p-3 rounded-xl bg-error-100 text-error-600">
                 <ExclamationTriangleIcon className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-xl font-bold text-red-700">{data.payments.overdue_count}</p>
-                <p className="text-sm text-red-600">مدفوعات متأخرة</p>
+                <p className="text-xl font-extrabold text-error-700">{data.payments.overdue_count}</p>
+                <p className="text-xs text-error-600 mt-0.5">مدفوعات متأخرة</p>
               </div>
             </div>
           </div>
@@ -115,27 +126,30 @@ export default function PortalDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Upcoming Sessions */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">الجلسات القادمة</h2>
-            <Link href="/portal/schedule" className="text-sm text-primary-600 hover:text-primary-700">
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-base font-bold text-neutral-900">الجلسات القادمة</h2>
+            <Link
+              href="/portal/schedule"
+              className="text-sm font-semibold text-primary-600 hover:text-primary-700 hover:underline transition-colors"
+            >
               عرض الكل
             </Link>
           </div>
           {data.upcoming_sessions.length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {data.upcoming_sessions.map((session) => (
                 <div
                   key={session.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3.5 bg-neutral-50 rounded-xl border border-neutral-100 hover:bg-primary-50/50 hover:border-primary-100 transition-colors"
                 >
                   <div>
-                    <p className="font-medium text-gray-900">{session.title}</p>
-                    <p className="text-sm text-gray-500">{session.group_name}</p>
+                    <p className="font-semibold text-neutral-900 text-sm">{session.title}</p>
+                    <p className="text-xs text-neutral-500 mt-0.5">{session.group_name}</p>
                   </div>
                   <div className="text-left">
-                    <p className="text-sm font-medium text-gray-900">{session.session_date}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-sm font-semibold text-neutral-700">{session.session_date}</p>
+                    <p className="text-xs text-neutral-400 mt-0.5">
                       {(session.start_time || '--:--').substring(0, 5)} - {(session.end_time || '--:--').substring(0, 5)}
                     </p>
                   </div>
@@ -143,32 +157,37 @@ export default function PortalDashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-6 text-gray-500">
-              <CalendarDaysIcon className="w-12 h-12 mx-auto text-gray-300 mb-2" />
-              <p>لا توجد جلسات قادمة</p>
+            <div className="text-center py-8 text-neutral-400">
+              <div className="inline-flex items-center justify-center w-14 h-14 bg-neutral-50 rounded-2xl mb-3">
+                <CalendarDaysIcon className="w-7 h-7 text-neutral-300" />
+              </div>
+              <p className="text-sm">لا توجد جلسات قادمة</p>
             </div>
           )}
         </div>
 
         {/* Recent Results */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">آخر النتائج</h2>
-            <Link href="/portal/grades" className="text-sm text-primary-600 hover:text-primary-700">
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-base font-bold text-neutral-900">آخر النتائج</h2>
+            <Link
+              href="/portal/grades"
+              className="text-sm font-semibold text-primary-600 hover:text-primary-700 hover:underline transition-colors"
+            >
               عرض الكل
             </Link>
           </div>
           {data.recent_results.length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {data.recent_results.map((result) => (
                 <div
                   key={result.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3.5 bg-neutral-50 rounded-xl border border-neutral-100 hover:bg-neutral-100/70 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className={`p-2 rounded-lg ${
-                        result.is_passed ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                      className={`p-2 rounded-xl ${
+                        result.is_passed ? 'bg-success-100 text-success-600' : 'bg-error-100 text-error-600'
                       }`}
                     >
                       {result.is_passed ? (
@@ -178,19 +197,19 @@ export default function PortalDashboardPage() {
                       )}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{result.exam_title}</p>
-                      <p className="text-xs text-gray-500">{result.exam_date}</p>
+                      <p className="font-semibold text-neutral-900 text-sm">{result.exam_title}</p>
+                      <p className="text-xs text-neutral-500 mt-0.5">{result.exam_date}</p>
                     </div>
                   </div>
                   <div className="text-left">
                     <p
-                      className={`text-lg font-bold ${
-                        result.is_passed ? 'text-green-600' : 'text-red-600'
+                      className={`text-lg font-extrabold ${
+                        result.is_passed ? 'text-success-600' : 'text-error-600'
                       }`}
                     >
                       {result.percentage}%
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-neutral-400 mt-0.5">
                       {result.obtained_marks}/{result.total_marks}
                     </p>
                   </div>
@@ -198,9 +217,11 @@ export default function PortalDashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-6 text-gray-500">
-              <AcademicCapIcon className="w-12 h-12 mx-auto text-gray-300 mb-2" />
-              <p>لا توجد نتائج حديثة</p>
+            <div className="text-center py-8 text-neutral-400">
+              <div className="inline-flex items-center justify-center w-14 h-14 bg-neutral-50 rounded-2xl mb-3">
+                <AcademicCapIcon className="w-7 h-7 text-neutral-300" />
+              </div>
+              <p className="text-sm">لا توجد نتائج حديثة</p>
             </div>
           )}
         </div>
@@ -208,46 +229,48 @@ export default function PortalDashboardPage() {
 
       {/* Announcements */}
       {data.announcements.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">أحدث الإعلانات</h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-base font-bold text-neutral-900">أحدث الإعلانات</h2>
             <Link
               href="/portal/announcements"
-              className="text-sm text-primary-600 hover:text-primary-700"
+              className="text-sm font-semibold text-primary-600 hover:text-primary-700 hover:underline transition-colors"
             >
               عرض الكل
             </Link>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {data.announcements.map((announcement) => (
               <Link
                 key={announcement.id}
                 href={`/portal/announcements/${announcement.id}`}
-                className="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-start gap-3 p-4 bg-neutral-50 rounded-xl border border-neutral-100 hover:bg-primary-50/40 hover:border-primary-100 transition-all duration-200 group"
               >
-                <div className="flex items-start gap-3">
-                  <MegaphoneIcon
-                    className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
-                      announcement.priority === 'high'
-                        ? 'text-red-500'
-                        : announcement.priority === 'medium'
-                        ? 'text-yellow-500'
-                        : 'text-gray-400'
-                    }`}
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium text-gray-900">{announcement.title}</p>
-                      {announcement.is_pinned && (
-                        <span className="px-2 py-0.5 bg-primary-100 text-primary-700 text-xs rounded-full">
-                          مثبت
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {new Date(announcement.created_at).toLocaleDateString('ar-EG')}
+                <div
+                  className={`mt-0.5 p-2 rounded-xl flex-shrink-0 ${
+                    announcement.priority === 'high'
+                      ? 'bg-error-50 text-error-500'
+                      : announcement.priority === 'medium'
+                      ? 'bg-warning-50 text-warning-600'
+                      : 'bg-neutral-100 text-neutral-400'
+                  }`}
+                >
+                  <MegaphoneIcon className="w-4 h-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="font-semibold text-neutral-900 text-sm group-hover:text-primary-700 transition-colors">
+                      {announcement.title}
                     </p>
+                    {announcement.is_pinned && (
+                      <span className="px-2 py-0.5 bg-primary-100 text-primary-700 text-xs font-semibold rounded-full">
+                        مثبت
+                      </span>
+                    )}
                   </div>
+                  <p className="text-xs text-neutral-400 mt-1">
+                    {new Date(announcement.created_at).toLocaleDateString('ar-EG')}
+                  </p>
                 </div>
               </Link>
             ))}
