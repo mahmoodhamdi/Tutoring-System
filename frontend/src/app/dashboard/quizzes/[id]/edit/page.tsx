@@ -35,8 +35,8 @@ export default function EditQuizPage() {
   if (!quiz) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">الاختبار غير موجود</p>
-        <Link href="/dashboard/quizzes" className="text-primary-600 hover:text-primary-700 mt-4 inline-block">
+        <p className="text-neutral-500">الاختبار غير موجود</p>
+        <Link href="/dashboard/quizzes" className="text-primary-600 hover:text-primary-700 mt-4 inline-block transition-all duration-200">
           العودة للاختبارات
         </Link>
       </div>
@@ -44,18 +44,18 @@ export default function EditQuizPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link
           href={`/dashboard/quizzes/${quizId}`}
-          className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+          className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all duration-200"
         >
           <ArrowRightIcon className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">تعديل الاختبار</h1>
-          <p className="text-gray-600">{quiz.title}</p>
+          <h1 className="text-2xl font-extrabold text-neutral-900">تعديل الاختبار</h1>
+          <p className="text-neutral-600">{quiz.title}</p>
         </div>
       </div>
 

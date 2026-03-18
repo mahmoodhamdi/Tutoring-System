@@ -20,22 +20,22 @@ export default function NewSessionPage() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-6">
-        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-          <Link href="/dashboard" className="hover:text-gray-700">
+        <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-3">
+          <Link href="/dashboard" className="hover:text-neutral-700 transition-colors">
             لوحة التحكم
           </Link>
-          <span>/</span>
-          <Link href="/dashboard/schedule" className="hover:text-gray-700">
+          <span className="text-neutral-300">/</span>
+          <Link href="/dashboard/schedule" className="hover:text-neutral-700 transition-colors">
             الجدول
           </Link>
-          <span>/</span>
-          <span className="text-gray-900">إضافة جلسة جديدة</span>
+          <span className="text-neutral-300">/</span>
+          <span className="text-neutral-900 font-semibold">إضافة جلسة جديدة</span>
         </nav>
-        <h1 className="text-2xl font-bold text-gray-900">إضافة جلسة جديدة</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-extrabold text-neutral-900">إضافة جلسة جديدة</h1>
+        <p className="mt-1 text-sm text-neutral-500">
           أدخل بيانات الجلسة الجديدة
         </p>
       </div>

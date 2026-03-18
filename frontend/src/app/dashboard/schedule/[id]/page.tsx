@@ -89,9 +89,9 @@ export default function SessionPage({ params }: SessionPageProps) {
   };
 
   const statusColors: Record<string, string> = {
-    scheduled: 'bg-blue-100 text-blue-800',
-    completed: 'bg-green-100 text-green-800',
-    cancelled: 'bg-red-100 text-red-800',
+    scheduled: 'bg-primary-100 text-primary-800',
+    completed: 'bg-secondary-100 text-secondary-800',
+    cancelled: 'bg-error-100 text-error-800',
   };
 
   const statusLabels: Record<string, string> = {
@@ -104,8 +104,8 @@ export default function SessionPage({ params }: SessionPageProps) {
     return (
       <div className="p-6">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-4" />
-          <div className="h-64 bg-gray-200 rounded" />
+          <div className="h-8 bg-neutral-100 rounded-xl w-1/4 mb-4" />
+          <div className="h-64 bg-neutral-100 rounded-2xl" />
         </div>
       </div>
     );
@@ -132,25 +132,25 @@ export default function SessionPage({ params }: SessionPageProps) {
   const sessionData = session.data;
 
   return (
-    <div className="p-6">
+    <div className="p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-6">
-        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-          <Link href="/dashboard" className="hover:text-gray-700">
+        <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-3">
+          <Link href="/dashboard" className="hover:text-neutral-700 transition-colors">
             لوحة التحكم
           </Link>
-          <span>/</span>
-          <Link href="/dashboard/schedule" className="hover:text-gray-700">
+          <span className="text-neutral-300">/</span>
+          <Link href="/dashboard/schedule" className="hover:text-neutral-700 transition-colors">
             الجدول
           </Link>
-          <span>/</span>
-          <span className="text-gray-900">{sessionData.title}</span>
+          <span className="text-neutral-300">/</span>
+          <span className="text-neutral-900 font-semibold">{sessionData.title}</span>
         </nav>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{sessionData.title}</h1>
+            <h1 className="text-2xl font-extrabold text-neutral-900">{sessionData.title}</h1>
             <span
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium mt-2 ${
+              className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold mt-2 ${
                 statusColors[sessionData.status]
               }`}
             >
@@ -163,7 +163,7 @@ export default function SessionPage({ params }: SessionPageProps) {
                 <Button
                   variant="outline"
                   onClick={() => setShowCancelModal(true)}
-                  className="text-red-600 border-red-300 hover:bg-red-50"
+                  className="text-error-600 border-error-300 hover:bg-error-50"
                 >
                   <XCircleIcon className="w-4 h-4 ml-2" />
                   إلغاء
@@ -178,7 +178,7 @@ export default function SessionPage({ params }: SessionPageProps) {
               variant="outline"
               onClick={handleDelete}
               isLoading={deleteSession.isPending}
-              className="text-red-600 border-red-300 hover:bg-red-50"
+              className="text-error-600 border-error-300 hover:bg-error-50"
             >
               حذف
             </Button>
@@ -189,15 +189,15 @@ export default function SessionPage({ params }: SessionPageProps) {
       {/* Session Details */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">تفاصيل الجلسة</h2>
+          <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+            <h2 className="text-lg font-bold text-neutral-900 mb-4">تفاصيل الجلسة</h2>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center">
-                <CalendarDaysIcon className="h-5 w-5 text-gray-400 ml-2" />
+                <CalendarDaysIcon className="h-5 w-5 text-neutral-400 ml-2" />
                 <div>
-                  <p className="text-sm text-gray-500">التاريخ</p>
-                  <p className="font-medium">
+                  <p className="text-sm text-neutral-500">التاريخ</p>
+                  <p className="font-semibold text-neutral-900">
                     {sessionData.scheduled_at
                       ? format(new Date(sessionData.scheduled_at), 'd MMMM yyyy', { locale: arSA })
                       : sessionData.session_date
@@ -208,10 +208,10 @@ export default function SessionPage({ params }: SessionPageProps) {
               </div>
 
               <div className="flex items-center">
-                <ClockIcon className="h-5 w-5 text-gray-400 ml-2" />
+                <ClockIcon className="h-5 w-5 text-neutral-400 ml-2" />
                 <div>
-                  <p className="text-sm text-gray-500">الوقت</p>
-                  <p className="font-medium">
+                  <p className="text-sm text-neutral-500">الوقت</p>
+                  <p className="font-semibold text-neutral-900">
                     {sessionData.scheduled_at
                       ? format(new Date(sessionData.scheduled_at), 'h:mm a', { locale: arSA })
                       : sessionData.start_time
@@ -222,50 +222,50 @@ export default function SessionPage({ params }: SessionPageProps) {
               </div>
 
               <div className="flex items-center">
-                <ClockIcon className="h-5 w-5 text-gray-400 ml-2" />
+                <ClockIcon className="h-5 w-5 text-neutral-400 ml-2" />
                 <div>
-                  <p className="text-sm text-gray-500">المدة</p>
-                  <p className="font-medium">{sessionData.duration_minutes} دقيقة</p>
+                  <p className="text-sm text-neutral-500">المدة</p>
+                  <p className="font-semibold text-neutral-900">{sessionData.duration_minutes} دقيقة</p>
                 </div>
               </div>
 
               {sessionData.location && (
                 <div className="flex items-center">
-                  <MapPinIcon className="h-5 w-5 text-gray-400 ml-2" />
+                  <MapPinIcon className="h-5 w-5 text-neutral-400 ml-2" />
                   <div>
-                    <p className="text-sm text-gray-500">المكان</p>
-                    <p className="font-medium">{sessionData.location}</p>
+                    <p className="text-sm text-neutral-500">المكان</p>
+                    <p className="font-semibold text-neutral-900">{sessionData.location}</p>
                   </div>
                 </div>
               )}
 
               <div className="flex items-center">
-                <UserGroupIcon className="h-5 w-5 text-gray-400 ml-2" />
+                <UserGroupIcon className="h-5 w-5 text-neutral-400 ml-2" />
                 <div>
-                  <p className="text-sm text-gray-500">المجموعة</p>
-                  <p className="font-medium">{sessionData.group?.name}</p>
+                  <p className="text-sm text-neutral-500">المجموعة</p>
+                  <p className="font-semibold text-neutral-900">{sessionData.group?.name}</p>
                 </div>
               </div>
             </div>
 
             {sessionData.description && (
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <p className="text-sm text-gray-500">الوصف</p>
-                <p className="mt-1">{sessionData.description}</p>
+              <div className="mt-4 pt-4 border-t border-neutral-100">
+                <p className="text-sm text-neutral-500">الوصف</p>
+                <p className="mt-1 text-neutral-700">{sessionData.description}</p>
               </div>
             )}
 
             {sessionData.notes && (
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <p className="text-sm text-gray-500">ملاحظات</p>
-                <p className="mt-1">{sessionData.notes}</p>
+              <div className="mt-4 pt-4 border-t border-neutral-100">
+                <p className="text-sm text-neutral-500">ملاحظات</p>
+                <p className="mt-1 text-neutral-700">{sessionData.notes}</p>
               </div>
             )}
 
             {sessionData.status === 'cancelled' && sessionData.cancellation_reason && (
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <p className="text-sm text-red-500">سبب الإلغاء</p>
-                <p className="mt-1 text-red-700">{sessionData.cancellation_reason}</p>
+              <div className="mt-4 pt-4 border-t border-neutral-100">
+                <p className="text-sm text-error-500">سبب الإلغاء</p>
+                <p className="mt-1 text-error-700">{sessionData.cancellation_reason}</p>
               </div>
             )}
           </div>
@@ -273,13 +273,13 @@ export default function SessionPage({ params }: SessionPageProps) {
 
         {/* Attendance Section */}
         <div className="lg:col-span-1">
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">الحضور</h2>
+          <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+            <h2 className="text-lg font-bold text-neutral-900 mb-4">الحضور</h2>
 
             {attendanceLoading ? (
               <div className="animate-pulse space-y-4">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-10 bg-gray-200 rounded" />
+                  <div key={i} className="h-10 bg-neutral-100 rounded-xl" />
                 ))}
               </div>
             ) : sessionData.status === 'scheduled' ? (
@@ -290,25 +290,25 @@ export default function SessionPage({ params }: SessionPageProps) {
                   isSubmitting={recordAttendance.isPending}
                 />
               ) : (
-                <p className="text-gray-500 text-sm">لا يوجد طلاب في هذه المجموعة</p>
+                <p className="text-neutral-500 text-sm">لا يوجد طلاب في هذه المجموعة</p>
               )
             ) : (
               <div className="space-y-2">
                 {attendanceData?.attendances?.map((attendance) => (
                   <div
                     key={attendance.student_id}
-                    className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                    className="flex items-center justify-between p-3 bg-neutral-50 rounded-xl"
                   >
-                    <span className="font-medium">{attendance.student_name}</span>
+                    <span className="font-semibold text-neutral-900">{attendance.student_name}</span>
                     <span
-                      className={`text-sm ${
+                      className={`text-sm font-medium ${
                         attendance.status === 'present'
-                          ? 'text-green-600'
+                          ? 'text-secondary-600'
                           : attendance.status === 'absent'
-                          ? 'text-red-600'
+                          ? 'text-error-600'
                           : attendance.status === 'late'
-                          ? 'text-yellow-600'
-                          : 'text-gray-600'
+                          ? 'text-warning-600'
+                          : 'text-neutral-600'
                       }`}
                     >
                       {attendance.status}
@@ -323,14 +323,14 @@ export default function SessionPage({ params }: SessionPageProps) {
 
       {/* Cancel Modal */}
       {showCancelModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">إلغاء الجلسة</h3>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+            <h3 className="text-lg font-bold text-neutral-900 mb-4">إلغاء الجلسة</h3>
             <textarea
               value={cancelReason}
               onChange={(e) => setCancelReason(e.target.value)}
               placeholder="سبب الإلغاء (اختياري)"
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+              className="w-full rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
               rows={3}
             />
             <div className="mt-4 flex justify-end gap-2">
@@ -340,7 +340,7 @@ export default function SessionPage({ params }: SessionPageProps) {
               <Button
                 onClick={handleCancel}
                 isLoading={cancelSession.isPending}
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-error-600 hover:bg-error-700"
               >
                 تأكيد الإلغاء
               </Button>

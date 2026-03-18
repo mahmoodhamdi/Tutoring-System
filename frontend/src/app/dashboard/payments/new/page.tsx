@@ -20,22 +20,22 @@ export default function NewPaymentPage() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-6">
-        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-          <Link href="/dashboard" className="hover:text-gray-700">
+        <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-3">
+          <Link href="/dashboard" className="hover:text-neutral-700 transition-colors">
             لوحة التحكم
           </Link>
-          <span>/</span>
-          <Link href="/dashboard/payments" className="hover:text-gray-700">
+          <span className="text-neutral-300">/</span>
+          <Link href="/dashboard/payments" className="hover:text-neutral-700 transition-colors">
             المدفوعات
           </Link>
-          <span>/</span>
-          <span className="text-gray-900">تسجيل دفعة جديدة</span>
+          <span className="text-neutral-300">/</span>
+          <span className="text-neutral-900 font-semibold">تسجيل دفعة جديدة</span>
         </nav>
-        <h1 className="text-2xl font-bold text-gray-900">تسجيل دفعة جديدة</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-extrabold text-neutral-900">تسجيل دفعة جديدة</h1>
+        <p className="mt-1 text-sm text-neutral-500">
           أدخل بيانات الدفعة الجديدة
         </p>
       </div>

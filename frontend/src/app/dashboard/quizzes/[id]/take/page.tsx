@@ -67,7 +67,7 @@ export default function TakeQuizPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full"></div>
+        <div className="w-8 h-8 border-4 border-primary-100 border-t-primary-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -75,8 +75,8 @@ export default function TakeQuizPage() {
   if (!quiz) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">الاختبار غير موجود</p>
-        <Link href="/dashboard/quizzes" className="text-primary-600 hover:text-primary-700 mt-4 inline-block">
+        <p className="text-neutral-500">الاختبار غير موجود</p>
+        <Link href="/dashboard/quizzes" className="text-primary-600 hover:text-primary-700 mt-4 inline-block font-semibold">
           العودة للاختبارات
         </Link>
       </div>
@@ -86,17 +86,17 @@ export default function TakeQuizPage() {
   // Show results
   if (completedAttempt) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 animate-fade-in">
         <div className="flex items-center gap-4">
           <Link
             href="/dashboard/quizzes"
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+            className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-colors"
           >
             <ArrowRightIcon className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{quiz.title}</h1>
-            <p className="text-gray-600">نتيجة الاختبار</p>
+            <h1 className="text-2xl font-extrabold text-neutral-900">{quiz.title}</h1>
+            <p className="text-neutral-500">نتيجة الاختبار</p>
           </div>
         </div>
 
@@ -105,7 +105,7 @@ export default function TakeQuizPage() {
         <div className="flex justify-center">
           <Link
             href="/dashboard/quizzes"
-            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+            className="px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 font-semibold transition-colors shadow-sm"
           >
             العودة للاختبارات
           </Link>
@@ -132,32 +132,32 @@ export default function TakeQuizPage() {
 
   // Show instructions page
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
       <div className="flex items-center gap-4">
         <Link
           href="/dashboard/quizzes"
-          className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+          className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-colors"
         >
           <ArrowRightIcon className="w-5 h-5" />
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">{quiz.title}</h1>
+        <h1 className="text-2xl font-extrabold text-neutral-900">{quiz.title}</h1>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
         {/* Quiz Info */}
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-            <ClockIcon className="w-6 h-6 text-gray-400" />
+          <div className="flex items-center gap-3 p-4 bg-neutral-50 rounded-xl">
+            <ClockIcon className="w-6 h-6 text-neutral-400" />
             <div>
-              <p className="text-sm text-gray-500">المدة</p>
-              <p className="font-semibold text-gray-900">{quiz.duration_minutes} دقيقة</p>
+              <p className="text-sm text-neutral-500">المدة</p>
+              <p className="font-bold text-neutral-900">{quiz.duration_minutes} دقيقة</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-            <AcademicCapIcon className="w-6 h-6 text-gray-400" />
+          <div className="flex items-center gap-3 p-4 bg-neutral-50 rounded-xl">
+            <AcademicCapIcon className="w-6 h-6 text-neutral-400" />
             <div>
-              <p className="text-sm text-gray-500">الدرجة الكلية</p>
-              <p className="font-semibold text-gray-900">{quiz.total_marks} درجة</p>
+              <p className="text-sm text-neutral-500">الدرجة الكلية</p>
+              <p className="font-bold text-neutral-900">{quiz.total_marks} درجة</p>
             </div>
           </div>
         </div>
@@ -165,21 +165,21 @@ export default function TakeQuizPage() {
         {/* Description */}
         {quiz.description && (
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">الوصف</h3>
-            <p className="text-gray-600">{quiz.description}</p>
+            <h3 className="text-sm font-semibold text-neutral-700 mb-2">الوصف</h3>
+            <p className="text-neutral-600">{quiz.description}</p>
           </div>
         )}
 
         {/* Instructions */}
         {quiz.instructions && (
-          <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <h3 className="text-sm font-medium text-blue-800 mb-2">تعليمات مهمة</h3>
-            <p className="text-blue-700">{quiz.instructions}</p>
+          <div className="mb-6 p-4 bg-primary-50 rounded-xl border border-primary-200">
+            <h3 className="text-sm font-semibold text-primary-800 mb-2">تعليمات مهمة</h3>
+            <p className="text-primary-700">{quiz.instructions}</p>
           </div>
         )}
 
         {/* Quiz Settings */}
-        <div className="mb-6 space-y-2 text-sm text-gray-600">
+        <div className="mb-6 space-y-2 text-sm text-neutral-600">
           <p>• عدد الأسئلة: {quiz.questions_count} سؤال</p>
           <p>• نسبة النجاح: {quiz.pass_percentage}%</p>
           <p>• المحاولات المتبقية: {remainingAttempts} من {quiz.max_attempts}</p>
@@ -188,10 +188,10 @@ export default function TakeQuizPage() {
         </div>
 
         {/* Warning */}
-        <div className="mb-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200 flex items-start gap-3">
-          <ExclamationTriangleIcon className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-yellow-700">
-            <p className="font-medium">تنبيه مهم:</p>
+        <div className="mb-6 p-4 bg-warning-50 rounded-xl border border-warning-200 flex items-start gap-3">
+          <ExclamationTriangleIcon className="w-5 h-5 text-warning-600 flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-warning-700">
+            <p className="font-semibold">تنبيه مهم:</p>
             <p>بمجرد بدء الاختبار، سيبدأ العد التنازلي ولا يمكن إيقافه. تأكد من أنك جاهز قبل البدء.</p>
           </div>
         </div>
@@ -201,16 +201,16 @@ export default function TakeQuizPage() {
           <button
             onClick={handleStartQuiz}
             disabled={startAttempt.isPending}
-            className="w-full py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium disabled:opacity-50"
+            className="w-full py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 font-semibold disabled:opacity-50 transition-colors shadow-sm"
           >
             {startAttempt.isPending ? 'جاري التحميل...' : 'بدء الاختبار'}
           </button>
         ) : (
           <div className="text-center py-4">
             {!quiz.is_available ? (
-              <p className="text-red-600">هذا الاختبار غير متاح حالياً</p>
+              <p className="text-error-600 font-semibold">هذا الاختبار غير متاح حالياً</p>
             ) : (
-              <p className="text-red-600">لقد استنفدت جميع محاولاتك المسموح بها</p>
+              <p className="text-error-600 font-semibold">لقد استنفدت جميع محاولاتك المسموح بها</p>
             )}
           </div>
         )}
@@ -218,24 +218,24 @@ export default function TakeQuizPage() {
 
       {/* Previous Attempts */}
       {myAttempts && myAttempts.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">محاولاتك السابقة</h3>
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+          <h3 className="text-lg font-bold text-neutral-900 mb-4">محاولاتك السابقة</h3>
           <div className="space-y-3">
             {myAttempts.map((prevAttempt, index) => (
               <div
                 key={prevAttempt.id}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                className="flex items-center justify-between p-3 bg-neutral-50 rounded-xl"
               >
                 <div>
-                  <p className="font-medium text-gray-900">المحاولة {index + 1}</p>
-                  <p className="text-sm text-gray-500">{prevAttempt.status_label}</p>
+                  <p className="font-semibold text-neutral-900">المحاولة {index + 1}</p>
+                  <p className="text-sm text-neutral-500">{prevAttempt.status_label}</p>
                 </div>
                 {prevAttempt.percentage !== null && prevAttempt.percentage !== undefined && (
                   <div className="text-left">
-                    <p className={`font-bold ${prevAttempt.is_passed ? 'text-green-600' : 'text-red-600'}`}>
+                    <p className={`font-bold ${prevAttempt.is_passed ? 'text-secondary-600' : 'text-error-600'}`}>
                       {prevAttempt.percentage.toFixed(1)}%
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-neutral-500">
                       {prevAttempt.score?.toFixed(1)} / {quiz.total_marks}
                     </p>
                   </div>

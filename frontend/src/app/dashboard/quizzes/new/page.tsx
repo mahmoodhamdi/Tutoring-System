@@ -21,18 +21,18 @@ export default function NewQuizPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link
           href="/dashboard/quizzes"
-          className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+          className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all duration-200"
         >
           <ArrowRightIcon className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">اختبار جديد</h1>
-          <p className="text-gray-600">إنشاء اختبار قصير جديد</p>
+          <h1 className="text-2xl font-extrabold text-neutral-900">اختبار جديد</h1>
+          <p className="text-neutral-600">إنشاء اختبار قصير جديد</p>
         </div>
       </div>
 

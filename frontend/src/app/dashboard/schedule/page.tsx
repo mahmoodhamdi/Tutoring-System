@@ -31,9 +31,9 @@ export default function SchedulePage() {
   if (isError) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <h3 className="text-lg font-medium text-red-800">حدث خطأ</h3>
-          <p className="mt-2 text-sm text-red-700">
+        <div className="bg-error-50 border border-error-200 rounded-xl p-4">
+          <h3 className="text-lg font-bold text-error-800">حدث خطأ</h3>
+          <p className="mt-2 text-sm text-error-700">
             {(error as Error)?.message || 'فشل في تحميل الجدول'}
           </p>
         </div>
@@ -42,33 +42,33 @@ export default function SchedulePage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">الجدول</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-extrabold text-neutral-900">الجدول</h1>
+          <p className="mt-1 text-sm text-neutral-500">
             إدارة جلسات التدريس والمواعيد
           </p>
         </div>
         <div className="flex gap-2">
-          <div className="flex rounded-lg border border-gray-300 p-1">
+          <div className="flex rounded-xl border border-neutral-200 p-1 bg-white">
             <button
               onClick={() => setViewMode('list')}
-              className={`px-3 py-1 text-sm rounded ${
+              className={`px-3 py-1.5 text-sm rounded-lg font-semibold transition-colors ${
                 viewMode === 'list'
-                  ? 'bg-primary-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                  ? 'bg-primary-600 text-white shadow-sm'
+                  : 'text-neutral-600 hover:bg-neutral-100'
               }`}
             >
               قائمة
             </button>
             <button
               onClick={() => setViewMode('calendar')}
-              className={`px-3 py-1 text-sm rounded ${
+              className={`px-3 py-1.5 text-sm rounded-lg font-semibold transition-colors ${
                 viewMode === 'calendar'
-                  ? 'bg-primary-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                  ? 'bg-primary-600 text-white shadow-sm'
+                  : 'text-neutral-600 hover:bg-neutral-100'
               }`}
             >
               تقويم
@@ -89,7 +89,7 @@ export default function SchedulePage() {
           onChange={(e) =>
             handleStatusFilter(e.target.value as SessionStatus | undefined)
           }
-          className="rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+          className="rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
         >
           <option value="">كل الحالات</option>
           <option value="scheduled">مجدولة</option>
@@ -102,16 +102,16 @@ export default function SchedulePage() {
       {isLoading ? (
         <div className="animate-pulse space-y-4">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-24 bg-gray-200 rounded-lg" />
+            <div key={i} className="h-24 bg-neutral-100 rounded-xl" />
           ))}
         </div>
       ) : data?.data.length === 0 ? (
-        <div className="text-center py-12">
-          <CalendarDaysIcon className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-semibold text-gray-900">
+        <div className="text-center py-16 bg-white rounded-2xl border border-neutral-100">
+          <CalendarDaysIcon className="mx-auto h-14 w-14 text-neutral-300" />
+          <h3 className="mt-4 text-sm font-bold text-neutral-900">
             لا توجد جلسات
           </h3>
-          <p className="mt-1 text-sm text-gray-500">ابدأ بإضافة جلسة جديدة</p>
+          <p className="mt-1 text-sm text-neutral-500">ابدأ بإضافة جلسة جديدة</p>
           <div className="mt-6">
             <Link href="/dashboard/schedule/new">
               <Button>إضافة جلسة</Button>
@@ -125,10 +125,10 @@ export default function SchedulePage() {
       {/* Pagination */}
       {data && data.meta.last_page > 1 && (
         <div className="mt-6 flex items-center justify-between">
-          <div className="text-sm text-gray-700">
-            عرض <span className="font-medium">{data.meta.from || 0}</span> إلى{' '}
-            <span className="font-medium">{data.meta.to || 0}</span> من{' '}
-            <span className="font-medium">{data.meta.total}</span> جلسة
+          <div className="text-sm text-neutral-600">
+            عرض <span className="font-semibold">{data.meta.from || 0}</span> إلى{' '}
+            <span className="font-semibold">{data.meta.to || 0}</span> من{' '}
+            <span className="font-semibold">{data.meta.total}</span> جلسة
           </div>
           <div className="flex gap-2">
             <Button

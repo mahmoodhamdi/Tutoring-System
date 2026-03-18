@@ -69,9 +69,9 @@ export default function PaymentsPage() {
   if (isError) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <h3 className="text-lg font-medium text-red-800">حدث خطأ</h3>
-          <p className="mt-2 text-sm text-red-700">
+        <div className="bg-error-50 border border-error-200 rounded-xl p-4">
+          <h3 className="text-lg font-bold text-error-800">حدث خطأ</h3>
+          <p className="mt-2 text-sm text-error-700">
             {(error as Error)?.message || 'فشل في تحميل المدفوعات'}
           </p>
         </div>
@@ -80,12 +80,12 @@ export default function PaymentsPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">المدفوعات</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-extrabold text-neutral-900">المدفوعات</h1>
+          <p className="mt-1 text-sm text-neutral-500">
             إدارة مدفوعات الطلاب والرسوم
           </p>
         </div>
@@ -110,7 +110,7 @@ export default function PaymentsPage() {
           onChange={(e) =>
             handleStatusFilter(e.target.value as PaymentStatus | undefined || undefined)
           }
-          className="rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+          className="rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
         >
           <option value="">كل الحالات</option>
           <option value="paid">مدفوع</option>
@@ -123,7 +123,7 @@ export default function PaymentsPage() {
           onChange={(e) =>
             handleMonthFilter(e.target.value ? parseInt(e.target.value) : undefined)
           }
-          className="rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+          className="rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
         >
           <option value="">كل الشهور</option>
           {months.map((month) => (
@@ -137,7 +137,7 @@ export default function PaymentsPage() {
           onChange={(e) =>
             handleYearFilter(e.target.value ? parseInt(e.target.value) : undefined)
           }
-          className="rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+          className="rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
         >
           <option value="">كل السنوات</option>
           {years.map((year) => (
@@ -151,7 +151,7 @@ export default function PaymentsPage() {
       {/* Payments Table */}
       {isLoading ? (
         <div className="animate-pulse">
-          <div className="h-64 bg-gray-200 rounded-lg" />
+          <div className="h-64 bg-neutral-100 rounded-2xl" />
         </div>
       ) : (
         <PaymentsTable
@@ -164,10 +164,10 @@ export default function PaymentsPage() {
       {/* Pagination */}
       {data && data.meta.last_page > 1 && (
         <div className="mt-6 flex items-center justify-between">
-          <div className="text-sm text-gray-700">
-            عرض <span className="font-medium">{data.meta.from || 0}</span> إلى{' '}
-            <span className="font-medium">{data.meta.to || 0}</span> من{' '}
-            <span className="font-medium">{data.meta.total}</span> دفعة
+          <div className="text-sm text-neutral-600">
+            عرض <span className="font-semibold">{data.meta.from || 0}</span> إلى{' '}
+            <span className="font-semibold">{data.meta.to || 0}</span> من{' '}
+            <span className="font-semibold">{data.meta.total}</span> دفعة
           </div>
           <div className="flex gap-2">
             <Button

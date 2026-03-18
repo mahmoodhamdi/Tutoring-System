@@ -33,9 +33,9 @@ export default function ExamsPage() {
   if (isError) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <h3 className="text-lg font-medium text-red-800">حدث خطأ</h3>
-          <p className="mt-2 text-sm text-red-700">
+        <div className="bg-error-50 border border-error-200 rounded-xl p-4">
+          <h3 className="text-lg font-bold text-error-800">حدث خطأ</h3>
+          <p className="mt-2 text-sm text-error-700">
             {(error as Error)?.message || 'فشل في تحميل الاختبارات'}
           </p>
         </div>
@@ -44,12 +44,12 @@ export default function ExamsPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">الاختبارات</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-extrabold text-neutral-900">الاختبارات</h1>
+          <p className="mt-1 text-sm text-neutral-500">
             إدارة اختبارات الطلاب وتسجيل النتائج
           </p>
         </div>
@@ -67,7 +67,7 @@ export default function ExamsPage() {
           onChange={(e) =>
             handleStatusFilter(e.target.value as ExamStatus | undefined || undefined)
           }
-          className="rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+          className="rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
         >
           <option value="">كل الحالات</option>
           <option value="scheduled">مجدول</option>
@@ -80,7 +80,7 @@ export default function ExamsPage() {
           onChange={(e) =>
             handleTypeFilter(e.target.value as ExamType | undefined || undefined)
           }
-          className="rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+          className="rounded-xl border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
         >
           <option value="">كل الأنواع</option>
           <option value="quiz">اختبار قصير</option>
@@ -94,14 +94,14 @@ export default function ExamsPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-48 bg-gray-200 rounded-lg animate-pulse" />
+            <div key={i} className="h-48 bg-neutral-100 rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : data?.data.length === 0 ? (
-        <div className="text-center py-12">
-          <AcademicCapIcon className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-semibold text-gray-900">لا توجد اختبارات</h3>
-          <p className="mt-1 text-sm text-gray-500">ابدأ بإنشاء اختبار جديد</p>
+        <div className="text-center py-16 bg-white rounded-2xl border border-neutral-100">
+          <AcademicCapIcon className="mx-auto h-14 w-14 text-neutral-300" />
+          <h3 className="mt-4 text-sm font-bold text-neutral-900">لا توجد اختبارات</h3>
+          <p className="mt-1 text-sm text-neutral-500">ابدأ بإنشاء اختبار جديد</p>
           <div className="mt-6">
             <Link href="/dashboard/exams/new">
               <Button>إنشاء اختبار</Button>
@@ -119,10 +119,10 @@ export default function ExamsPage() {
       {/* Pagination */}
       {data && data.meta.last_page > 1 && (
         <div className="mt-6 flex items-center justify-between">
-          <div className="text-sm text-gray-700">
-            عرض <span className="font-medium">{data.meta.from || 0}</span> إلى{' '}
-            <span className="font-medium">{data.meta.to || 0}</span> من{' '}
-            <span className="font-medium">{data.meta.total}</span> اختبار
+          <div className="text-sm text-neutral-600">
+            عرض <span className="font-semibold">{data.meta.from || 0}</span> إلى{' '}
+            <span className="font-semibold">{data.meta.to || 0}</span> من{' '}
+            <span className="font-semibold">{data.meta.total}</span> اختبار
           </div>
           <div className="flex gap-2">
             <Button

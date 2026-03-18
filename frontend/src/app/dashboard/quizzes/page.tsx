@@ -59,16 +59,16 @@ export default function QuizzesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">الاختبارات القصيرة</h1>
-          <p className="text-gray-600">إدارة الاختبارات والكويزات</p>
+          <h1 className="text-2xl font-extrabold text-neutral-900">الاختبارات القصيرة</h1>
+          <p className="text-neutral-600">إدارة الاختبارات والكويزات</p>
         </div>
         <Link
           href="/dashboard/quizzes/new"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-l from-primary-600 to-primary-500 text-white rounded-xl hover:bg-primary-700 transition-all duration-200"
         >
           <PlusIcon className="w-5 h-5" />
           اختبار جديد
@@ -76,17 +76,17 @@ export default function QuizzesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Search */}
           <div className="relative">
-            <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
             <input
               type="text"
               placeholder="بحث..."
               value={filters.search}
               onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-              className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full pr-10 pl-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
             />
           </div>
 
@@ -94,7 +94,7 @@ export default function QuizzesPage() {
           <select
             value={filters.group_id || ''}
             onChange={(e) => setFilters({ ...filters, group_id: e.target.value ? parseInt(e.target.value) : undefined })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
           >
             <option value="">جميع المجموعات</option>
             {groups.map((group) => (
@@ -114,7 +114,7 @@ export default function QuizzesPage() {
                 is_published: value === '' ? undefined : value === 'published',
               });
             }}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
           >
             <option value="">جميع الحالات</option>
             <option value="published">منشور</option>
@@ -124,7 +124,7 @@ export default function QuizzesPage() {
           {/* Clear Filters */}
           <button
             onClick={() => setFilters({ group_id: undefined, is_published: undefined, search: '' })}
-            className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            className="px-4 py-2 text-neutral-600 bg-neutral-100 rounded-xl hover:bg-neutral-200 transition-all duration-200"
           >
             إعادة تعيين
           </button>
@@ -135,14 +135,14 @@ export default function QuizzesPage() {
       {isLoading ? (
         <div className="text-center py-12">
           <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto"></div>
-          <p className="text-gray-500 mt-4">جاري التحميل...</p>
+          <p className="text-neutral-500 mt-4">جاري التحميل...</p>
         </div>
       ) : quizzes.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-          <p className="text-gray-500 mb-4">لا توجد اختبارات</p>
+        <div className="text-center py-12 bg-white rounded-2xl border border-neutral-200">
+          <p className="text-neutral-500 mb-4">لا توجد اختبارات</p>
           <Link
             href="/dashboard/quizzes/new"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700"
+            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-all duration-200"
           >
             <PlusIcon className="w-5 h-5" />
             إنشاء اختبار جديد

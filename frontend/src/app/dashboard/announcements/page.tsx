@@ -102,12 +102,12 @@ export default function AnnouncementsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">الإعلانات</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-extrabold text-neutral-900">الإعلانات</h1>
+          <p className="text-neutral-600">
             إدارة الإعلانات والتنبيهات
             {unreadCount > 0 && (
               <span className="text-primary-600 mr-2">({unreadCount} غير مقروء)</span>
@@ -118,7 +118,7 @@ export default function AnnouncementsPage() {
           {unreadCount > 0 && (
             <button
               onClick={handleMarkAllAsRead}
-              className="inline-flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 bg-white border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-all duration-200"
             >
               <CheckIcon className="w-5 h-5" />
               تحديد الكل كمقروء
@@ -126,7 +126,7 @@ export default function AnnouncementsPage() {
           )}
           <Link
             href="/dashboard/announcements/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-all duration-200"
           >
             <PlusIcon className="w-5 h-5" />
             إعلان جديد
@@ -135,17 +135,17 @@ export default function AnnouncementsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {/* Search */}
           <div className="relative">
-            <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
             <input
               type="text"
               placeholder="بحث..."
               value={filters.search}
               onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-              className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full pr-10 pl-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
             />
           </div>
 
@@ -153,7 +153,7 @@ export default function AnnouncementsPage() {
           <select
             value={filters.group_id || ''}
             onChange={(e) => setFilters({ ...filters, group_id: e.target.value ? parseInt(e.target.value) : undefined })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
           >
             <option value="">جميع المجموعات</option>
             {groups.map((group) => (
@@ -167,7 +167,7 @@ export default function AnnouncementsPage() {
           <select
             value={filters.priority || ''}
             onChange={(e) => setFilters({ ...filters, priority: (e.target.value as AnnouncementPriority) || undefined })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
           >
             <option value="">جميع الأولويات</option>
             {Object.entries(PRIORITY_LABELS).map(([value, label]) => (
@@ -181,7 +181,7 @@ export default function AnnouncementsPage() {
           <select
             value={filters.type || ''}
             onChange={(e) => setFilters({ ...filters, type: (e.target.value as AnnouncementType) || undefined })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
           >
             <option value="">جميع الأنواع</option>
             {Object.entries(TYPE_LABELS).map(([value, label]) => (
@@ -201,7 +201,7 @@ export default function AnnouncementsPage() {
                 is_published: value === '' ? undefined : value === 'published',
               });
             }}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
           >
             <option value="">جميع الحالات</option>
             <option value="published">منشور</option>
@@ -214,14 +214,14 @@ export default function AnnouncementsPage() {
       {isLoading ? (
         <div className="text-center py-12">
           <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto"></div>
-          <p className="text-gray-500 mt-4">جاري التحميل...</p>
+          <p className="text-neutral-500 mt-4">جاري التحميل...</p>
         </div>
       ) : announcements.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-          <p className="text-gray-500 mb-4">لا توجد إعلانات</p>
+        <div className="text-center py-12 bg-white rounded-2xl border border-neutral-200">
+          <p className="text-neutral-500 mb-4">لا توجد إعلانات</p>
           <Link
             href="/dashboard/announcements/new"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700"
+            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-all duration-200"
           >
             <PlusIcon className="w-5 h-5" />
             إنشاء إعلان جديد

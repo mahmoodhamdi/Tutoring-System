@@ -91,7 +91,7 @@ export default function QuizDetailPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full"></div>
+        <div className="w-8 h-8 border-4 border-primary-100 border-t-primary-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -99,8 +99,8 @@ export default function QuizDetailPage() {
   if (!quiz) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">الاختبار غير موجود</p>
-        <Link href="/dashboard/quizzes" className="text-primary-600 hover:text-primary-700 mt-4 inline-block">
+        <p className="text-neutral-500">الاختبار غير موجود</p>
+        <Link href="/dashboard/quizzes" className="text-primary-600 hover:text-primary-700 mt-4 inline-block font-semibold">
           العودة للاختبارات
         </Link>
       </div>
@@ -108,33 +108,33 @@ export default function QuizDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
           <Link
             href="/dashboard/quizzes"
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+            className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-colors"
           >
             <ArrowRightIcon className="w-5 h-5" />
           </Link>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-900">{quiz.title}</h1>
+              <h1 className="text-2xl font-extrabold text-neutral-900">{quiz.title}</h1>
               {quiz.is_published ? (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-secondary-100 text-secondary-800">
                   <CheckCircleIcon className="w-3.5 h-3.5 ml-1" />
                   منشور
                 </span>
               ) : (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-neutral-100 text-neutral-700">
                   <XCircleIcon className="w-3.5 h-3.5 ml-1" />
                   مسودة
                 </span>
               )}
             </div>
             {quiz.group && (
-              <p className="text-gray-600">{quiz.group.name}</p>
+              <p className="text-neutral-500 mt-0.5">{quiz.group.name}</p>
             )}
           </div>
         </div>
@@ -144,21 +144,21 @@ export default function QuizDetailPage() {
             <button
               onClick={handlePublish}
               disabled={quiz.questions_count === 0}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-secondary-600 text-white rounded-xl hover:bg-secondary-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-colors shadow-sm"
             >
               نشر الاختبار
             </button>
           ) : (
             <button
               onClick={handleUnpublish}
-              className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+              className="px-4 py-2 bg-warning-600 text-white rounded-xl hover:bg-warning-700 font-semibold transition-colors shadow-sm"
             >
               إلغاء النشر
             </button>
           )}
           <Link
             href={`/dashboard/quizzes/${quizId}/edit`}
-            className="inline-flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 bg-white border border-neutral-300 rounded-xl hover:bg-neutral-50 font-semibold transition-colors"
           >
             <PencilIcon className="w-4 h-4" />
             تعديل
@@ -168,51 +168,51 @@ export default function QuizDetailPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary-100 rounded-lg">
+            <div className="p-2 bg-primary-100 rounded-xl">
               <ClockIcon className="w-5 h-5 text-primary-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{quiz.duration_minutes}</p>
-              <p className="text-sm text-gray-500">دقيقة</p>
+              <p className="text-2xl font-extrabold text-neutral-900">{quiz.duration_minutes}</p>
+              <p className="text-sm text-neutral-500">دقيقة</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <AcademicCapIcon className="w-5 h-5 text-green-600" />
+            <div className="p-2 bg-secondary-100 rounded-xl">
+              <AcademicCapIcon className="w-5 h-5 text-secondary-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{quiz.total_marks}</p>
-              <p className="text-sm text-gray-500">درجة</p>
+              <p className="text-2xl font-extrabold text-neutral-900">{quiz.total_marks}</p>
+              <p className="text-sm text-neutral-500">درجة</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <UsersIcon className="w-5 h-5 text-blue-600" />
+            <div className="p-2 bg-info-100 rounded-xl">
+              <UsersIcon className="w-5 h-5 text-info-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{quiz.completed_attempts_count}</p>
-              <p className="text-sm text-gray-500">محاولة</p>
+              <p className="text-2xl font-extrabold text-neutral-900">{quiz.completed_attempts_count}</p>
+              <p className="text-sm text-neutral-500">محاولة</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <AcademicCapIcon className="w-5 h-5 text-purple-600" />
+            <div className="p-2 bg-accent-100 rounded-xl">
+              <AcademicCapIcon className="w-5 h-5 text-accent-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-extrabold text-neutral-900">
                 {quiz.average_percentage !== undefined && quiz.average_percentage !== null
                   ? `${quiz.average_percentage}%`
                   : '-'}
               </p>
-              <p className="text-sm text-gray-500">المتوسط</p>
+              <p className="text-sm text-neutral-500">المتوسط</p>
             </div>
           </div>
         </div>
@@ -220,41 +220,41 @@ export default function QuizDetailPage() {
 
       {/* Description & Instructions */}
       {(quiz.description || quiz.instructions) && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
           {quiz.description && (
             <div className="mb-4">
-              <h3 className="text-sm font-medium text-gray-500 mb-1">الوصف</h3>
-              <p className="text-gray-700">{quiz.description}</p>
+              <h3 className="text-sm font-semibold text-neutral-500 mb-1">الوصف</h3>
+              <p className="text-neutral-700">{quiz.description}</p>
             </div>
           )}
           {quiz.instructions && (
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">التعليمات</h3>
-              <p className="text-gray-700">{quiz.instructions}</p>
+              <h3 className="text-sm font-semibold text-neutral-500 mb-1">التعليمات</h3>
+              <p className="text-neutral-700">{quiz.instructions}</p>
             </div>
           )}
         </div>
       )}
 
       {/* Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-neutral-200">
         <nav className="flex gap-8">
           <button
             onClick={() => setActiveTab('questions')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm ${
+            className={`py-4 px-1 border-b-2 font-semibold text-sm transition-colors ${
               activeTab === 'questions'
                 ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
             }`}
           >
             الأسئلة ({quiz.questions_count})
           </button>
           <button
             onClick={() => setActiveTab('attempts')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm ${
+            className={`py-4 px-1 border-b-2 font-semibold text-sm transition-colors ${
               activeTab === 'attempts'
                 ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
             }`}
           >
             المحاولات ({quiz.completed_attempts_count})
@@ -269,7 +269,7 @@ export default function QuizDetailPage() {
           {!showQuestionForm && !editingQuestion && (
             <button
               onClick={() => setShowQuestionForm(true)}
-              className="w-full py-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:text-primary-600 hover:border-primary-300 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-4 border-2 border-dashed border-neutral-300 rounded-2xl text-neutral-500 hover:text-primary-600 hover:border-primary-300 transition-colors flex items-center justify-center gap-2 font-semibold"
             >
               <PlusIcon className="w-5 h-5" />
               إضافة سؤال جديد
@@ -278,8 +278,8 @@ export default function QuizDetailPage() {
 
           {/* Question Form */}
           {(showQuestionForm || editingQuestion) && (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+              <h3 className="text-lg font-bold text-neutral-900 mb-4">
                 {editingQuestion ? 'تعديل السؤال' : 'إضافة سؤال جديد'}
               </h3>
               <QuestionForm
@@ -300,59 +300,59 @@ export default function QuizDetailPage() {
               {quiz.questions.map((question, index) => (
                 <div
                   key={question.id}
-                  className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+                  className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-600 font-medium text-sm">
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-600 font-bold text-sm">
                         {index + 1}
                       </span>
-                      <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                      <span className="text-xs font-semibold text-neutral-500 bg-neutral-100 px-2 py-1 rounded-full">
                         {QUESTION_TYPE_LABELS[question.question_type]}
                       </span>
-                      <span className="text-xs text-gray-500">{question.marks} درجة</span>
+                      <span className="text-xs text-neutral-500 font-medium">{question.marks} درجة</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setEditingQuestion(question)}
-                        className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg"
+                        className="p-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-xl transition-colors"
                       >
                         <PencilIcon className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteQuestion(question.id)}
-                        className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                        className="p-2 text-neutral-500 hover:text-error-600 hover:bg-error-50 rounded-xl transition-colors"
                       >
                         <TrashIcon className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
 
-                  <p className="text-gray-900 mb-4">{question.question_text}</p>
+                  <p className="text-neutral-900 mb-4 font-medium">{question.question_text}</p>
 
                   {question.options && question.options.length > 0 && (
                     <div className="space-y-2">
                       {question.options.map((option) => (
                         <div
                           key={option.id}
-                          className={`flex items-center gap-3 p-3 rounded-lg ${
+                          className={`flex items-center gap-3 p-3 rounded-xl ${
                             option.is_correct
-                              ? 'bg-green-50 border border-green-200'
-                              : 'bg-gray-50 border border-gray-200'
+                              ? 'bg-secondary-50 border border-secondary-200'
+                              : 'bg-neutral-50 border border-neutral-200'
                           }`}
                         >
                           <div
-                            className={`w-4 h-4 rounded-full border-2 ${
+                            className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
                               option.is_correct
-                                ? 'border-green-500 bg-green-500'
-                                : 'border-gray-300'
+                                ? 'border-secondary-500 bg-secondary-500'
+                                : 'border-neutral-300'
                             }`}
                           />
-                          <span className={option.is_correct ? 'text-green-700' : 'text-gray-700'}>
+                          <span className={option.is_correct ? 'text-secondary-700 font-medium' : 'text-neutral-700'}>
                             {option.option_text}
                           </span>
                           {option.is_correct && (
-                            <CheckCircleIcon className="w-4 h-4 text-green-500 mr-auto" />
+                            <CheckCircleIcon className="w-4 h-4 text-secondary-500 mr-auto" />
                           )}
                         </div>
                       ))}
@@ -360,9 +360,9 @@ export default function QuizDetailPage() {
                   )}
 
                   {question.explanation && (
-                    <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                      <p className="text-xs text-blue-600 mb-1">الشرح:</p>
-                      <p className="text-sm text-blue-700">{question.explanation}</p>
+                    <div className="mt-4 p-3 bg-primary-50 rounded-xl border border-primary-200">
+                      <p className="text-xs text-primary-600 mb-1 font-semibold">الشرح:</p>
+                      <p className="text-sm text-primary-700">{question.explanation}</p>
                     </div>
                   )}
                 </div>
@@ -370,7 +370,7 @@ export default function QuizDetailPage() {
             </div>
           ) : (
             !showQuestionForm && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-10 text-neutral-500">
                 لا توجد أسئلة بعد. أضف سؤالاً للبدء.
               </div>
             )
@@ -380,7 +380,7 @@ export default function QuizDetailPage() {
 
       {/* Attempts Tab */}
       {activeTab === 'attempts' && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm">
           <AttemptsTable attempts={attempts} quizId={quizId} />
         </div>
       )}

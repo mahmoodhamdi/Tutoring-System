@@ -29,7 +29,7 @@ export default function EditGroupPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-600 border-r-transparent"></div>
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-primary-100 border-t-primary-600"></div>
       </div>
     );
   }
@@ -37,7 +37,7 @@ export default function EditGroupPage() {
   if (error || !group) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600">حدث خطأ أثناء تحميل بيانات المجموعة</p>
+        <p className="text-error-600">حدث خطأ أثناء تحميل بيانات المجموعة</p>
         <Link href="/dashboard/groups" className="mt-4 text-primary-600 hover:underline">
           العودة للمجموعات
         </Link>
@@ -46,11 +46,11 @@ export default function EditGroupPage() {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="px-4 sm:px-6 lg:px-8 animate-fade-in">
       <div className="mb-6">
         <Link
           href={`/dashboard/groups/${groupId}`}
-          className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700"
+          className="inline-flex items-center text-sm text-neutral-500 hover:text-neutral-700 transition-colors"
         >
           <ArrowRightIcon className="h-4 w-4 ml-1" />
           العودة للمجموعة
@@ -58,8 +58,8 @@ export default function EditGroupPage() {
       </div>
 
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900">تعديل المجموعة</h1>
-        <p className="mt-2 text-sm text-gray-700">تعديل بيانات المجموعة &quot;{group.name}&quot;</p>
+        <h1 className="text-2xl font-extrabold text-neutral-900">تعديل المجموعة</h1>
+        <p className="mt-2 text-sm text-neutral-600">تعديل بيانات المجموعة &quot;{group.name}&quot;</p>
       </div>
 
       <GroupForm group={group} onSubmit={handleSubmit} isSubmitting={updateGroup.isPending} />

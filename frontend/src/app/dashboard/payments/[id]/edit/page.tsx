@@ -33,8 +33,8 @@ export default function EditPaymentPage({ params }: EditPaymentPageProps) {
     return (
       <div className="p-6">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-4" />
-          <div className="h-64 bg-gray-200 rounded" />
+          <div className="h-8 bg-neutral-100 rounded-xl w-1/4 mb-4" />
+          <div className="h-64 bg-neutral-100 rounded-2xl" />
         </div>
       </div>
     );
@@ -59,26 +59,26 @@ export default function EditPaymentPage({ params }: EditPaymentPageProps) {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-6">
-        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-          <Link href="/dashboard" className="hover:text-gray-700">
+        <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-3">
+          <Link href="/dashboard" className="hover:text-neutral-700 transition-colors">
             لوحة التحكم
           </Link>
-          <span>/</span>
-          <Link href="/dashboard/payments" className="hover:text-gray-700">
+          <span className="text-neutral-300">/</span>
+          <Link href="/dashboard/payments" className="hover:text-neutral-700 transition-colors">
             المدفوعات
           </Link>
-          <span>/</span>
-          <Link href={`/dashboard/payments/${paymentId}`} className="hover:text-gray-700">
+          <span className="text-neutral-300">/</span>
+          <Link href={`/dashboard/payments/${paymentId}`} className="hover:text-neutral-700 transition-colors">
             تفاصيل الدفعة
           </Link>
-          <span>/</span>
-          <span className="text-gray-900">تعديل</span>
+          <span className="text-neutral-300">/</span>
+          <span className="text-neutral-900 font-semibold">تعديل</span>
         </nav>
-        <h1 className="text-2xl font-bold text-gray-900">تعديل الدفعة</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-extrabold text-neutral-900">تعديل الدفعة</h1>
+        <p className="mt-1 text-sm text-neutral-500">
           تعديل بيانات الدفعة
         </p>
       </div>

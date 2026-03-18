@@ -74,15 +74,15 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">الإشعارات</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-extrabold text-neutral-900">الإشعارات</h1>
+          <p className="text-neutral-500">
             جميع الإشعارات الخاصة بك
             {unreadCount && unreadCount > 0 && (
-              <span className="text-primary-600 mr-2">({unreadCount} غير مقروء)</span>
+              <span className="text-primary-600 mr-2 font-semibold">({unreadCount} غير مقروء)</span>
             )}
           </p>
         </div>
@@ -90,7 +90,7 @@ export default function NotificationsPage() {
           {unreadCount && unreadCount > 0 && (
             <button
               onClick={handleMarkAllAsRead}
-              className="inline-flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 bg-white border border-neutral-300 rounded-xl hover:bg-neutral-50 font-semibold transition-colors"
             >
               <CheckIcon className="w-5 h-5" />
               تحديد الكل كمقروء
@@ -98,7 +98,7 @@ export default function NotificationsPage() {
           )}
           <button
             onClick={handleDeleteRead}
-            className="inline-flex items-center gap-2 px-4 py-2 text-red-700 bg-red-50 rounded-lg hover:bg-red-100"
+            className="inline-flex items-center gap-2 px-4 py-2 text-error-700 bg-error-50 rounded-xl hover:bg-error-100 font-semibold transition-colors"
           >
             <TrashIcon className="w-5 h-5" />
             حذف المقروءة
@@ -107,7 +107,7 @@ export default function NotificationsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Status Filter */}
           <select
@@ -119,7 +119,7 @@ export default function NotificationsPage() {
                 is_read: value === '' ? undefined : value === 'read',
               });
             }}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
           >
             <option value="">جميع الإشعارات</option>
             <option value="unread">غير مقروءة</option>
@@ -130,7 +130,7 @@ export default function NotificationsPage() {
           <select
             value={filters.type || ''}
             onChange={(e) => setFilters({ ...filters, type: (e.target.value as NotificationType) || undefined })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
           >
             <option value="">جميع الأنواع</option>
             {Object.entries(NOTIFICATION_TYPE_LABELS).map(([value, label]) => (
@@ -143,7 +143,7 @@ export default function NotificationsPage() {
           {/* Clear Filters */}
           <button
             onClick={() => setFilters({ is_read: undefined, type: undefined })}
-            className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            className="px-4 py-2 text-neutral-600 bg-neutral-100 rounded-xl hover:bg-neutral-200 font-semibold text-sm transition-colors"
           >
             إعادة تعيين
           </button>
@@ -153,16 +153,16 @@ export default function NotificationsPage() {
       {/* Notifications List */}
       {isLoading ? (
         <div className="text-center py-12">
-          <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto"></div>
-          <p className="text-gray-500 mt-4">جاري التحميل...</p>
+          <div className="w-8 h-8 border-4 border-primary-100 border-t-primary-600 rounded-full mx-auto animate-spin"></div>
+          <p className="text-neutral-500 mt-4">جاري التحميل...</p>
         </div>
       ) : notifications.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-          <BellIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-          <p className="text-gray-500">لا توجد إشعارات</p>
+        <div className="text-center py-16 bg-white rounded-2xl border border-neutral-100">
+          <BellIcon className="w-16 h-16 mx-auto text-neutral-300 mb-4" />
+          <p className="text-neutral-500 font-semibold">لا توجد إشعارات</p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 divide-y divide-gray-100">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm divide-y divide-neutral-100">
           {notifications.map((notification) => (
             <NotificationItem
               key={notification.id}

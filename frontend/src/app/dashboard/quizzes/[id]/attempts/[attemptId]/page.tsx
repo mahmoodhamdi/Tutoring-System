@@ -16,7 +16,7 @@ export default function AttemptDetailPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full"></div>
+        <div className="w-8 h-8 border-4 border-primary-100 border-t-primary-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -24,8 +24,8 @@ export default function AttemptDetailPage() {
   if (!attempt) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">المحاولة غير موجودة</p>
-        <Link href={`/dashboard/quizzes/${quizId}`} className="text-primary-600 hover:text-primary-700 mt-4 inline-block">
+        <p className="text-neutral-500">المحاولة غير موجودة</p>
+        <Link href={`/dashboard/quizzes/${quizId}`} className="text-primary-600 hover:text-primary-700 mt-4 inline-block font-semibold">
           العودة للاختبار
         </Link>
       </div>
@@ -33,18 +33,18 @@ export default function AttemptDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link
           href={`/dashboard/quizzes/${quizId}`}
-          className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+          className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-colors"
         >
           <ArrowRightIcon className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{attempt.quiz?.title}</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-extrabold text-neutral-900">{attempt.quiz?.title}</h1>
+          <p className="text-neutral-500">
             محاولة {attempt.student?.name || 'الطالب'}
           </p>
         </div>
