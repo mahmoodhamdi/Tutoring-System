@@ -27,7 +27,7 @@ export default function EditQuizPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full"></div>
+        <div className="w-8 h-8 border-4 border-primary-100 border-t-primary-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -36,7 +36,7 @@ export default function EditQuizPage() {
     return (
       <div className="text-center py-12">
         <p className="text-neutral-500">الاختبار غير موجود</p>
-        <Link href="/dashboard/quizzes" className="text-primary-600 hover:text-primary-700 mt-4 inline-block transition-all duration-200">
+        <Link href="/dashboard/quizzes" className="text-primary-600 hover:text-primary-700 mt-4 inline-block font-semibold">
           العودة للاختبارات
         </Link>
       </div>
@@ -49,13 +49,13 @@ export default function EditQuizPage() {
       <div className="flex items-center gap-4">
         <Link
           href={`/dashboard/quizzes/${quizId}`}
-          className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all duration-200"
+          className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-colors"
         >
           <ArrowRightIcon className="w-5 h-5" />
         </Link>
         <div>
           <h1 className="text-2xl font-extrabold text-neutral-900">تعديل الاختبار</h1>
-          <p className="text-neutral-600">{quiz.title}</p>
+          <p className="text-neutral-500">{quiz.title}</p>
         </div>
       </div>
 
