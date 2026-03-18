@@ -35,6 +35,11 @@ class SecurityHeaders
         $response->headers->remove('X-Powered-By');
         $response->headers->remove('Server');
 
+        // HSTS header
+        if ($request->secure() || config('app.env') === 'production') {
+            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+        }
+
         // Content Security Policy for API
         if ($request->is('api/*')) {
             $response->headers->set('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");

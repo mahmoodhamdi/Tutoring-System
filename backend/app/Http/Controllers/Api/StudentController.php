@@ -43,8 +43,11 @@ class StudentController extends Controller
                 $q->where('is_active', filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN));
             });
 
-        $sortBy = $request->sort_by ?? 'created_at';
-        $sortOrder = $request->sort_order ?? 'desc';
+        $allowedSortColumns = ['created_at', 'name', 'phone', 'email', 'is_active', 'updated_at'];
+        $sortBy = in_array($request->sort_by, $allowedSortColumns, true)
+            ? $request->sort_by
+            : 'created_at';
+        $sortOrder = $request->sort_order === 'asc' ? 'asc' : 'desc';
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = min($request->per_page ?? 15, 100);

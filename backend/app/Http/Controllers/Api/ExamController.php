@@ -10,6 +10,7 @@ use App\Http\Resources\ExamResource;
 use App\Http\Resources\ExamResultResource;
 use App\Models\Exam;
 use App\Models\ExamResult;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -44,8 +45,11 @@ class ExamController extends Controller
             $query->where('exam_date', '<=', $request->end_date);
         }
 
-        $sortBy = $request->input('sort_by', 'exam_date');
-        $sortOrder = $request->input('sort_order', 'desc');
+        $allowedSortColumns = ['exam_date', 'created_at', 'title', 'total_marks', 'status', 'updated_at'];
+        $sortBy = in_array($request->input('sort_by'), $allowedSortColumns, true)
+            ? $request->input('sort_by')
+            : 'exam_date';
+        $sortOrder = $request->input('sort_order') === 'asc' ? 'asc' : 'desc';
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $request->input('per_page', 15);
@@ -237,8 +241,19 @@ class ExamController extends Controller
         ]);
     }
 
-    public function studentExams(int $studentId): AnonymousResourceCollection
+    public function studentExams(Request $request, int $studentId): AnonymousResourceCollection
     {
+        $caller = $request->user();
+        if ($caller->isStudent() && $caller->id !== $studentId) {
+            abort(403, 'غير مصرح لك بعرض نتائج هذا الطالب');
+        }
+        if ($caller->isParent()) {
+            $childIds = User::where('parent_id', $caller->id)->pluck('id')->toArray();
+            if (! in_array($studentId, $childIds)) {
+                abort(403, 'غير مصرح لك بعرض نتائج هذا الطالب');
+            }
+        }
+
         $results = ExamResult::with(['exam.group'])
             ->where('student_id', $studentId)
             ->orderByDesc(Exam::select('exam_date')

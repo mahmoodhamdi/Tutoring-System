@@ -15,6 +15,19 @@ class UpdateProfileRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $sanitized = [];
+        foreach (['name', 'address', 'school_name', 'grade_level'] as $field) {
+            if ($this->has($field) && is_string($this->input($field))) {
+                $sanitized[$field] = strip_tags($this->input($field));
+            }
+        }
+        if ($sanitized) {
+            $this->merge($sanitized);
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *

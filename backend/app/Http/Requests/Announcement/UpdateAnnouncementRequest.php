@@ -9,7 +9,20 @@ class UpdateAnnouncementRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user() && $this->user()->isTeacher();
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $sanitized = [];
+        foreach (['title', 'content'] as $field) {
+            if ($this->has($field) && is_string($this->input($field))) {
+                $sanitized[$field] = strip_tags($this->input($field));
+            }
+        }
+        if ($sanitized) {
+            $this->merge($sanitized);
+        }
     }
 
     public function rules(): array

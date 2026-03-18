@@ -15,6 +15,7 @@ class QuizAttempt extends Model
         'quiz_id',
         'student_id',
         'started_at',
+        'submitted_at',
         'completed_at',
         'score',
         'percentage',
@@ -25,6 +26,7 @@ class QuizAttempt extends Model
 
     protected $casts = [
         'started_at' => 'datetime',
+        'submitted_at' => 'datetime',
         'completed_at' => 'datetime',
         'score' => 'decimal:2',
         'percentage' => 'decimal:2',

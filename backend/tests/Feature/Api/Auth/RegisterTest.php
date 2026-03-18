@@ -183,7 +183,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function user_can_register_as_teacher(): void
+    public function user_cannot_register_as_teacher(): void
     {
         $response = $this->postJson('/api/auth/register', [
             'name' => 'Teacher User',
@@ -193,12 +193,8 @@ class RegisterTest extends TestCase
             'role' => 'teacher',
         ]);
 
-        $response->assertStatus(201);
-
-        $this->assertDatabaseHas('users', [
-            'phone' => '+201234567890',
-            'role' => 'teacher',
-        ]);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['role']);
     }
 
     /** @test */

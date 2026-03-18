@@ -4,66 +4,66 @@ import { z } from 'zod';
 
 export const phoneSchema = z
   .string()
-  .min(10, 'Phone number must be at least 10 digits')
-  .regex(/^\+?[0-9]+$/, 'Invalid phone number format');
+  .min(10, 'رقم الهاتف يجب أن يكون 10 أرقام على الأقل')
+  .regex(/^\+?[0-9]+$/, 'صيغة رقم الهاتف غير صالحة');
 
 export const emailSchema = z
   .string()
-  .email('Invalid email address')
+  .email('البريد الإلكتروني غير صالح')
   .optional()
   .or(z.literal(''));
 
 export const passwordSchema = z
   .string()
-  .min(8, 'Password must be at least 8 characters')
-  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-  .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-  .regex(/[0-9]/, 'Password must contain at least one number');
+  .min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل')
+  .regex(/[A-Z]/, 'كلمة المرور يجب أن تحتوي على حرف كبير واحد على الأقل')
+  .regex(/[a-z]/, 'كلمة المرور يجب أن تحتوي على حرف صغير واحد على الأقل')
+  .regex(/[0-9]/, 'كلمة المرور يجب أن تحتوي على رقم واحد على الأقل');
 
 // Auth schemas
 export const loginSchema = z.object({
   phone: phoneSchema,
-  password: z.string().min(1, 'Password is required'),
+  password: z.string().min(1, 'كلمة المرور مطلوبة'),
 });
 
 export const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z.string().min(2, 'الاسم يجب أن يكون حرفين على الأقل'),
   email: emailSchema,
   phone: phoneSchema,
   password: passwordSchema,
   password_confirmation: z.string(),
-  role: z.enum(['teacher', 'student', 'parent']),
+  role: z.enum(['student', 'parent']),
 }).refine((data) => data.password === data.password_confirmation, {
-  message: 'Passwords do not match',
+  message: 'كلمة المرور غير متطابقة',
   path: ['password_confirmation'],
 });
 
 export const forgotPasswordSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.string().email('البريد الإلكتروني غير صالح'),
 });
 
 export const resetPasswordSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.string().email('البريد الإلكتروني غير صالح'),
   password: passwordSchema,
   password_confirmation: z.string(),
   token: z.string(),
 }).refine((data) => data.password === data.password_confirmation, {
-  message: 'Passwords do not match',
+  message: 'كلمة المرور غير متطابقة',
   path: ['password_confirmation'],
 });
 
 export const changePasswordSchema = z.object({
-  current_password: z.string().min(1, 'Current password is required'),
+  current_password: z.string().min(1, 'كلمة المرور الحالية مطلوبة'),
   password: passwordSchema,
   password_confirmation: z.string(),
 }).refine((data) => data.password === data.password_confirmation, {
-  message: 'Passwords do not match',
+  message: 'كلمة المرور غير متطابقة',
   path: ['password_confirmation'],
 });
 
 // Student schemas
 export const studentSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z.string().min(2, 'الاسم يجب أن يكون حرفين على الأقل'),
   email: emailSchema,
   phone: phoneSchema,
   date_of_birth: z.string().optional(),
@@ -79,21 +79,21 @@ export const studentSchema = z.object({
 
 // Group schemas
 export const groupSchema = z.object({
-  name: z.string().min(2, 'Group name must be at least 2 characters'),
-  subject: z.string().min(1, 'Subject is required'),
-  grade_level: z.string().min(1, 'Grade level is required'),
+  name: z.string().min(2, 'اسم المجموعة يجب أن يكون حرفين على الأقل'),
+  subject: z.string().min(1, 'المادة مطلوبة'),
+  grade_level: z.string().min(1, 'المرحلة الدراسية مطلوبة'),
   description: z.string().optional(),
-  monthly_fee: z.number().min(0, 'Monthly fee must be positive'),
+  monthly_fee: z.number().min(0, 'الرسوم الشهرية يجب أن تكون صفر أو أكثر'),
   max_students: z.number().int().positive().optional(),
   status: z.enum(['active', 'inactive', 'completed']).default('active'),
 });
 
 // Session schemas
 export const sessionSchema = z.object({
-  group_id: z.number().int().positive('Group is required'),
-  session_date: z.string().min(1, 'Session date is required'),
-  start_time: z.string().min(1, 'Start time is required'),
-  end_time: z.string().min(1, 'End time is required'),
+  group_id: z.number().int().positive('يجب اختيار المجموعة'),
+  session_date: z.string().min(1, 'تاريخ الجلسة مطلوب'),
+  start_time: z.string().min(1, 'وقت البداية مطلوب'),
+  end_time: z.string().min(1, 'وقت النهاية مطلوب'),
   topic: z.string().optional(),
   notes: z.string().optional(),
   location: z.string().optional(),
@@ -101,30 +101,30 @@ export const sessionSchema = z.object({
 
 // Payment schemas
 export const paymentSchema = z.object({
-  student_id: z.number().int().positive('Student is required'),
+  student_id: z.number().int().positive('يجب اختيار الطالب'),
   group_id: z.number().int().positive().optional(),
-  amount: z.number().positive('Amount must be positive'),
+  amount: z.number().positive('المبلغ يجب أن يكون أكبر من صفر'),
   method: z.enum(['cash', 'bank_transfer', 'wallet']).default('cash'),
-  payment_date: z.string().min(1, 'Payment date is required'),
+  payment_date: z.string().min(1, 'تاريخ الدفع مطلوب'),
   notes: z.string().optional(),
 });
 
 // Exam schemas
 export const examSchema = z.object({
-  group_id: z.number().int().positive('Group is required'),
-  title: z.string().min(2, 'Title must be at least 2 characters'),
+  group_id: z.number().int().positive('يجب اختيار المجموعة'),
+  title: z.string().min(2, 'العنوان يجب أن يكون حرفين على الأقل'),
   description: z.string().optional(),
   type: z.enum(['quiz', 'midterm', 'final', 'assignment']).default('quiz'),
-  total_marks: z.number().positive('Total marks must be positive'),
-  exam_date: z.string().min(1, 'Exam date is required'),
+  total_marks: z.number().positive('الدرجة الكلية يجب أن تكون أكبر من صفر'),
+  exam_date: z.string().min(1, 'تاريخ الاختبار مطلوب'),
   start_time: z.string().optional(),
   duration_minutes: z.number().int().positive().optional(),
 });
 
 // Announcement schemas
 export const announcementSchema = z.object({
-  title: z.string().min(2, 'Title must be at least 2 characters'),
-  content: z.string().min(10, 'Content must be at least 10 characters'),
+  title: z.string().min(2, 'العنوان يجب أن يكون حرفين على الأقل'),
+  content: z.string().min(10, 'المحتوى يجب أن يكون 10 أحرف على الأقل'),
   type: z.enum(['general', 'exam', 'payment', 'schedule', 'important']).default('general'),
   target: z.enum(['all', 'group', 'student']).default('all'),
   group_id: z.number().int().positive().optional(),

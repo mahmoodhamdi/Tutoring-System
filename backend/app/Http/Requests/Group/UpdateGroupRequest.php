@@ -15,6 +15,19 @@ class UpdateGroupRequest extends FormRequest
         return $this->user() && $this->user()->isTeacher();
     }
 
+    protected function prepareForValidation(): void
+    {
+        $sanitized = [];
+        foreach (['name', 'description', 'subject', 'grade_level', 'schedule_description'] as $field) {
+            if ($this->has($field) && is_string($this->input($field))) {
+                $sanitized[$field] = strip_tags($this->input($field));
+            }
+        }
+        if ($sanitized) {
+            $this->merge($sanitized);
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *

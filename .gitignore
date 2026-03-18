@@ -1,3 +1,7 @@
+# Audit/Session state
+.audit/
+.redesign/
+
 # IDE
 .idea/
 .vscode/
@@ -34,6 +38,9 @@ yarn-error.log*
 # Dependencies (handled in subdirectories)
 node_modules/
 vendor/
+
+# Test results
+frontend/test-results/
 
 # Docker
 docker-compose.override.yml

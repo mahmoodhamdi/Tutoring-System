@@ -39,11 +39,21 @@ cd frontend
 npm run dev              # Dev server (port 3000)
 npm run test             # Jest unit tests
 npm run test:watch       # Jest watch mode
-npm run test:coverage    # Coverage report
+npm run test:coverage    # Coverage report (80% threshold enforced)
 npm run lint -- --fix    # ESLint with auto-fix
 npm run type-check       # TypeScript check
-npm run test:e2e         # Playwright E2E tests
+npm run test:e2e         # Playwright E2E tests (Chromium, Firefox, WebKit, mobile)
 npm run test:e2e:ui      # E2E with Playwright UI
+```
+
+### Docker
+```bash
+make docker-up      # Start all 7 services (nginx, backend, frontend, mysql, redis, queue, scheduler)
+make docker-down    # Stop containers
+make docker-build   # Build images (no cache)
+make docker-logs    # Tail container logs
+make docker-shell   # Shell into backend container
+make docker-fresh   # Fresh migrate + seed in container
 ```
 
 ## Development Workflow
@@ -88,8 +98,10 @@ The entire application is **Arabic-first with RTL layout**:
 - **FormRequests** (`app/Http/Requests/`): Handle both authorization (role checks in `authorize()`) and validation. All `messages()` return Arabic strings.
 - **Resources** (`app/Http/Resources/`): 16 resource classes. Use `$this->when()` for conditional fields, handle pivot data, format dates as ISO 8601.
 - **Enums** (`app/Enums/`): 5 enums (UserRole, AttendanceStatus, PaymentStatus, SessionStatus, QuizAttemptStatus). Each has Arabic `label()`, `color()` for UI, and boolean helper methods.
-- **Services** (`app/Services/`): PdfExportService (DomPDF reports), SmsService. Business logic that doesn't belong in controllers.
+- **Services** (`app/Services/`): PdfExportService (DomPDF), SmsService, plus Excel export via `maatwebsite/excel`. Business logic that doesn't belong in controllers.
 - **Policies** (`app/Policies/`): Minimal — most authorization is inline in FormRequest `authorize()` or controller checks.
+- **Middleware**: PerformanceMonitoring, RequestLogging, SecurityHeaders — applied globally in addition to Sanctum auth and rate limiting.
+- **Health endpoint**: `GET /api/health` for service monitoring (no auth required).
 
 **API response shapes:**
 ```
@@ -176,11 +188,14 @@ src/app/
 - Unit tests in `tests/Unit/Models/`
 - Pattern: `RefreshDatabase` trait, `User::factory()->teacher()->create()` for setup, `actingAs()` + `postJson()`/`putJson()` for requests, `assertJsonPath()` + `assertDatabaseHas()` for assertions
 - **100% coverage requirement enforced**
+- Test DB: SQLite in-memory (configured in `phpunit.xml`)
 
 ### Frontend
-- Unit/component tests: `frontend/__tests__/` (Jest + Testing Library)
-- E2E tests: `frontend/e2e/` (Playwright across Chromium, Firefox, WebKit, mobile viewports)
+- Unit/component tests: `frontend/__tests__/` (Jest 30 + Testing Library)
+- **80% coverage threshold** enforced for branches, functions, lines, and statements
+- E2E tests: `frontend/e2e/` (Playwright 1.57 across Chromium, Firefox, WebKit, mobile viewports)
 - E2E auth fixture: `e2e/fixtures/auth.fixture.ts` provides `authenticatedPage`, `adminPage`, `studentPage` helpers
+- E2E captures screenshots/video on failure, traces on first retry
 
 ## Environment
 
@@ -189,7 +204,25 @@ src/app/
 - API Docs (Swagger): `http://localhost:8001/api/documentation`
 - Backend `.env`: `SANCTUM_STATEFUL_DOMAINS=localhost:3000`
 - Frontend `.env.local`: `NEXT_PUBLIC_API_URL=http://localhost:8001/api`
+- Docker `.env.docker.example` for containerized setup
+
+## Infrastructure
+
+### Docker Compose (7 services)
+- **nginx** (ports 80/443), **backend** (PHP-FPM:9000), **frontend** (Next.js:3000)
+- **mysql** 8.0 (port 3306), **redis** (port 6379) — both with health checks
+- **queue** (Laravel queue worker), **scheduler** (Laravel task scheduler)
+- Single `tutoring-network` bridge connects all services
+
+### CI/CD (GitHub Actions)
+- `backend.yml`: PHP 8.2 + MySQL + Redis, runs tests with coverage
+- `frontend.yml`: Node 20, linting + type-check + tests + build
+- `e2e.yml`: Playwright across multiple browsers
+- `deploy.yml`: Production deployment
+
+### Monitoring
+- Sentry integrated in both backend (`sentry/sentry-laravel`) and frontend (`@sentry/nextjs`)
 
 ## Progress
 
-CHECKLIST.md tracks implementation across 15 phases. Phases 1-4 (Setup, Auth, Students, Groups) are complete. Phase 5 (Sessions & Schedule) is next.
+All 15 phases are fully implemented (Setup, Auth, Students, Groups, Sessions, Attendance, Payments, Exams, Quizzes, Announcements, Notifications, Dashboard/Reports, Portal, Settings, Final Polish). CHECKLIST.md tracks per-phase details but its checkboxes for phases 5-15 are outdated — the code is complete.

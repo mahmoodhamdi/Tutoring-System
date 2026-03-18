@@ -125,7 +125,6 @@ export function RegisterForm() {
           >
             <option value="student">طالب</option>
             <option value="parent">ولي أمر</option>
-            <option value="teacher">معلم</option>
           </select>
           {errors.role && (
             <p className="mt-1.5 text-sm text-error-600 flex items-center gap-1">

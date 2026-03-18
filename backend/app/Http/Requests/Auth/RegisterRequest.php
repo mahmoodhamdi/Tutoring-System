@@ -16,6 +16,16 @@ class RegisterRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->name) {
+            $this->merge(['name' => strip_tags($this->name)]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -27,7 +37,7 @@ class RegisterRequest extends FormRequest
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['required', 'string', 'min:10', 'max:20', 'unique:users,phone'],
             'password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()->numbers()],
-            'role' => ['nullable', 'string', 'in:teacher,student,parent'],
+            'role' => ['nullable', 'string', 'in:student,parent'],
         ];
     }
 

@@ -80,7 +80,7 @@ export default function AnnouncementDetailPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full"></div>
+        <div className="w-8 h-8 border-4 border-primary-100 border-t-primary-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -89,7 +89,7 @@ export default function AnnouncementDetailPage() {
     return (
       <div className="text-center py-12">
         <p className="text-neutral-500">الإعلان غير موجود</p>
-        <Link href="/dashboard/announcements" className="text-primary-600 hover:text-primary-700 mt-4 inline-block transition-all duration-200">
+        <Link href="/dashboard/announcements" className="text-primary-600 hover:text-primary-700 mt-4 inline-block font-semibold">
           العودة للإعلانات
         </Link>
       </div>
@@ -103,7 +103,7 @@ export default function AnnouncementDetailPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/dashboard/announcements"
-            className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all duration-200"
+            className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-colors"
           >
             <ArrowRightIcon className="w-5 h-5" />
           </Link>
@@ -118,19 +118,19 @@ export default function AnnouncementDetailPage() {
                 </span>
               )}
               {announcement.is_published ? (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-secondary-100 text-secondary-800">
                   <CheckCircleIcon className="w-3.5 h-3.5 ml-1" />
                   منشور
                 </span>
               ) : (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-neutral-100 text-neutral-700">
                   <XCircleIcon className="w-3.5 h-3.5 ml-1" />
                   مسودة
                 </span>
               )}
             </div>
             <div className="flex items-center gap-2 mt-1 text-sm text-neutral-500">
-              <span className={`px-2 py-0.5 rounded-full text-xs ${PRIORITY_COLORS[announcement.priority]}`}>
+              <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${PRIORITY_COLORS[announcement.priority]}`}>
                 {PRIORITY_LABELS[announcement.priority]}
               </span>
               <span>•</span>
@@ -149,14 +149,14 @@ export default function AnnouncementDetailPage() {
           {!announcement.is_published ? (
             <button
               onClick={handlePublish}
-              className="px-4 py-2 bg-success-600 text-white rounded-xl hover:bg-success-700 transition-all duration-200"
+              className="px-4 py-2 bg-secondary-600 text-white rounded-xl hover:bg-secondary-700 font-semibold transition-colors shadow-sm"
             >
               نشر
             </button>
           ) : (
             <button
               onClick={handleUnpublish}
-              className="px-4 py-2 bg-accent-600 text-white rounded-xl hover:bg-accent-700 transition-all duration-200"
+              className="px-4 py-2 bg-warning-600 text-white rounded-xl hover:bg-warning-700 font-semibold transition-colors shadow-sm"
             >
               إلغاء النشر
             </button>
@@ -164,28 +164,28 @@ export default function AnnouncementDetailPage() {
           {!announcement.is_pinned ? (
             <button
               onClick={handlePin}
-              className="px-4 py-2 text-warning-700 bg-warning-100 rounded-xl hover:bg-warning-200 transition-all duration-200"
+              className="px-4 py-2 text-warning-700 bg-warning-100 rounded-xl hover:bg-warning-200 font-semibold transition-colors"
             >
               تثبيت
             </button>
           ) : (
             <button
               onClick={handleUnpin}
-              className="px-4 py-2 text-neutral-700 bg-neutral-100 rounded-xl hover:bg-neutral-200 transition-all duration-200"
+              className="px-4 py-2 text-neutral-700 bg-neutral-100 rounded-xl hover:bg-neutral-200 font-semibold transition-colors"
             >
               إلغاء التثبيت
             </button>
           )}
           <Link
             href={`/dashboard/announcements/${announcementId}/edit`}
-            className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 bg-white border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-all duration-200"
+            className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 bg-white border border-neutral-300 rounded-xl hover:bg-neutral-50 font-semibold transition-colors"
           >
             <PencilIcon className="w-4 h-4" />
             تعديل
           </Link>
           <button
             onClick={handleDelete}
-            className="inline-flex items-center gap-2 px-4 py-2 text-error-700 bg-error-50 rounded-xl hover:bg-error-100 transition-all duration-200"
+            className="inline-flex items-center gap-2 px-4 py-2 text-error-700 bg-error-50 rounded-xl hover:bg-error-100 font-semibold transition-colors"
           >
             <TrashIcon className="w-4 h-4" />
             حذف
@@ -195,52 +195,52 @@ export default function AnnouncementDetailPage() {
 
       {/* Meta Info */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-neutral-100 rounded-xl">
-              <EyeIcon className="w-5 h-5 text-neutral-600" />
+            <div className="p-2 bg-neutral-50 rounded-xl">
+              <EyeIcon className="w-5 h-5 text-neutral-500" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900">{announcement.reads_count}</p>
+              <p className="text-2xl font-extrabold text-neutral-900">{announcement.reads_count}</p>
               <p className="text-sm text-neutral-500">مشاهدة</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-neutral-100 rounded-xl">
-              <CalendarIcon className="w-5 h-5 text-neutral-600" />
+            <div className="p-2 bg-neutral-50 rounded-xl">
+              <CalendarIcon className="w-5 h-5 text-neutral-500" />
             </div>
             <div>
-              <p className="text-sm font-medium text-neutral-900">
+              <p className="text-sm font-semibold text-neutral-900">
                 {announcement.published_at ? formatDate(announcement.published_at) : 'لم ينشر'}
               </p>
               <p className="text-sm text-neutral-500">تاريخ النشر</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-neutral-100 rounded-xl">
-              <ClockIcon className="w-5 h-5 text-neutral-600" />
+            <div className="p-2 bg-neutral-50 rounded-xl">
+              <ClockIcon className="w-5 h-5 text-neutral-500" />
             </div>
             <div>
-              <p className="text-sm font-medium text-neutral-900">
+              <p className="text-sm font-semibold text-neutral-900">
                 {announcement.expires_at ? formatDate(announcement.expires_at) : 'غير محدد'}
               </p>
               <p className="text-sm text-neutral-500">تاريخ الانتهاء</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-4">
+        <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-neutral-100 rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-neutral-600">
+            <div className="p-2 bg-neutral-50 rounded-xl">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-neutral-500">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
               </svg>
             </div>
             <div>
-              <p className="text-sm font-medium text-neutral-900">{announcement.author?.name}</p>
+              <p className="text-sm font-semibold text-neutral-900">{announcement.author?.name}</p>
               <p className="text-sm text-neutral-500">الناشر</p>
             </div>
           </div>
@@ -248,8 +248,8 @@ export default function AnnouncementDetailPage() {
       </div>
 
       {/* Content */}
-      <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
-        <h3 className="text-lg font-medium text-neutral-900 mb-4">المحتوى</h3>
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+        <h3 className="text-lg font-bold text-neutral-900 mb-4">المحتوى</h3>
         <div className="prose prose-neutral max-w-none">
           <p className="whitespace-pre-wrap text-neutral-700">{announcement.content}</p>
         </div>

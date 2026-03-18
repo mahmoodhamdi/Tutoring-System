@@ -153,15 +153,15 @@ class PortalTest extends TestCase
 
         $response = $this->postJson('/api/portal/password', [
             'current_password' => 'password123',
-            'new_password' => 'newpassword123',
-            'new_password_confirmation' => 'newpassword123',
+            'new_password' => 'NewPassword123',
+            'new_password_confirmation' => 'NewPassword123',
         ]);
 
         $response->assertOk();
 
         // Verify the password was changed
         $this->student->refresh();
-        $this->assertTrue(Hash::check('newpassword123', $this->student->password));
+        $this->assertTrue(Hash::check('NewPassword123', $this->student->password));
     }
 
     public function test_password_update_fails_with_wrong_current_password(): void
@@ -170,8 +170,8 @@ class PortalTest extends TestCase
 
         $response = $this->postJson('/api/portal/password', [
             'current_password' => 'wrong_password',
-            'new_password' => 'newpassword123',
-            'new_password_confirmation' => 'newpassword123',
+            'new_password' => 'NewPassword123',
+            'new_password_confirmation' => 'NewPassword123',
         ]);
 
         $response->assertStatus(400);

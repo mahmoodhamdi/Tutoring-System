@@ -16,6 +16,22 @@ class StoreStudentRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $sanitized = [];
+        foreach (['name', 'school_name', 'address', 'notes', 'emergency_contact_name'] as $field) {
+            if ($this->has($field) && is_string($this->input($field))) {
+                $sanitized[$field] = strip_tags($this->input($field));
+            }
+        }
+        if ($sanitized) {
+            $this->merge($sanitized);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>

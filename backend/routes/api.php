@@ -58,7 +58,7 @@ Route::prefix('auth')->middleware([\Laravel\Sanctum\Http\Middleware\EnsureFronte
 Route::middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class, \App\Http\Middleware\ApiAuthenticate::class])->group(function () {
     // Get authenticated user
     Route::get('/user', function (Request $request) {
-        return $request->user();
+        return new \App\Http\Resources\UserResource($request->user());
     });
 
     // Students routes (Phase 3)

@@ -393,7 +393,7 @@ class ReportsController extends Controller
                     'id' => $a->id,
                     'student_name' => $a->student->name,
                     'quiz_title' => $a->quiz->title,
-                    'submitted_at' => $a->submitted_at->toDateTimeString(),
+                    'submitted_at' => $a->submitted_at?->toDateTimeString(),
                     'group_name' => $a->quiz->group?->name,
                     'score' => $a->score,
                     'total_points' => $a->total_points,
