@@ -35,6 +35,9 @@ const gradeLevels = [
   'الصف الثاني عشر',
 ];
 
+const selectClass =
+  'w-full px-3 py-2 border border-neutral-200 bg-white rounded-xl text-neutral-800 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200';
+
 export function StudentsFilter({
   onSearch,
   onFilter,
@@ -77,13 +80,13 @@ export function StudentsFilter({
   const hasActiveFilters = status || gradeLevel || isActive !== undefined;
 
   return (
-    <div className="bg-white rounded-lg shadow p-4 mb-6">
+    <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-4 mb-6">
       <div className="flex flex-col md:flex-row gap-4">
         {/* Search */}
         <div className="flex-1">
           <div className="relative">
             <svg
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-neutral-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -109,10 +112,10 @@ export function StudentsFilter({
         <button
           type="button"
           onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center gap-2 px-4 py-2 border rounded-md text-sm font-medium ${
+          className={`flex items-center gap-2 px-4 py-2 border rounded-xl text-sm font-medium transition-all duration-200 ${
             hasActiveFilters
-              ? 'border-blue-500 text-blue-600 bg-blue-50'
-              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+              ? 'border-primary-400 text-primary-600 bg-primary-50'
+              : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
           }`}
         >
           <svg
@@ -130,7 +133,7 @@ export function StudentsFilter({
           </svg>
           <span>تصفية</span>
           {hasActiveFilters && (
-            <span className="bg-blue-600 text-white text-xs rounded-full px-2 py-0.5">
+            <span className="bg-primary-600 text-white text-xs rounded-full px-2 py-0.5">
               {[status, gradeLevel, isActive !== undefined].filter(Boolean).length}
             </span>
           )}
@@ -139,17 +142,17 @@ export function StudentsFilter({
 
       {/* Filters Panel */}
       {showFilters && (
-        <div className="mt-4 pt-4 border-t">
+        <div className="mt-4 pt-4 border-t border-neutral-100">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Status Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 الحالة
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as StudentStatus | '')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className={selectClass}
               >
                 <option value="">الكل</option>
                 <option value="active">نشط</option>
@@ -160,13 +163,13 @@ export function StudentsFilter({
 
             {/* Grade Level Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 المرحلة الدراسية
               </label>
               <select
                 value={gradeLevel}
                 onChange={(e) => setGradeLevel(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className={selectClass}
               >
                 <option value="">الكل</option>
                 {gradeLevels.map((level) => (
@@ -179,7 +182,7 @@ export function StudentsFilter({
 
             {/* Account Active Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 حالة الحساب
               </label>
               <select
@@ -188,7 +191,7 @@ export function StudentsFilter({
                   const value = e.target.value;
                   setIsActive(value === '' ? undefined : value === 'true');
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className={selectClass}
               >
                 <option value="">الكل</option>
                 <option value="true">نشط</option>

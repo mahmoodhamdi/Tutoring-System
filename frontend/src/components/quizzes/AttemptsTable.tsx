@@ -14,7 +14,7 @@ interface AttemptsTableProps {
 export function AttemptsTable({ attempts, quizId, showStudent = true }: AttemptsTableProps) {
   if (attempts.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-neutral-500">
         لا توجد محاولات حتى الآن
       </div>
     );
@@ -29,49 +29,49 @@ export function AttemptsTable({ attempts, quizId, showStudent = true }: Attempts
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+      <table className="min-w-full divide-y divide-neutral-200">
+        <thead className="bg-neutral-50">
           <tr>
             {showStudent && (
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                 الطالب
               </th>
             )}
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
               تاريخ البدء
             </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
               الحالة
             </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
               الدرجة
             </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
               النسبة
             </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
               الوقت
             </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
               النتيجة
             </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
               إجراءات
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white divide-y divide-neutral-200">
           {attempts.map((attempt) => (
-            <tr key={attempt.id} className="hover:bg-gray-50">
+            <tr key={attempt.id} className="hover:bg-neutral-50 transition-all duration-200">
               {showStudent && (
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
+                  <div className="text-sm font-medium text-neutral-900">
                     {attempt.student?.name || 'غير معروف'}
                   </div>
-                  <div className="text-sm text-gray-500">{attempt.student?.email}</div>
+                  <div className="text-sm text-neutral-500">{attempt.student?.email}</div>
                 </td>
               )}
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                 {formatDate(attempt.started_at)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
@@ -79,7 +79,7 @@ export function AttemptsTable({ attempts, quizId, showStudent = true }: Attempts
                   {ATTEMPT_STATUS_LABELS[attempt.status]}
                 </span>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
                 {attempt.status === 'completed' || attempt.status === 'timed_out' ? (
                   <>
                     {attempt.score?.toFixed(1)} / {attempt.quiz?.total_marks || '-'}
@@ -88,20 +88,20 @@ export function AttemptsTable({ attempts, quizId, showStudent = true }: Attempts
                   '-'
                 )}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
                 {attempt.percentage !== undefined && attempt.percentage !== null
                   ? `${attempt.percentage.toFixed(1)}%`
                   : '-'}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                 {formatDuration(attempt.time_taken_seconds)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {attempt.is_passed !== null && (
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                     attempt.is_passed
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
+                      ? 'bg-success-100 text-success-800'
+                      : 'bg-error-100 text-error-800'
                   }`}>
                     {attempt.is_passed ? 'ناجح' : 'راسب'}
                   </span>
@@ -110,7 +110,7 @@ export function AttemptsTable({ attempts, quizId, showStudent = true }: Attempts
               <td className="px-6 py-4 whitespace-nowrap text-sm">
                 <Link
                   href={`/dashboard/quizzes/${quizId}/attempts/${attempt.id}`}
-                  className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700"
+                  className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 transition-all duration-200"
                 >
                   <EyeIcon className="w-4 h-4" />
                   عرض

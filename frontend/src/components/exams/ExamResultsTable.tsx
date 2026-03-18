@@ -85,54 +85,56 @@ export function ExamResultsTable({ exam, results, onSave, isSaving }: ExamResult
   };
 
   const getGradeColor = (marks: number | undefined): string => {
-    if (marks === undefined) return 'text-gray-500';
+    if (marks === undefined) return 'text-neutral-500';
     const percentage = (marks / exam.total_marks) * 100;
-    if (percentage >= 90) return 'text-green-600';
-    if (percentage >= 80) return 'text-blue-600';
-    if (percentage >= 70) return 'text-yellow-600';
-    if (percentage >= 60) return 'text-orange-600';
-    return 'text-red-600';
+    if (percentage >= 90) return 'text-success-600';
+    if (percentage >= 80) return 'text-primary-600';
+    if (percentage >= 70) return 'text-accent-600';
+    if (percentage >= 60) return 'text-accent-500';
+    return 'text-error-600';
   };
 
-  const statusButtons = [
-    { status: 'graded' as const, icon: CheckCircleIcon, label: 'تم التصحيح', color: 'green' },
-    { status: 'pending' as const, icon: ClockIcon, label: 'معلق', color: 'yellow' },
-    { status: 'absent' as const, icon: XCircleIcon, label: 'غائب', color: 'red' },
+  const statusConfig = [
+    { status: 'graded' as const, icon: CheckCircleIcon, label: 'تم التصحيح', selectedClass: 'bg-success-100 text-success-700 ring-2 ring-success-400', hoverClass: 'hover:bg-success-50 hover:text-success-600' },
+    { status: 'pending' as const, icon: ClockIcon, label: 'معلق', selectedClass: 'bg-accent-100 text-accent-700 ring-2 ring-accent-400', hoverClass: 'hover:bg-accent-50 hover:text-accent-600' },
+    { status: 'absent' as const, icon: XCircleIcon, label: 'غائب', selectedClass: 'bg-error-100 text-error-700 ring-2 ring-error-400', hoverClass: 'hover:bg-error-50 hover:text-error-600' },
   ];
 
   if (results.length === 0) {
     return (
-      <div className="text-center py-12 bg-white rounded-lg shadow">
-        <UserIcon className="mx-auto h-12 w-12 text-gray-400" />
-        <h3 className="mt-2 text-sm font-semibold text-gray-900">لا يوجد طلاب</h3>
-        <p className="mt-1 text-sm text-gray-500">لم يتم تسجيل نتائج بعد</p>
+      <div className="text-center py-14 bg-white rounded-2xl border border-neutral-100 shadow-sm">
+        <div className="h-14 w-14 bg-neutral-100 rounded-full flex items-center justify-center mx-auto">
+          <UserIcon className="h-7 w-7 text-neutral-400" />
+        </div>
+        <h3 className="mt-3 text-sm font-semibold text-neutral-900">لا يوجد طلاب</h3>
+        <p className="mt-1 text-sm text-neutral-500">لم يتم تسجيل نتائج بعد</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="bg-white rounded-xl border border-neutral-100 shadow-sm overflow-hidden">
+        <table className="min-w-full divide-y divide-neutral-100">
+          <thead className="bg-neutral-50">
             <tr>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">الطالب</th>
-              <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الدرجة</th>
-              <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">التقدير</th>
-              <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">ملاحظات</th>
+              <th className="px-4 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider">الطالب</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-neutral-500 uppercase tracking-wider">الدرجة</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-neutral-500 uppercase tracking-wider">التقدير</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-neutral-500 uppercase tracking-wider">الحالة</th>
+              <th className="px-4 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider">ملاحظات</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
-            {results.map((result) => {
+          <tbody className="divide-y divide-neutral-100">
+            {results.map((result, idx) => {
               const edited = editedResults[result.student_id];
               return (
-                <tr key={result.student_id}>
+                <tr key={result.student_id} className={idx % 2 === 1 ? 'bg-neutral-50/50' : 'bg-white'}>
                   <td className="px-4 py-3">
-                    <div className="font-medium text-gray-900">{result.student?.name}</div>
-                    <div className="text-sm text-gray-500">{result.student?.phone}</div>
+                    <div className="font-semibold text-neutral-900">{result.student?.name}</div>
+                    <div className="text-sm text-neutral-500">{result.student?.phone}</div>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 text-center">
                     <input
                       type="number"
                       value={edited?.marks_obtained ?? ''}
@@ -146,32 +148,32 @@ export function ExamResultsTable({ exam, results, onSave, isSaving }: ExamResult
                       max={exam.total_marks}
                       step="0.5"
                       disabled={edited?.status === 'absent'}
-                      className="w-20 text-center rounded-md border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm disabled:bg-gray-100"
+                      className="w-20 text-center rounded-xl border border-neutral-200 py-1 px-2 text-neutral-800 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all disabled:bg-neutral-100 disabled:text-neutral-400"
                       placeholder={`/ ${exam.total_marks}`}
                     />
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <span className={`text-lg font-bold ${getGradeColor(edited?.marks_obtained)}`}>
+                    <span className={`text-lg font-extrabold ${getGradeColor(edited?.marks_obtained)}`}>
                       {edited?.status === 'absent' ? 'F' : getGrade(edited?.marks_obtained)}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex justify-center gap-1">
-                      {statusButtons.map((btn) => {
+                    <div className="flex justify-center gap-1.5">
+                      {statusConfig.map((btn) => {
                         const isSelected = edited?.status === btn.status;
                         return (
                           <button
                             key={btn.status}
                             type="button"
                             onClick={() => handleStatusChange(result.student_id, btn.status)}
-                            className={`p-2 rounded-lg transition-colors ${
+                            className={`p-2 rounded-xl transition-all duration-200 ${
                               isSelected
-                                ? `bg-${btn.color}-100 text-${btn.color}-700 ring-2 ring-${btn.color}-500`
-                                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                                ? btn.selectedClass
+                                : `bg-neutral-100 text-neutral-500 ${btn.hoverClass}`
                             }`}
                             title={btn.label}
                           >
-                            <btn.icon className="h-5 w-5" />
+                            <btn.icon className="h-4 w-4" />
                           </button>
                         );
                       })}
@@ -182,7 +184,7 @@ export function ExamResultsTable({ exam, results, onSave, isSaving }: ExamResult
                       type="text"
                       value={edited?.feedback || ''}
                       onChange={(e) => handleFeedbackChange(result.student_id, e.target.value)}
-                      className="block w-full rounded-md border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm"
+                      className="block w-full rounded-xl border border-neutral-200 py-1.5 px-3 text-neutral-800 text-sm shadow-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all"
                       placeholder="ملاحظات..."
                     />
                   </td>
@@ -198,7 +200,7 @@ export function ExamResultsTable({ exam, results, onSave, isSaving }: ExamResult
           type="button"
           onClick={handleSubmit}
           disabled={isSaving}
-          className="rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 disabled:opacity-50"
+          className="rounded-xl bg-gradient-to-l from-primary-600 to-primary-500 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:from-primary-700 hover:to-primary-600 transition-all duration-200 disabled:opacity-50"
         >
           {isSaving ? 'جاري الحفظ...' : 'حفظ النتائج'}
         </button>

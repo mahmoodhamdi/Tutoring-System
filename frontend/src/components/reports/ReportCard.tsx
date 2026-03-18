@@ -25,37 +25,61 @@ const reportIcons: Record<string, typeof ClipboardDocumentListIcon> = {
   financial_summary: CurrencyDollarIcon,
 };
 
-const reportColors: Record<string, string> = {
-  attendance: 'bg-blue-50 text-blue-600 border-blue-200',
-  payments: 'bg-green-50 text-green-600 border-green-200',
-  performance: 'bg-purple-50 text-purple-600 border-purple-200',
-  students: 'bg-primary-50 text-primary-600 border-primary-200',
-  sessions: 'bg-yellow-50 text-yellow-600 border-yellow-200',
-  financial_summary: 'bg-red-50 text-red-600 border-red-200',
+const reportColors: Record<string, { icon: string; selected: string; badge: string }> = {
+  attendance: {
+    icon: 'bg-primary-100 text-primary-600',
+    selected: 'border-primary-400 bg-primary-50',
+    badge: 'bg-primary-600',
+  },
+  payments: {
+    icon: 'bg-success-100 text-success-600',
+    selected: 'border-success-400 bg-success-50',
+    badge: 'bg-success-600',
+  },
+  performance: {
+    icon: 'bg-secondary-100 text-secondary-600',
+    selected: 'border-secondary-400 bg-secondary-50',
+    badge: 'bg-secondary-600',
+  },
+  students: {
+    icon: 'bg-primary-100 text-primary-600',
+    selected: 'border-primary-400 bg-primary-50',
+    badge: 'bg-primary-600',
+  },
+  sessions: {
+    icon: 'bg-accent-100 text-accent-600',
+    selected: 'border-accent-400 bg-accent-50',
+    badge: 'bg-accent-600',
+  },
+  financial_summary: {
+    icon: 'bg-error-100 text-error-600',
+    selected: 'border-error-400 bg-error-50',
+    badge: 'bg-error-600',
+  },
 };
 
 export function ReportCard({ report, isSelected, onClick }: ReportCardProps) {
   const Icon = reportIcons[report.id] || ClipboardDocumentListIcon;
-  const colorClass = reportColors[report.id] || reportColors.attendance;
+  const colors = reportColors[report.id] || reportColors.attendance;
 
   return (
     <button
       onClick={onClick}
-      className={`w-full p-4 rounded-lg border-2 text-right transition-all ${
+      className={`w-full p-4 rounded-2xl border-2 text-right transition-all duration-200 ${
         isSelected
-          ? `${colorClass} border-current shadow-md`
-          : 'bg-white border-gray-200 hover:border-gray-300 hover:shadow-sm'
+          ? `${colors.selected} border-current shadow-md`
+          : 'bg-white border-neutral-100 hover:border-neutral-200 hover:shadow-sm'
       }`}
     >
       <div className="flex items-start gap-3">
-        <div className={`p-2 rounded-lg ${isSelected ? colorClass : 'bg-gray-100 text-gray-600'}`}>
-          <Icon className="w-6 h-6" />
+        <div className={`p-2.5 rounded-xl flex-shrink-0 ${isSelected ? colors.icon : 'bg-neutral-100 text-neutral-500'}`}>
+          <Icon className="w-5 h-5" />
         </div>
-        <div className="flex-1">
-          <h3 className={`font-medium ${isSelected ? 'text-gray-900' : 'text-gray-700'}`}>
+        <div className="flex-1 text-right">
+          <h3 className={`font-bold text-sm ${isSelected ? 'text-neutral-900' : 'text-neutral-700'}`}>
             {report.name}
           </h3>
-          <p className="text-sm text-gray-500 mt-1">{report.description}</p>
+          <p className="text-xs text-neutral-500 mt-1 line-clamp-2">{report.description}</p>
         </div>
       </div>
     </button>

@@ -54,15 +54,15 @@ export function NotificationItem({
 }: NotificationItemProps) {
   const content = (
     <div
-      className={`flex items-start gap-3 p-4 rounded-lg transition-colors ${
+      className={`flex items-start gap-3 p-4 transition-all duration-200 ${
         notification.is_read
-          ? 'bg-white hover:bg-gray-50'
+          ? 'bg-white hover:bg-neutral-50'
           : 'bg-primary-50 hover:bg-primary-100'
       }`}
     >
       {/* Icon */}
       <div
-        className={`flex-shrink-0 p-2 rounded-lg ${
+        className={`flex-shrink-0 p-2 rounded-xl ${
           NOTIFICATION_TYPE_COLORS[notification.type]
         }`}
       >
@@ -72,21 +72,21 @@ export function NotificationItem({
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between">
-          <div>
-            <h4 className={`text-sm font-medium ${notification.is_read ? 'text-gray-700' : 'text-gray-900'}`}>
+          <div className="flex-1 min-w-0">
+            <h4 className={`text-sm font-semibold truncate ${notification.is_read ? 'text-neutral-700' : 'text-neutral-900'}`}>
               {notification.title}
             </h4>
             {!compact && (
-              <p className={`mt-1 text-sm ${notification.is_read ? 'text-gray-500' : 'text-gray-600'}`}>
+              <p className={`mt-0.5 text-sm line-clamp-2 ${notification.is_read ? 'text-neutral-500' : 'text-neutral-600'}`}>
                 {notification.message}
               </p>
             )}
           </div>
           {!notification.is_read && (
-            <span className="flex-shrink-0 w-2 h-2 bg-primary-500 rounded-full"></span>
+            <span className="flex-shrink-0 w-2 h-2 bg-primary-500 rounded-full mt-1 mr-2"></span>
           )}
         </div>
-        <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
+        <div className="mt-1 flex items-center gap-2 text-xs text-neutral-400">
           <span>{notification.type_label}</span>
           <span>•</span>
           <span>{formatDate(notification.created_at)}</span>
@@ -112,12 +112,12 @@ export function NotificationItem({
       {wrappedContent}
 
       {/* Actions */}
-      <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+      <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1">
         {notification.is_read ? (
           onMarkAsUnread && (
             <button
               onClick={() => onMarkAsUnread(notification.id)}
-              className="p-1 text-gray-400 hover:text-gray-600 rounded"
+              className="p-1.5 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-lg transition-all duration-200"
               title="تحديد كغير مقروء"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -129,7 +129,7 @@ export function NotificationItem({
           onMarkAsRead && (
             <button
               onClick={() => onMarkAsRead(notification.id)}
-              className="p-1 text-gray-400 hover:text-primary-600 rounded"
+              className="p-1.5 text-neutral-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-200"
               title="تحديد كمقروء"
             >
               <CheckCircleIcon className="w-4 h-4" />
@@ -139,7 +139,7 @@ export function NotificationItem({
         {onDelete && (
           <button
             onClick={() => onDelete(notification.id)}
-            className="p-1 text-gray-400 hover:text-red-600 rounded"
+            className="p-1.5 text-neutral-400 hover:text-error-600 hover:bg-error-50 rounded-lg transition-all duration-200"
             title="حذف"
           >
             <TrashIcon className="w-4 h-4" />

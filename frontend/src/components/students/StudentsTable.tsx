@@ -24,7 +24,7 @@ const SortIcon = ({ field, sortBy, sortOrder }: SortIconProps) => {
   if (sortBy !== field) {
     return (
       <svg
-        className="w-4 h-4 text-gray-400"
+        className="w-4 h-4 text-neutral-400"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -40,7 +40,7 @@ const SortIcon = ({ field, sortBy, sortOrder }: SortIconProps) => {
   }
   return sortOrder === 'asc' ? (
     <svg
-      className="w-4 h-4 text-blue-600"
+      className="w-4 h-4 text-primary-600"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -54,7 +54,7 @@ const SortIcon = ({ field, sortBy, sortOrder }: SortIconProps) => {
     </svg>
   ) : (
     <svg
-      className="w-4 h-4 text-blue-600"
+      className="w-4 h-4 text-primary-600"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -70,9 +70,9 @@ const SortIcon = ({ field, sortBy, sortOrder }: SortIconProps) => {
 };
 
 const statusColors: Record<StudentStatus, string> = {
-  active: 'bg-green-100 text-green-800',
-  inactive: 'bg-gray-100 text-gray-800',
-  suspended: 'bg-red-100 text-red-800',
+  active: 'bg-success-100 text-success-700',
+  inactive: 'bg-neutral-100 text-neutral-600',
+  suspended: 'bg-error-100 text-error-700',
 };
 
 const statusLabels: Record<StudentStatus, string> = {
@@ -106,11 +106,11 @@ export function StudentsTable({
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-xl border border-neutral-100 shadow-sm overflow-hidden">
         <div className="animate-pulse">
-          <div className="h-12 bg-gray-200" />
+          <div className="h-12 bg-neutral-100" />
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-16 bg-gray-100 border-t border-gray-200" />
+            <div key={i} className="h-16 bg-neutral-50 border-t border-neutral-100" />
           ))}
         </div>
       </div>
@@ -119,22 +119,24 @@ export function StudentsTable({
 
   if (students.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-8 text-center">
-        <svg
-          className="mx-auto h-12 w-12 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-          />
-        </svg>
-        <h3 className="mt-2 text-sm font-medium text-gray-900">لا يوجد طلاب</h3>
-        <p className="mt-1 text-sm text-gray-500">
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-8 text-center">
+        <div className="h-16 w-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto">
+          <svg
+            className="h-8 w-8 text-neutral-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+            />
+          </svg>
+        </div>
+        <h3 className="mt-3 text-sm font-semibold text-neutral-900">لا يوجد طلاب</h3>
+        <p className="mt-1 text-sm text-neutral-500">
           ابدأ بإضافة طالب جديد للنظام
         </p>
         <div className="mt-6">
@@ -147,14 +149,14 @@ export function StudentsTable({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="bg-white rounded-xl border border-neutral-100 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-neutral-100">
+          <thead className="bg-neutral-50">
             <tr>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                className="px-6 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer hover:text-neutral-700 transition-colors"
                 onClick={() => handleSort('name')}
               >
                 <div className="flex items-center gap-1">
@@ -164,25 +166,25 @@ export function StudentsTable({
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider"
               >
                 رقم الهاتف
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider"
               >
                 المرحلة الدراسية
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider"
               >
                 الحالة
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                className="px-6 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider cursor-pointer hover:text-neutral-700 transition-colors"
                 onClick={() => handleSort('created_at')}
               >
                 <div className="flex items-center gap-1">
@@ -195,63 +197,64 @@ export function StudentsTable({
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {students.map((student) => (
-              <tr key={student.id} className="hover:bg-gray-50">
+          <tbody className="bg-white divide-y divide-neutral-100">
+            {students.map((student, idx) => (
+              <tr
+                key={student.id}
+                className={`hover:bg-neutral-50 transition-colors ${idx % 2 === 1 ? 'bg-neutral-50/50' : ''}`}
+              >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
-                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                        <span className="text-blue-600 font-medium text-sm">
+                      <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                        <span className="text-primary-600 font-semibold text-sm">
                           {student.name.charAt(0)}
                         </span>
                       </div>
                     </div>
                     <div className="mr-4">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-semibold text-neutral-900">
                         {student.name}
                       </div>
                       {student.email && (
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-neutral-500">
                           {student.email}
                         </div>
                       )}
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
                   {student.phone}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
                   {student.profile?.grade_level || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                    className={`px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                       statusColors[student.profile?.status || 'active']
                     }`}
                   >
                     {statusLabels[student.profile?.status || 'active']}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
                   {student.profile?.enrollment_date
-                    ? new Date(student.profile.enrollment_date).toLocaleDateString(
-                        'ar-EG'
-                      )
+                    ? new Date(student.profile.enrollment_date).toLocaleDateString('ar-EG')
                     : '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <Link
                       href={`/dashboard/students/${student.id}`}
-                      className="text-blue-600 hover:text-blue-900"
+                      className="text-primary-600 hover:text-primary-800 font-medium transition-colors"
                     >
                       عرض
                     </Link>
                     <Link
                       href={`/dashboard/students/${student.id}/edit`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      className="text-neutral-600 hover:text-neutral-900 transition-colors"
                     >
                       تعديل
                     </Link>
@@ -259,13 +262,13 @@ export function StudentsTable({
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => handleDelete(student.id)}
-                          className="text-red-600 hover:text-red-900"
+                          className="text-error-600 hover:text-error-800 font-medium transition-colors"
                         >
                           تأكيد
                         </button>
                         <button
                           onClick={() => setDeleteId(null)}
-                          className="text-gray-600 hover:text-gray-900"
+                          className="text-neutral-600 hover:text-neutral-900 transition-colors"
                         >
                           إلغاء
                         </button>
@@ -273,7 +276,7 @@ export function StudentsTable({
                     ) : (
                       <button
                         onClick={() => setDeleteId(student.id)}
-                        className="text-red-600 hover:text-red-900"
+                        className="text-error-600 hover:text-error-800 transition-colors"
                       >
                         حذف
                       </button>

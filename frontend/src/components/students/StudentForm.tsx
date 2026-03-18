@@ -49,6 +49,12 @@ const gradeLevels = [
   'الصف الثاني عشر',
 ];
 
+const selectClass =
+  'w-full px-3 py-2 border border-neutral-200 bg-white rounded-xl text-neutral-800 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200';
+
+const textareaClass =
+  'w-full px-3 py-2 border border-neutral-200 bg-white rounded-xl text-neutral-800 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200';
+
 export function StudentForm({ student, onSubmit, isLoading = false }: StudentFormProps) {
   const isEdit = !!student;
 
@@ -86,10 +92,10 @@ export function StudentForm({ student, onSubmit, isLoading = false }: StudentFor
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-8">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       {/* Basic Information */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">المعلومات الأساسية</h3>
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+        <h3 className="text-base font-bold text-neutral-900 mb-6">المعلومات الأساسية</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input
             label="الاسم *"
@@ -122,36 +128,30 @@ export function StudentForm({ student, onSubmit, isLoading = false }: StudentFor
             error={errors.date_of_birth?.message}
           />
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               الجنس
             </label>
-            <select
-              {...register('gender')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            >
+            <select {...register('gender')} className={selectClass}>
               <option value="">اختر الجنس</option>
               <option value="male">ذكر</option>
               <option value="female">أنثى</option>
             </select>
             {errors.gender && (
-              <p className="mt-1 text-sm text-red-600">{errors.gender.message}</p>
+              <p className="mt-1 text-sm text-error-600">{errors.gender.message}</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Student Profile */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">معلومات الطالب</h3>
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+        <h3 className="text-base font-bold text-neutral-900 mb-6">معلومات الطالب</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               المرحلة الدراسية
             </label>
-            <select
-              {...register('grade_level')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            >
+            <select {...register('grade_level')} className={selectClass}>
               <option value="">اختر المرحلة</option>
               {gradeLevels.map((level) => (
                 <option key={level} value={level}>
@@ -172,37 +172,34 @@ export function StudentForm({ student, onSubmit, isLoading = false }: StudentFor
             error={errors.enrollment_date?.message}
           />
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               الحالة
             </label>
-            <select
-              {...register('status')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            >
+            <select {...register('status')} className={selectClass}>
               <option value="active">نشط</option>
               <option value="inactive">غير نشط</option>
               <option value="suspended">معلق</option>
             </select>
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               العنوان
             </label>
             <textarea
               {...register('address')}
               rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className={textareaClass}
             />
             {errors.address && (
-              <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>
+              <p className="mt-1 text-sm text-error-600">{errors.address.message}</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Emergency Contact */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">جهة الاتصال الطارئة</h3>
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+        <h3 className="text-base font-bold text-neutral-900 mb-6">جهة الاتصال الطارئة</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input
             label="الاسم"
@@ -218,32 +215,30 @@ export function StudentForm({ student, onSubmit, isLoading = false }: StudentFor
       </div>
 
       {/* Notes */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">ملاحظات</h3>
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+        <h3 className="text-base font-bold text-neutral-900 mb-4">ملاحظات</h3>
         <textarea
           {...register('notes')}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className={textareaClass}
           placeholder="أضف أي ملاحظات إضافية عن الطالب..."
         />
         {errors.notes && (
-          <p className="mt-1 text-sm text-red-600">{errors.notes.message}</p>
+          <p className="mt-1 text-sm text-error-600">{errors.notes.message}</p>
         )}
       </div>
 
       {/* Account Status */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <div className="flex items-center">
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+        <label className="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"
             {...register('is_active')}
             id="is_active"
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-neutral-300 rounded"
           />
-          <label htmlFor="is_active" className="mr-2 block text-sm text-gray-900">
-            الحساب نشط
-          </label>
-        </div>
+          <span className="text-sm font-medium text-neutral-800">الحساب نشط</span>
+        </label>
       </div>
 
       {/* Submit */}

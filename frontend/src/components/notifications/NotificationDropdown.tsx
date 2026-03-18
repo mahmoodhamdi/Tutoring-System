@@ -53,11 +53,11 @@ export function NotificationDropdown() {
       {/* Bell Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+        className="relative p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all duration-200"
       >
         <BellIcon className="w-6 h-6" />
         {unreadCount && unreadCount > 0 && (
-          <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-500 rounded-full">
+          <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-error-500 rounded-full shadow-sm">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -65,14 +65,14 @@ export function NotificationDropdown() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+        <div className="absolute left-0 mt-2 w-96 bg-white rounded-2xl shadow-xl border border-neutral-100 z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-            <h3 className="font-semibold text-gray-900">الإشعارات</h3>
+          <div className="flex items-center justify-between px-4 py-3.5 border-b border-neutral-100 bg-neutral-50">
+            <h3 className="font-bold text-neutral-900">الإشعارات</h3>
             {unreadCount && unreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700"
+                className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
               >
                 <CheckIcon className="w-4 h-4" />
                 تحديد الكل كمقروء
@@ -83,9 +83,9 @@ export function NotificationDropdown() {
           {/* Notifications List */}
           <div className="max-h-96 overflow-y-auto">
             {isLoading ? (
-              <div className="p-4 text-center text-gray-500">جاري التحميل...</div>
+              <div className="p-6 text-center text-neutral-500 text-sm">جاري التحميل...</div>
             ) : notifications && notifications.length > 0 ? (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-neutral-100">
                 {notifications.map((notification) => (
                   <div key={notification.id} onClick={() => setIsOpen(false)}>
                     <NotificationItem
@@ -97,19 +97,21 @@ export function NotificationDropdown() {
                 ))}
               </div>
             ) : (
-              <div className="p-8 text-center text-gray-500">
-                <BellIcon className="w-12 h-12 mx-auto text-gray-300 mb-2" />
-                <p>لا توجد إشعارات</p>
+              <div className="p-10 text-center text-neutral-500">
+                <div className="h-12 w-12 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <BellIcon className="w-6 h-6 text-neutral-400" />
+                </div>
+                <p className="text-sm">لا توجد إشعارات</p>
               </div>
             )}
           </div>
 
           {/* Footer */}
-          <div className="px-4 py-3 border-t border-gray-200">
+          <div className="px-4 py-3 border-t border-neutral-100 bg-neutral-50">
             <Link
               href="/dashboard/notifications"
               onClick={() => setIsOpen(false)}
-              className="block text-center text-sm text-primary-600 hover:text-primary-700 font-medium"
+              className="block text-center text-sm text-primary-600 hover:text-primary-700 font-semibold transition-colors"
             >
               عرض جميع الإشعارات
             </Link>

@@ -69,25 +69,31 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
   };
 
   if (!currentQuestion) {
-    return <div className="text-center py-8">لا توجد أسئلة في هذا الاختبار</div>;
+    return (
+      <div className="text-center py-8 bg-white rounded-2xl border border-neutral-100 shadow-sm">
+        <p className="text-neutral-500">لا توجد أسئلة في هذا الاختبار</p>
+      </div>
+    );
   }
 
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header with timer */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4 mb-6 shadow-sm">
+      <div className="sticky top-0 z-10 bg-white border-b border-neutral-100 p-4 mb-6 shadow-sm rounded-b-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h2 className="font-semibold text-gray-900">{attempt.quiz?.title}</h2>
-            <span className="text-sm text-gray-500">
+            <h2 className="font-bold text-neutral-900">{attempt.quiz?.title}</h2>
+            <span className="text-sm text-neutral-500">
               سؤال {currentQuestionIndex + 1} من {questions.length}
             </span>
           </div>
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-            timeRemaining < 300 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium ${
+            timeRemaining < 300
+              ? 'bg-error-100 text-error-700'
+              : 'bg-neutral-100 text-neutral-700'
           }`}>
             <ClockIcon className="w-5 h-5" />
-            <span className="font-mono font-medium">{formatTime(timeRemaining)}</span>
+            <span className="font-mono">{formatTime(timeRemaining)}</span>
           </div>
         </div>
 
@@ -98,33 +104,33 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
               <button
                 key={q.id}
                 onClick={() => setCurrentQuestionIndex(index)}
-                className={`flex-1 h-2 rounded-full transition-colors ${
+                className={`flex-1 h-2 rounded-full transition-all duration-200 ${
                   index === currentQuestionIndex
                     ? 'bg-primary-600'
                     : isQuestionAnswered(q.id)
-                    ? 'bg-green-500'
-                    : 'bg-gray-200'
+                      ? 'bg-success-500'
+                      : 'bg-neutral-200'
                 }`}
                 title={`سؤال ${index + 1}`}
               />
             ))}
           </div>
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-neutral-500 mt-2">
             {getAnsweredCount()} من {questions.length} أسئلة تمت الإجابة عليها
           </p>
         </div>
       </div>
 
       {/* Question Card */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6 mb-6">
         <div className="flex items-start justify-between mb-4">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-100 text-primary-700">
             {currentQuestion.question_type_label}
           </span>
-          <span className="text-sm text-gray-500">{currentQuestion.marks} درجة</span>
+          <span className="text-sm text-neutral-500 font-medium">{currentQuestion.marks} درجة</span>
         </div>
 
-        <h3 className="text-lg font-medium text-gray-900 mb-6">{currentQuestion.question_text}</h3>
+        <h3 className="text-base font-bold text-neutral-900 mb-6">{currentQuestion.question_text}</h3>
 
         {/* Answer Options */}
         {(currentQuestion.question_type === 'multiple_choice' || currentQuestion.question_type === 'true_false') && (
@@ -132,10 +138,10 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
             {currentQuestion.options?.map((option) => (
               <label
                 key={option.id}
-                className={`flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
+                className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${
                   answers[currentQuestion.id]?.selected_option_id === option.id
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-gray-200 hover:bg-gray-50'
+                    ? 'border-primary-400 bg-primary-50 shadow-sm'
+                    : 'border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300'
                 }`}
               >
                 <input
@@ -143,9 +149,9 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
                   name={`question_${currentQuestion.id}`}
                   checked={answers[currentQuestion.id]?.selected_option_id === option.id}
                   onChange={() => handleAnswerChange(currentQuestion.id, { selected_option_id: option.id })}
-                  className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+                  className="w-4 h-4 text-primary-600 border-neutral-300 focus:ring-primary-500"
                 />
-                <span className="text-gray-700">{option.option_text}</span>
+                <span className="text-neutral-700">{option.option_text}</span>
               </label>
             ))}
           </div>
@@ -156,7 +162,7 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
             type="text"
             value={answers[currentQuestion.id]?.answer_text || ''}
             onChange={(e) => handleAnswerChange(currentQuestion.id, { answer_text: e.target.value })}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-3 border border-neutral-200 rounded-xl bg-white text-neutral-800 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200"
             placeholder="اكتب إجابتك هنا..."
           />
         )}
@@ -166,7 +172,7 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
             value={answers[currentQuestion.id]?.answer_text || ''}
             onChange={(e) => handleAnswerChange(currentQuestion.id, { answer_text: e.target.value })}
             rows={6}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-3 border border-neutral-200 rounded-xl bg-white text-neutral-800 shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200"
             placeholder="اكتب إجابتك هنا..."
           />
         )}
@@ -177,7 +183,7 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
         <button
           onClick={() => setCurrentQuestionIndex((prev) => Math.max(0, prev - 1))}
           disabled={currentQuestionIndex === 0}
-          className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-5 py-2 text-neutral-700 bg-white border border-neutral-200 rounded-xl hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
         >
           السابق
         </button>
@@ -186,14 +192,14 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
           {currentQuestionIndex < questions.length - 1 ? (
             <button
               onClick={() => setCurrentQuestionIndex((prev) => Math.min(questions.length - 1, prev + 1))}
-              className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+              className="px-6 py-2 bg-gradient-to-l from-primary-600 to-primary-500 text-white rounded-xl hover:from-primary-700 hover:to-primary-600 transition-all duration-200 font-semibold shadow-sm"
             >
               التالي
             </button>
           ) : (
             <button
               onClick={() => setShowConfirmSubmit(true)}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="px-6 py-2 bg-gradient-to-l from-success-600 to-success-500 text-white rounded-xl hover:from-success-700 hover:to-success-600 transition-all duration-200 font-semibold shadow-sm"
             >
               تسليم الاختبار
             </button>
@@ -202,19 +208,19 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
       </div>
 
       {/* Questions Navigator */}
-      <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-        <h4 className="text-sm font-medium text-gray-700 mb-3">الانتقال السريع</h4>
+      <div className="mt-8 bg-white rounded-2xl border border-neutral-100 shadow-sm p-5">
+        <h4 className="text-sm font-bold text-neutral-700 mb-4">الانتقال السريع</h4>
         <div className="flex flex-wrap gap-2">
           {questions.map((q, index) => (
             <button
               key={q.id}
               onClick={() => setCurrentQuestionIndex(index)}
-              className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
+              className={`w-10 h-10 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 index === currentQuestionIndex
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-gradient-to-b from-primary-600 to-primary-500 text-white shadow-md'
                   : isQuestionAnswered(q.id)
-                  ? 'bg-green-100 text-green-700 border border-green-300'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-success-100 text-success-700 border border-success-200'
+                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
               }`}
             >
               {index + 1}
@@ -225,18 +231,22 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
 
       {/* Confirm Submit Modal */}
       {showConfirmSubmit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4 border border-neutral-100">
             <div className="flex items-center gap-3 mb-4">
               {getAnsweredCount() < questions.length ? (
-                <ExclamationTriangleIcon className="w-8 h-8 text-yellow-500" />
+                <div className="h-10 w-10 bg-accent-100 rounded-full flex items-center justify-center">
+                  <ExclamationTriangleIcon className="w-6 h-6 text-accent-500" />
+                </div>
               ) : (
-                <CheckCircleIcon className="w-8 h-8 text-green-500" />
+                <div className="h-10 w-10 bg-success-100 rounded-full flex items-center justify-center">
+                  <CheckCircleIcon className="w-6 h-6 text-success-500" />
+                </div>
               )}
-              <h3 className="text-lg font-semibold text-gray-900">تأكيد التسليم</h3>
+              <h3 className="text-lg font-bold text-neutral-900">تأكيد التسليم</h3>
             </div>
 
-            <p className="text-gray-600 mb-4">
+            <p className="text-neutral-600 mb-5">
               {getAnsweredCount() < questions.length ? (
                 <>
                   لم تجب على جميع الأسئلة. لقد أجبت على {getAnsweredCount()} من {questions.length} سؤال.
@@ -251,7 +261,7 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowConfirmSubmit(false)}
-                className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-4 py-2 text-neutral-700 bg-white border border-neutral-200 rounded-xl hover:bg-neutral-50 font-medium transition-all duration-200"
               >
                 إلغاء
               </button>
@@ -261,7 +271,7 @@ export function QuizTaker({ attempt, onSubmit, isSubmitting }: QuizTakerProps) {
                   handleSubmit();
                 }}
                 disabled={isSubmitting}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                className="px-4 py-2 bg-gradient-to-l from-success-600 to-success-500 text-white rounded-xl hover:from-success-700 hover:to-success-600 disabled:opacity-50 font-semibold transition-all duration-200"
               >
                 {isSubmitting ? 'جاري التسليم...' : 'تسليم الاختبار'}
               </button>

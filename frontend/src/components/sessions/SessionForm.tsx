@@ -24,6 +24,14 @@ interface SessionFormProps {
   isSubmitting?: boolean;
 }
 
+const inputClass =
+  'block w-full rounded-xl border border-neutral-200 bg-white py-2 px-3 text-neutral-800 text-sm shadow-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200';
+
+const selectClass =
+  'block w-full rounded-xl border border-neutral-200 bg-white py-2 px-3 text-neutral-800 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200';
+
+const labelClass = 'block text-sm font-medium text-neutral-700 mb-1';
+
 export function SessionForm({ session, onSubmit, isSubmitting }: SessionFormProps) {
   const { data: groupsData } = useGroups({ is_active: true });
 
@@ -57,144 +65,130 @@ export function SessionForm({ session, onSubmit, isSubmitting }: SessionFormProp
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-      <div className="bg-white shadow-sm ring-1 ring-gray-900/5 rounded-xl">
-        <div className="px-4 py-6 sm:p-8">
-          <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm">
+        <div className="px-6 py-6">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div className="sm:col-span-3">
-              <label htmlFor="group_id" className="block text-sm font-medium text-gray-900">
-                المجموعة <span className="text-red-500">*</span>
+              <label htmlFor="group_id" className={labelClass}>
+                المجموعة <span className="text-error-500">*</span>
               </label>
-              <div className="mt-2">
-                <select
-                  id="group_id"
-                  {...register('group_id', { valueAsNumber: true })}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                >
-                  <option value={0}>اختر المجموعة</option>
-                  {groupsData?.data.map((group) => (
-                    <option key={group.id} value={group.id}>
-                      {group.name}
-                    </option>
-                  ))}
-                </select>
-                {errors.group_id && (
-                  <p className="mt-2 text-sm text-red-600">{errors.group_id.message}</p>
-                )}
-              </div>
+              <select
+                id="group_id"
+                {...register('group_id', { valueAsNumber: true })}
+                className={selectClass}
+              >
+                <option value={0}>اختر المجموعة</option>
+                {groupsData?.data.map((group) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
+                  </option>
+                ))}
+              </select>
+              {errors.group_id && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.group_id.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-900">
-                عنوان الجلسة <span className="text-red-500">*</span>
+              <label htmlFor="title" className={labelClass}>
+                عنوان الجلسة <span className="text-error-500">*</span>
               </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  id="title"
-                  {...register('title')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                  placeholder="مثال: مراجعة الفصل الأول"
-                />
-                {errors.title && (
-                  <p className="mt-2 text-sm text-red-600">{errors.title.message}</p>
-                )}
-              </div>
+              <input
+                type="text"
+                id="title"
+                {...register('title')}
+                className={inputClass}
+                placeholder="مثال: مراجعة الفصل الأول"
+              />
+              {errors.title && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.title.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="scheduled_at" className="block text-sm font-medium text-gray-900">
-                التاريخ والوقت <span className="text-red-500">*</span>
+              <label htmlFor="scheduled_at" className={labelClass}>
+                التاريخ والوقت <span className="text-error-500">*</span>
               </label>
-              <div className="mt-2">
-                <input
-                  type="datetime-local"
-                  id="scheduled_at"
-                  {...register('scheduled_at')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                />
-                {errors.scheduled_at && (
-                  <p className="mt-2 text-sm text-red-600">{errors.scheduled_at.message}</p>
-                )}
-              </div>
+              <input
+                type="datetime-local"
+                id="scheduled_at"
+                {...register('scheduled_at')}
+                className={inputClass}
+              />
+              {errors.scheduled_at && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.scheduled_at.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="duration_minutes" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="duration_minutes" className={labelClass}>
                 المدة (بالدقائق)
               </label>
-              <div className="mt-2">
-                <input
-                  type="number"
-                  id="duration_minutes"
-                  {...register('duration_minutes', { valueAsNumber: true })}
-                  min={15}
-                  max={480}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                />
-                {errors.duration_minutes && (
-                  <p className="mt-2 text-sm text-red-600">{errors.duration_minutes.message}</p>
-                )}
-              </div>
+              <input
+                type="number"
+                id="duration_minutes"
+                {...register('duration_minutes', { valueAsNumber: true })}
+                min={15}
+                max={480}
+                className={inputClass}
+              />
+              {errors.duration_minutes && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.duration_minutes.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="location" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="location" className={labelClass}>
                 المكان
               </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  id="location"
-                  {...register('location')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                  placeholder="مثال: القاعة 1"
-                />
-              </div>
+              <input
+                type="text"
+                id="location"
+                {...register('location')}
+                className={inputClass}
+                placeholder="مثال: القاعة 1"
+              />
             </div>
 
             <div className="col-span-full">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="description" className={labelClass}>
                 الوصف
               </label>
-              <div className="mt-2">
-                <textarea
-                  id="description"
-                  rows={3}
-                  {...register('description')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                  placeholder="وصف مختصر للجلسة..."
-                />
-              </div>
+              <textarea
+                id="description"
+                rows={3}
+                {...register('description')}
+                className={inputClass}
+                placeholder="وصف مختصر للجلسة..."
+              />
             </div>
 
             <div className="col-span-full">
-              <label htmlFor="notes" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="notes" className={labelClass}>
                 ملاحظات
               </label>
-              <div className="mt-2">
-                <textarea
-                  id="notes"
-                  rows={2}
-                  {...register('notes')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                />
-              </div>
+              <textarea
+                id="notes"
+                rows={2}
+                {...register('notes')}
+                className={inputClass}
+              />
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+        <div className="flex items-center justify-end gap-x-4 border-t border-neutral-100 px-6 py-4">
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="text-sm font-semibold text-gray-900"
+            className="text-sm font-semibold text-neutral-600 hover:text-neutral-900 transition-colors"
           >
             إلغاء
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 disabled:opacity-50"
+            className="rounded-xl bg-gradient-to-l from-primary-600 to-primary-500 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:from-primary-700 hover:to-primary-600 transition-all duration-200 disabled:opacity-50"
           >
             {isSubmitting ? 'جاري الحفظ...' : session ? 'تحديث' : 'إنشاء'}
           </button>

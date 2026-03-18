@@ -17,45 +17,50 @@ export function StudentStats({ data }: StudentStatsProps) {
   });
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">الطلاب</h3>
+    <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6 animate-fade-in">
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="text-lg font-extrabold text-neutral-900">الطلاب</h3>
         <Link
           href="/dashboard/students"
-          className="text-sm text-primary-600 hover:text-primary-700"
+          className="text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors duration-150"
         >
           عرض الكل
         </Link>
       </div>
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        <div className="text-center p-3 bg-green-50 rounded-lg">
-          <p className="text-2xl font-bold text-green-600">{data.active}</p>
-          <p className="text-xs text-green-700">نشط</p>
+      <div className="grid grid-cols-3 gap-3 mb-6 stagger-children">
+        <div className="text-center p-3 bg-secondary-50 rounded-xl border border-secondary-100/60 transition-all duration-200 hover:shadow-sm">
+          <p className="text-2xl font-extrabold text-secondary-600">{data.active}</p>
+          <p className="text-xs font-semibold text-secondary-700 mt-0.5">نشط</p>
         </div>
-        <div className="text-center p-3 bg-gray-50 rounded-lg">
-          <p className="text-2xl font-bold text-gray-600">{data.inactive}</p>
-          <p className="text-xs text-gray-700">غير نشط</p>
+        <div className="text-center p-3 bg-neutral-100 rounded-xl border border-neutral-200/60 transition-all duration-200 hover:shadow-sm">
+          <p className="text-2xl font-extrabold text-neutral-600">{data.inactive}</p>
+          <p className="text-xs font-semibold text-neutral-500 mt-0.5">غير نشط</p>
         </div>
-        <div className="text-center p-3 bg-blue-50 rounded-lg">
-          <p className="text-2xl font-bold text-blue-600">{data.new}</p>
-          <p className="text-xs text-blue-700">جديد</p>
+        <div className="text-center p-3 bg-info-50 rounded-xl border border-info-100/60 transition-all duration-200 hover:shadow-sm">
+          <p className="text-2xl font-extrabold text-info-600">{data.new}</p>
+          <p className="text-xs font-semibold text-info-600 mt-0.5">جديد</p>
         </div>
       </div>
 
       {/* By Group */}
       {data.by_group.length > 0 && (
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-700 mb-3">حسب المجموعة</h4>
+        <div className="mb-5">
+          <h4 className="text-sm font-semibold text-neutral-600 mb-3">حسب المجموعة</h4>
           <div className="space-y-2">
             {data.by_group.slice(0, 5).map((group, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <div className="p-1.5 bg-primary-50 rounded">
+              <div
+                key={index}
+                className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-neutral-50 transition-colors duration-150"
+              >
+                <div className="p-1.5 bg-primary-50 rounded-lg shrink-0">
                   <UserGroupIcon className="w-4 h-4 text-primary-600" />
                 </div>
-                <span className="flex-1 text-sm text-gray-600 truncate">{group.name}</span>
-                <span className="text-sm font-medium text-gray-900">{group.count}</span>
+                <span className="flex-1 text-sm text-neutral-600 truncate">{group.name}</span>
+                <span className="text-sm font-semibold text-neutral-800 bg-neutral-100 px-2.5 py-0.5 rounded-lg shrink-0">
+                  {group.count}
+                </span>
               </div>
             ))}
           </div>
@@ -65,17 +70,17 @@ export function StudentStats({ data }: StudentStatsProps) {
       {/* By Grade */}
       {gradeEntries.length > 0 && (
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-3">حسب المرحلة الدراسية</h4>
+          <h4 className="text-sm font-semibold text-neutral-600 mb-3">حسب المرحلة الدراسية</h4>
           <div className="grid grid-cols-2 gap-2">
             {gradeEntries.slice(0, 6).map(([grade, count]) => (
               <div
                 key={grade}
-                className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
+                className="flex items-center justify-between p-2.5 bg-neutral-50 rounded-xl border border-neutral-100 hover:bg-primary-50/40 hover:border-primary-100 transition-all duration-150"
               >
-                <span className="text-xs text-gray-600">
+                <span className="text-xs font-medium text-neutral-600">
                   {GRADE_LEVEL_LABELS[grade] || grade}
                 </span>
-                <span className="text-sm font-medium text-gray-900">{count as number}</span>
+                <span className="text-sm font-semibold text-neutral-800">{count as number}</span>
               </div>
             ))}
           </div>

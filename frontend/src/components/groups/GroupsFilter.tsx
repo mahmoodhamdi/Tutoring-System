@@ -36,6 +36,9 @@ const GRADE_LEVELS = [
   'الصف الثالث الثانوي',
 ];
 
+const selectClass =
+  'mt-1 block w-full rounded-xl border border-neutral-200 bg-white py-2 pr-3 pl-3 text-sm text-neutral-800 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-200';
+
 export function GroupsFilter({ filters, onFilterChange }: GroupsFilterProps) {
   const [search, setSearch] = useState(filters.search || '');
   const [showFilters, setShowFilters] = useState(false);
@@ -75,29 +78,29 @@ export function GroupsFilter({ filters, onFilterChange }: GroupsFilterProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+            <MagnifyingGlassIcon className="h-5 w-5 text-neutral-400" />
           </div>
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+            className="block w-full rounded-xl border border-neutral-200 bg-white py-2 pr-10 pl-3 text-neutral-800 text-sm shadow-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200"
             placeholder="البحث في المجموعات..."
           />
         </div>
         <button
           type="button"
           onClick={() => setShowFilters(!showFilters)}
-          className={`inline-flex items-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ${
+          className={`inline-flex items-center gap-x-1.5 rounded-xl px-4 py-2 text-sm font-semibold shadow-sm border transition-all duration-200 ${
             hasActiveFilters
-              ? 'bg-primary-50 text-primary-700 ring-primary-300'
-              : 'bg-white text-gray-900 ring-gray-300 hover:bg-gray-50'
+              ? 'bg-primary-50 text-primary-700 border-primary-300 hover:bg-primary-100'
+              : 'bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-50'
           }`}
         >
-          <FunnelIcon className="h-5 w-5" />
+          <FunnelIcon className="h-4 w-4" />
           تصفية
           {hasActiveFilters && (
             <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-primary-600 rounded-full">
@@ -108,17 +111,17 @@ export function GroupsFilter({ filters, onFilterChange }: GroupsFilterProps) {
       </div>
 
       {showFilters && (
-        <div className="bg-gray-50 rounded-lg p-4 space-y-4">
+        <div className="bg-neutral-50 rounded-xl border border-neutral-100 p-4 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label htmlFor="filter-subject" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="filter-subject" className="block text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                 المادة
               </label>
               <select
                 id="filter-subject"
                 value={filters.subject || ''}
                 onChange={(e) => handleSubjectChange(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 py-2 pr-3 pl-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
+                className={selectClass}
               >
                 <option value="">الكل</option>
                 {SUBJECTS.map((subject) => (
@@ -130,14 +133,14 @@ export function GroupsFilter({ filters, onFilterChange }: GroupsFilterProps) {
             </div>
 
             <div>
-              <label htmlFor="filter-grade" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="filter-grade" className="block text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                 المرحلة الدراسية
               </label>
               <select
                 id="filter-grade"
                 value={filters.grade_level || ''}
                 onChange={(e) => handleGradeLevelChange(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 py-2 pr-3 pl-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
+                className={selectClass}
               >
                 <option value="">الكل</option>
                 {GRADE_LEVELS.map((level) => (
@@ -149,14 +152,14 @@ export function GroupsFilter({ filters, onFilterChange }: GroupsFilterProps) {
             </div>
 
             <div>
-              <label htmlFor="filter-active" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="filter-active" className="block text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                 الحالة
               </label>
               <select
                 id="filter-active"
                 value={filters.is_active === undefined ? '' : String(filters.is_active)}
                 onChange={(e) => handleActiveChange(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 py-2 pr-3 pl-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
+                className={selectClass}
               >
                 <option value="">الكل</option>
                 <option value="true">نشطة</option>
@@ -170,7 +173,7 @@ export function GroupsFilter({ filters, onFilterChange }: GroupsFilterProps) {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex items-center gap-x-1 text-sm text-gray-600 hover:text-gray-900"
+                className="inline-flex items-center gap-x-1 text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
               >
                 <XMarkIcon className="h-4 w-4" />
                 مسح التصفية

@@ -18,14 +18,16 @@ export function SessionsList({
 }: SessionsListProps) {
   if (sessions.length === 0) {
     return (
-      <div className="text-center py-12">
-        <CalendarIcon className="mx-auto h-12 w-12 text-gray-400" />
-        <h3 className="mt-2 text-sm font-semibold text-gray-900">{emptyMessage}</h3>
-        <p className="mt-1 text-sm text-gray-500">ابدأ بإنشاء جلسة جديدة</p>
+      <div className="text-center py-14">
+        <div className="h-16 w-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto">
+          <CalendarIcon className="h-8 w-8 text-neutral-400" />
+        </div>
+        <h3 className="mt-3 text-sm font-semibold text-neutral-900">{emptyMessage}</h3>
+        <p className="mt-1 text-sm text-neutral-500">ابدأ بإنشاء جلسة جديدة</p>
         <div className="mt-6">
           <Link
             href="/dashboard/schedule/new"
-            className="inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500"
+            className="inline-flex items-center rounded-xl bg-gradient-to-l from-primary-600 to-primary-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:from-primary-700 hover:to-primary-600 transition-all duration-200"
           >
             إنشاء جلسة
           </Link>

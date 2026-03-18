@@ -27,59 +27,66 @@ export function AttendanceStats({ summary }: AttendanceStatsProps) {
       label: 'حاضر',
       value: summary.present,
       icon: CheckCircleIcon,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100',
+      color: 'text-success-600',
+      bgColor: 'bg-success-100',
+      borderColor: 'border-success-200',
     },
     {
       label: 'غائب',
       value: summary.absent,
       icon: XCircleIcon,
-      color: 'text-red-600',
-      bgColor: 'bg-red-100',
+      color: 'text-error-600',
+      bgColor: 'bg-error-100',
+      borderColor: 'border-error-200',
     },
     {
       label: 'متأخر',
       value: summary.late,
       icon: ClockIcon,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-100',
+      color: 'text-accent-600',
+      bgColor: 'bg-accent-100',
+      borderColor: 'border-accent-200',
     },
     {
       label: 'معذور',
       value: summary.excused,
       icon: ExclamationCircleIcon,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100',
+      color: 'text-primary-600',
+      bgColor: 'bg-primary-100',
+      borderColor: 'border-primary-200',
     },
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">إحصائيات الحضور</h3>
-        <div className="text-2xl font-bold text-primary-600">{attendanceRate}%</div>
+    <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="text-base font-bold text-neutral-900">إحصائيات الحضور</h3>
+        <div className="text-2xl font-extrabold text-primary-600">{attendanceRate}%</div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {stats.map((stat) => (
-          <div key={stat.label} className={`${stat.bgColor} rounded-lg p-3`}>
-            <div className="flex items-center">
-              <stat.icon className={`h-5 w-5 ${stat.color}`} />
-              <span className="mr-2 text-sm font-medium text-gray-700">{stat.label}</span>
+          <div
+            key={stat.label}
+            className={`${stat.bgColor} border ${stat.borderColor} rounded-xl p-3 transition-all duration-200`}
+          >
+            <div className="flex items-center gap-2">
+              <stat.icon className={`h-5 w-5 ${stat.color} flex-shrink-0`} />
+              <span className="text-sm font-semibold text-neutral-700">{stat.label}</span>
             </div>
-            <div className={`mt-1 text-2xl font-bold ${stat.color}`}>{stat.value}</div>
+            <div className={`mt-1.5 text-2xl font-extrabold ${stat.color}`}>{stat.value}</div>
           </div>
         ))}
       </div>
 
-      <div className="mt-4">
-        <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
-          <span>نسبة الحضور</span>
-          <span>{summary.present + summary.late} من {summary.total}</span>
+      <div className="mt-5">
+        <div className="flex items-center justify-between text-sm text-neutral-600 mb-2">
+          <span className="font-medium">نسبة الحضور</span>
+          <span className="font-semibold text-neutral-800">{summary.present + summary.late} من {summary.total}</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-3">
+        <div className="w-full bg-neutral-100 rounded-full h-3">
           <div
-            className="bg-green-500 h-3 rounded-full transition-all"
+            className="bg-gradient-to-l from-success-500 to-success-400 h-3 rounded-full transition-all duration-500"
             style={{ width: `${attendanceRate}%` }}
           />
         </div>

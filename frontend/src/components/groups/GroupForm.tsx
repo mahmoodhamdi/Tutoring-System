@@ -58,6 +58,14 @@ const GRADE_LEVELS = [
   'الصف الثالث الثانوي',
 ];
 
+const inputClass =
+  'block w-full rounded-xl border border-neutral-200 bg-white py-2 px-3 text-neutral-800 text-sm shadow-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200';
+
+const selectClass =
+  'block w-full rounded-xl border border-neutral-200 bg-white py-2 px-3 text-neutral-800 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200';
+
+const labelClass = 'block text-sm font-medium text-neutral-700 mb-1';
+
 export function GroupForm({ group, onSubmit, isSubmitting }: GroupFormProps) {
   const {
     register,
@@ -89,184 +97,157 @@ export function GroupForm({ group, onSubmit, isSubmitting }: GroupFormProps) {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-      <div className="bg-white shadow-sm ring-1 ring-gray-900/5 rounded-xl">
-        <div className="px-4 py-6 sm:p-8">
-          <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm">
+        <div className="px-6 py-6">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div className="sm:col-span-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-900">
-                اسم المجموعة <span className="text-red-500">*</span>
+              <label htmlFor="name" className={labelClass}>
+                اسم المجموعة <span className="text-error-500">*</span>
               </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  id="name"
-                  {...register('name')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                  placeholder="مثال: الرياضيات - الصف الثالث الثانوي"
-                />
-                {errors.name && (
-                  <p className="mt-2 text-sm text-red-600">{errors.name.message}</p>
-                )}
-              </div>
+              <input
+                type="text"
+                id="name"
+                {...register('name')}
+                className={inputClass}
+                placeholder="مثال: الرياضيات - الصف الثالث الثانوي"
+              />
+              {errors.name && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.name.message}</p>
+              )}
             </div>
 
             <div className="col-span-full">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="description" className={labelClass}>
                 الوصف
               </label>
-              <div className="mt-2">
-                <textarea
-                  id="description"
-                  rows={3}
-                  {...register('description')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                  placeholder="وصف مختصر للمجموعة..."
-                />
-                {errors.description && (
-                  <p className="mt-2 text-sm text-red-600">{errors.description.message}</p>
-                )}
-              </div>
+              <textarea
+                id="description"
+                rows={3}
+                {...register('description')}
+                className={inputClass}
+                placeholder="وصف مختصر للمجموعة..."
+              />
+              {errors.description && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.description.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="subject" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="subject" className={labelClass}>
                 المادة
               </label>
-              <div className="mt-2">
-                <select
-                  id="subject"
-                  {...register('subject')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                >
-                  <option value="">اختر المادة</option>
-                  {SUBJECTS.map((subject) => (
-                    <option key={subject} value={subject}>
-                      {subject}
-                    </option>
-                  ))}
-                </select>
-                {errors.subject && (
-                  <p className="mt-2 text-sm text-red-600">{errors.subject.message}</p>
-                )}
-              </div>
+              <select id="subject" {...register('subject')} className={selectClass}>
+                <option value="">اختر المادة</option>
+                {SUBJECTS.map((subject) => (
+                  <option key={subject} value={subject}>
+                    {subject}
+                  </option>
+                ))}
+              </select>
+              {errors.subject && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.subject.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="grade_level" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="grade_level" className={labelClass}>
                 المرحلة الدراسية
               </label>
-              <div className="mt-2">
-                <select
-                  id="grade_level"
-                  {...register('grade_level')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                >
-                  <option value="">اختر المرحلة</option>
-                  {GRADE_LEVELS.map((level) => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
-                  ))}
-                </select>
-                {errors.grade_level && (
-                  <p className="mt-2 text-sm text-red-600">{errors.grade_level.message}</p>
-                )}
-              </div>
+              <select id="grade_level" {...register('grade_level')} className={selectClass}>
+                <option value="">اختر المرحلة</option>
+                {GRADE_LEVELS.map((level) => (
+                  <option key={level} value={level}>
+                    {level}
+                  </option>
+                ))}
+              </select>
+              {errors.grade_level && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.grade_level.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="max_students" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="max_students" className={labelClass}>
                 الحد الأقصى للطلاب
               </label>
-              <div className="mt-2">
-                <input
-                  type="number"
-                  id="max_students"
-                  {...register('max_students', { valueAsNumber: true })}
-                  min={1}
-                  max={100}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                />
-                {errors.max_students && (
-                  <p className="mt-2 text-sm text-red-600">{errors.max_students.message}</p>
-                )}
-              </div>
+              <input
+                type="number"
+                id="max_students"
+                {...register('max_students', { valueAsNumber: true })}
+                min={1}
+                max={100}
+                className={inputClass}
+              />
+              {errors.max_students && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.max_students.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="monthly_fee" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="monthly_fee" className={labelClass}>
                 الرسوم الشهرية (ج.م)
               </label>
-              <div className="mt-2">
-                <input
-                  type="number"
-                  id="monthly_fee"
-                  {...register('monthly_fee', { valueAsNumber: true })}
-                  min={0}
-                  step="0.01"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                />
-                {errors.monthly_fee && (
-                  <p className="mt-2 text-sm text-red-600">{errors.monthly_fee.message}</p>
-                )}
-              </div>
+              <input
+                type="number"
+                id="monthly_fee"
+                {...register('monthly_fee', { valueAsNumber: true })}
+                min={0}
+                step="0.01"
+                className={inputClass}
+              />
+              {errors.monthly_fee && (
+                <p className="mt-1.5 text-sm text-error-600">{errors.monthly_fee.message}</p>
+              )}
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="is_active" className="block text-sm font-medium text-gray-900">
+              <label htmlFor="is_active" className={labelClass}>
                 الحالة
               </label>
-              <div className="mt-2">
-                <select
-                  id="is_active"
-                  {...register('is_active', {
-                    setValueAs: (v) => v === 'true',
-                  })}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                >
-                  <option value="true">نشطة</option>
-                  <option value="false">غير نشطة</option>
-                </select>
-              </div>
+              <select
+                id="is_active"
+                {...register('is_active', {
+                  setValueAs: (v) => v === 'true',
+                })}
+                className={selectClass}
+              >
+                <option value="true">نشطة</option>
+                <option value="false">غير نشطة</option>
+              </select>
             </div>
 
             <div className="col-span-full">
-              <label
-                htmlFor="schedule_description"
-                className="block text-sm font-medium text-gray-900"
-              >
+              <label htmlFor="schedule_description" className={labelClass}>
                 وصف الجدول
               </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  id="schedule_description"
-                  {...register('schedule_description')}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-                  placeholder="مثال: كل أحد وأربعاء من 4 إلى 6 مساءً"
-                />
-                {errors.schedule_description && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {errors.schedule_description.message}
-                  </p>
-                )}
-              </div>
+              <input
+                type="text"
+                id="schedule_description"
+                {...register('schedule_description')}
+                className={inputClass}
+                placeholder="مثال: كل أحد وأربعاء من 4 إلى 6 مساءً"
+              />
+              {errors.schedule_description && (
+                <p className="mt-1.5 text-sm text-error-600">
+                  {errors.schedule_description.message}
+                </p>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+        <div className="flex items-center justify-end gap-x-4 border-t border-neutral-100 px-6 py-4">
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="text-sm font-semibold text-gray-900"
+            className="text-sm font-semibold text-neutral-600 hover:text-neutral-900 transition-colors"
           >
             إلغاء
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-xl bg-gradient-to-l from-primary-600 to-primary-500 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:from-primary-700 hover:to-primary-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'جاري الحفظ...' : group ? 'تحديث' : 'إنشاء'}
           </button>

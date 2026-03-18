@@ -25,6 +25,17 @@ interface AnnouncementFormProps {
   isSubmitting?: boolean;
 }
 
+const inputClass =
+  'w-full px-3 py-2 border border-neutral-200 rounded-xl bg-white text-neutral-800 text-sm shadow-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200';
+
+const selectClass =
+  'w-full px-3 py-2 border border-neutral-200 rounded-xl bg-white text-neutral-800 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200';
+
+const labelClass = 'block text-sm font-medium text-neutral-700 mb-1';
+
+const checkboxLabelClass =
+  'flex items-center gap-3 cursor-pointer p-3 rounded-xl border border-neutral-100 hover:bg-neutral-50 transition-all duration-200';
+
 export function AnnouncementForm({ announcement, onSubmit, isSubmitting }: AnnouncementFormProps) {
   const { data: groupsData } = useGroups();
   const groups = groupsData?.data || [];
@@ -57,54 +68,54 @@ export function AnnouncementForm({ announcement, onSubmit, isSubmitting }: Annou
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">معلومات الإعلان</h3>
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+        <h3 className="text-base font-bold text-neutral-900 mb-5">معلومات الإعلان</h3>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-              العنوان *
+            <label htmlFor="title" className={labelClass}>
+              العنوان <span className="text-error-500">*</span>
             </label>
             <input
               type="text"
               id="title"
               {...register('title')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
               placeholder="عنوان الإعلان"
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+              <p className="mt-1.5 text-sm text-error-600">{errors.title.message}</p>
             )}
           </div>
 
           {/* Content */}
           <div>
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
-              المحتوى *
+            <label htmlFor="content" className={labelClass}>
+              المحتوى <span className="text-error-500">*</span>
             </label>
             <textarea
               id="content"
               {...register('content')}
               rows={6}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
               placeholder="محتوى الإعلان..."
             />
             {errors.content && (
-              <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
+              <p className="mt-1.5 text-sm text-error-600">{errors.content.message}</p>
             )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Group */}
             <div>
-              <label htmlFor="group_id" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="group_id" className={labelClass}>
                 المجموعة
               </label>
               <select
                 id="group_id"
                 {...register('group_id', { valueAsNumber: true })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className={selectClass}
               >
                 <option value="">للجميع</option>
                 {groups.map((group) => (
@@ -117,14 +128,10 @@ export function AnnouncementForm({ announcement, onSubmit, isSubmitting }: Annou
 
             {/* Priority */}
             <div>
-              <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
-                الأولوية *
+              <label htmlFor="priority" className={labelClass}>
+                الأولوية <span className="text-error-500">*</span>
               </label>
-              <select
-                id="priority"
-                {...register('priority')}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              >
+              <select id="priority" {...register('priority')} className={selectClass}>
                 {Object.entries(PRIORITY_LABELS).map(([value, label]) => (
                   <option key={value} value={value}>
                     {label}
@@ -135,14 +142,10 @@ export function AnnouncementForm({ announcement, onSubmit, isSubmitting }: Annou
 
             {/* Type */}
             <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
-                النوع *
+              <label htmlFor="type" className={labelClass}>
+                النوع <span className="text-error-500">*</span>
               </label>
-              <select
-                id="type"
-                {...register('type')}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              >
+              <select id="type" {...register('type')} className={selectClass}>
                 {Object.entries(TYPE_LABELS).map(([value, label]) => (
                   <option key={value} value={value}>
                     {label}
@@ -154,53 +157,60 @@ export function AnnouncementForm({ announcement, onSubmit, isSubmitting }: Annou
 
           {/* Expires At */}
           <div>
-            <label htmlFor="expires_at" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="expires_at" className={labelClass}>
               تاريخ الانتهاء (اختياري)
             </label>
             <input
               type="datetime-local"
               id="expires_at"
               {...register('expires_at')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
             />
           </div>
 
           {/* Pinned */}
-          <div className="flex items-center gap-3">
+          <label htmlFor="is_pinned" className={checkboxLabelClass}>
             <input
               type="checkbox"
               id="is_pinned"
               {...register('is_pinned')}
-              className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
             />
-            <label htmlFor="is_pinned" className="text-sm text-gray-700">
+            <span className="text-sm font-medium text-neutral-700">
               تثبيت الإعلان في الأعلى
-            </label>
-          </div>
+            </span>
+          </label>
 
           {/* Publish immediately (only for new announcements) */}
           {!announcement && (
-            <div className="flex items-center gap-3">
+            <label htmlFor="publish" className={checkboxLabelClass}>
               <input
                 type="checkbox"
                 id="publish"
                 {...register('publish')}
-                className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
               />
-              <label htmlFor="publish" className="text-sm text-gray-700">
+              <span className="text-sm font-medium text-neutral-700">
                 نشر الإعلان فوراً
-              </label>
-            </div>
+              </span>
+            </label>
           )}
         </div>
       </div>
 
       {/* Submit */}
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-4">
+        <button
+          type="button"
+          onClick={() => window.history.back()}
+          className="text-sm font-semibold text-neutral-600 hover:text-neutral-900 transition-colors"
+        >
+          إلغاء
+        </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-xl bg-gradient-to-l from-primary-600 to-primary-500 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:from-primary-700 hover:to-primary-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'جاري الحفظ...' : announcement ? 'تحديث الإعلان' : 'إنشاء الإعلان'}
         </button>

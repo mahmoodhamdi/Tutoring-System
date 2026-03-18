@@ -35,60 +35,62 @@ export function UpcomingSessions({ data }: UpcomingSessionsProps) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">الجلسات القادمة</h3>
+    <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6 animate-fade-in">
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="text-lg font-extrabold text-neutral-900">الجلسات القادمة</h3>
         <Link
           href="/dashboard/sessions"
-          className="text-sm text-primary-600 hover:text-primary-700"
+          className="text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors duration-150"
         >
           عرض الكل
         </Link>
       </div>
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-3 gap-3 mb-4">
-        <div className="text-center p-2 bg-green-50 rounded-lg">
-          <p className="text-xl font-bold text-green-600">{data.completed}</p>
-          <p className="text-xs text-green-700">مكتملة</p>
+      <div className="grid grid-cols-3 gap-3 mb-5 stagger-children">
+        <div className="text-center p-3 bg-secondary-50 rounded-xl border border-secondary-100/60 transition-all duration-200 hover:shadow-sm">
+          <p className="text-xl font-extrabold text-secondary-600">{data.completed}</p>
+          <p className="text-xs font-semibold text-secondary-700 mt-0.5">مكتملة</p>
         </div>
-        <div className="text-center p-2 bg-blue-50 rounded-lg">
-          <p className="text-xl font-bold text-blue-600">{data.scheduled}</p>
-          <p className="text-xs text-blue-700">مجدولة</p>
+        <div className="text-center p-3 bg-info-50 rounded-xl border border-info-100/60 transition-all duration-200 hover:shadow-sm">
+          <p className="text-xl font-extrabold text-info-600">{data.scheduled}</p>
+          <p className="text-xs font-semibold text-info-600 mt-0.5">مجدولة</p>
         </div>
-        <div className="text-center p-2 bg-red-50 rounded-lg">
-          <p className="text-xl font-bold text-red-600">{data.cancelled}</p>
-          <p className="text-xs text-red-700">ملغاة</p>
+        <div className="text-center p-3 bg-error-50 rounded-xl border border-error-100/60 transition-all duration-200 hover:shadow-sm">
+          <p className="text-xl font-extrabold text-error-600">{data.cancelled}</p>
+          <p className="text-xs font-semibold text-error-700 mt-0.5">ملغاة</p>
         </div>
       </div>
 
       {/* Upcoming Sessions List */}
       {data.upcoming.length > 0 ? (
-        <div className="space-y-3">
+        <div className="space-y-2.5 stagger-children">
           {data.upcoming.map((session) => (
             <Link
               key={session.id}
               href={`/dashboard/sessions/${session.id}`}
-              className="block p-3 rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50/50 transition-colors"
+              className="block p-4 rounded-xl border border-neutral-100 hover:border-primary-200 hover:bg-primary-50/40 transition-all duration-200 group card-hover"
             >
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="font-medium text-gray-900">{session.title}</p>
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="font-semibold text-neutral-900 group-hover:text-primary-700 transition-colors duration-150 truncate">
+                    {session.title}
+                  </p>
                   {session.group_name && (
-                    <p className="text-sm text-gray-500">{session.group_name}</p>
+                    <p className="text-sm text-neutral-400 mt-0.5">{session.group_name}</p>
                   )}
                 </div>
-                <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-1 rounded">
+                <span className="text-xs font-semibold text-primary-600 bg-primary-50 border border-primary-100 px-2.5 py-1 rounded-lg shrink-0">
                   {formatSessionDate(session.session_date)}
                 </span>
               </div>
-              <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+              <div className="flex items-center gap-4 mt-2.5 text-xs text-neutral-400">
                 <div className="flex items-center gap-1">
-                  <CalendarDaysIcon className="w-4 h-4" />
+                  <CalendarDaysIcon className="w-3.5 h-3.5 shrink-0" />
                   <span>{new Date(session.session_date).toLocaleDateString('ar-EG')}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <ClockIcon className="w-4 h-4" />
+                  <ClockIcon className="w-3.5 h-3.5 shrink-0" />
                   <span>
                     {formatTime(session.start_time)} - {formatTime(session.end_time)}
                   </span>
@@ -98,9 +100,11 @@ export function UpcomingSessions({ data }: UpcomingSessionsProps) {
           ))}
         </div>
       ) : (
-        <div className="text-center py-6 text-gray-500">
-          <CalendarDaysIcon className="w-12 h-12 mx-auto text-gray-300 mb-2" />
-          <p>لا توجد جلسات قادمة</p>
+        <div className="text-center py-10">
+          <div className="w-14 h-14 bg-neutral-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+            <CalendarDaysIcon className="w-7 h-7 text-neutral-300" />
+          </div>
+          <p className="text-sm text-neutral-400">لا توجد جلسات قادمة</p>
         </div>
       )}
     </div>

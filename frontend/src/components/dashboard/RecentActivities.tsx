@@ -20,11 +20,11 @@ const activityIcons = {
 };
 
 const activityColors = {
-  session: 'bg-blue-50 text-blue-600',
-  payment: 'bg-green-50 text-green-600',
-  exam_result: 'bg-purple-50 text-purple-600',
+  session: 'bg-info-50 text-info-600',
+  payment: 'bg-secondary-50 text-secondary-600',
+  exam_result: 'bg-primary-50 text-primary-600',
   student: 'bg-primary-50 text-primary-600',
-  announcement: 'bg-yellow-50 text-yellow-600',
+  announcement: 'bg-accent-50 text-accent-600',
 };
 
 export function RecentActivities() {
@@ -32,8 +32,8 @@ export function RecentActivities() {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">النشاط الأخير</h3>
+      <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">
+        <h3 className="text-lg font-extrabold text-neutral-900 mb-4">النشاط الأخير</h3>
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full"></div>
         </div>
@@ -42,11 +42,11 @@ export function RecentActivities() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">النشاط الأخير</h3>
+    <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6 animate-fade-in">
+      <h3 className="text-lg font-extrabold text-neutral-900 mb-4">النشاط الأخير</h3>
 
       {activities && activities.length > 0 ? (
-        <div className="space-y-4">
+        <div className="space-y-1 stagger-children">
           {activities.map((activity, index) => {
             const Icon = activityIcons[activity.type] || CalendarIcon;
             const colorClass = activityColors[activity.type] || activityColors.session;
@@ -55,18 +55,18 @@ export function RecentActivities() {
               <Link
                 key={index}
                 href={activity.link}
-                className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-start gap-3 p-3 rounded-xl hover:bg-neutral-50 transition-all duration-150 group"
               >
-                <div className={`p-2 rounded-lg ${colorClass}`}>
-                  <Icon className="w-5 h-5" />
+                <div className={`p-2 rounded-xl shrink-0 transition-transform duration-150 group-hover:scale-110 ${colorClass}`}>
+                  <Icon className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
+                  <p className="text-sm font-semibold text-neutral-900 truncate group-hover:text-primary-600 transition-colors duration-150">
                     {activity.title}
                   </p>
-                  <p className="text-xs text-gray-500 truncate">{activity.description}</p>
+                  <p className="text-xs text-neutral-400 truncate mt-0.5">{activity.description}</p>
                 </div>
-                <span className="text-xs text-gray-400 whitespace-nowrap">
+                <span className="text-xs text-neutral-300 whitespace-nowrap shrink-0 pt-0.5">
                   {formatDate(activity.date)}
                 </span>
               </Link>
@@ -74,8 +74,11 @@ export function RecentActivities() {
           })}
         </div>
       ) : (
-        <div className="text-center py-8 text-gray-500">
-          <p>لا يوجد نشاط حديث</p>
+        <div className="text-center py-10">
+          <div className="w-12 h-12 bg-neutral-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+            <CalendarIcon className="w-6 h-6 text-neutral-300" />
+          </div>
+          <p className="text-sm text-neutral-400">لا يوجد نشاط حديث</p>
         </div>
       )}
     </div>

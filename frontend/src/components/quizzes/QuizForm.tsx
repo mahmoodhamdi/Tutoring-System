@@ -30,6 +30,19 @@ interface QuizFormProps {
   isSubmitting?: boolean;
 }
 
+const inputClass =
+  'w-full px-3 py-2 border border-neutral-200 rounded-xl bg-white text-neutral-800 text-sm shadow-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200';
+
+const selectClass =
+  'w-full px-3 py-2 border border-neutral-200 rounded-xl bg-white text-neutral-800 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:outline-none transition-all duration-200';
+
+const labelClass = 'block text-sm font-medium text-neutral-700 mb-1';
+
+const sectionClass = 'bg-white rounded-2xl border border-neutral-100 shadow-sm p-6';
+
+const checkboxLabelClass =
+  'flex items-center gap-3 cursor-pointer p-3 rounded-xl border border-neutral-100 hover:bg-neutral-50 transition-all duration-200';
+
 export function QuizForm({ quiz, onSubmit, isSubmitting }: QuizFormProps) {
   const { data: groupsData } = useGroups();
   const groups = groupsData?.data || [];
@@ -69,34 +82,33 @@ export function QuizForm({ quiz, onSubmit, isSubmitting }: QuizFormProps) {
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       {/* Basic Info */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">معلومات أساسية</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className={sectionClass}>
+        <h3 className="text-base font-bold text-neutral-900 mb-5">معلومات أساسية</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="md:col-span-2">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-              عنوان الاختبار *
+            <label htmlFor="title" className={labelClass}>
+              عنوان الاختبار <span className="text-error-500">*</span>
             </label>
             <input
               type="text"
               id="title"
               {...register('title')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
               placeholder="مثال: اختبار الوحدة الأولى"
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+              <p className="mt-1.5 text-sm text-error-600">{errors.title.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="group_id" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="group_id" className={labelClass}>
               المجموعة
             </label>
             <select
               id="group_id"
               {...register('group_id', { valueAsNumber: true })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={selectClass}
             >
               <option value="">اختر المجموعة (اختياري)</option>
               {groups.map((group) => (
@@ -108,8 +120,8 @@ export function QuizForm({ quiz, onSubmit, isSubmitting }: QuizFormProps) {
           </div>
 
           <div>
-            <label htmlFor="duration_minutes" className="block text-sm font-medium text-gray-700 mb-1">
-              المدة (بالدقائق) *
+            <label htmlFor="duration_minutes" className={labelClass}>
+              المدة (بالدقائق) <span className="text-error-500">*</span>
             </label>
             <input
               type="number"
@@ -117,35 +129,35 @@ export function QuizForm({ quiz, onSubmit, isSubmitting }: QuizFormProps) {
               {...register('duration_minutes', { valueAsNumber: true })}
               min={1}
               max={480}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
             />
             {errors.duration_minutes && (
-              <p className="mt-1 text-sm text-red-600">{errors.duration_minutes.message}</p>
+              <p className="mt-1.5 text-sm text-error-600">{errors.duration_minutes.message}</p>
             )}
           </div>
 
           <div className="md:col-span-2">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="description" className={labelClass}>
               الوصف
             </label>
             <textarea
               id="description"
               {...register('description')}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
               placeholder="وصف مختصر للاختبار"
             />
           </div>
 
           <div className="md:col-span-2">
-            <label htmlFor="instructions" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="instructions" className={labelClass}>
               تعليمات الاختبار
             </label>
             <textarea
               id="instructions"
               {...register('instructions')}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
               placeholder="تعليمات للطلاب قبل بدء الاختبار"
             />
           </div>
@@ -153,13 +165,12 @@ export function QuizForm({ quiz, onSubmit, isSubmitting }: QuizFormProps) {
       </div>
 
       {/* Scoring Settings */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">إعدادات التقييم</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className={sectionClass}>
+        <h3 className="text-base font-bold text-neutral-900 mb-5">إعدادات التقييم</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label htmlFor="pass_percentage" className="block text-sm font-medium text-gray-700 mb-1">
-              نسبة النجاح (%) *
+            <label htmlFor="pass_percentage" className={labelClass}>
+              نسبة النجاح (%) <span className="text-error-500">*</span>
             </label>
             <input
               type="number"
@@ -167,16 +178,16 @@ export function QuizForm({ quiz, onSubmit, isSubmitting }: QuizFormProps) {
               {...register('pass_percentage', { valueAsNumber: true })}
               min={0}
               max={100}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
             />
             {errors.pass_percentage && (
-              <p className="mt-1 text-sm text-red-600">{errors.pass_percentage.message}</p>
+              <p className="mt-1.5 text-sm text-error-600">{errors.pass_percentage.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="max_attempts" className="block text-sm font-medium text-gray-700 mb-1">
-              الحد الأقصى للمحاولات *
+            <label htmlFor="max_attempts" className={labelClass}>
+              الحد الأقصى للمحاولات <span className="text-error-500">*</span>
             </label>
             <input
               type="number"
@@ -184,95 +195,100 @@ export function QuizForm({ quiz, onSubmit, isSubmitting }: QuizFormProps) {
               {...register('max_attempts', { valueAsNumber: true })}
               min={1}
               max={10}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
             />
             {errors.max_attempts && (
-              <p className="mt-1 text-sm text-red-600">{errors.max_attempts.message}</p>
+              <p className="mt-1.5 text-sm text-error-600">{errors.max_attempts.message}</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Display Settings */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">إعدادات العرض</h3>
-
-        <div className="space-y-4">
-          <label className="flex items-center gap-3">
+      <div className={sectionClass}>
+        <h3 className="text-base font-bold text-neutral-900 mb-5">إعدادات العرض</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <label className={checkboxLabelClass}>
             <input
               type="checkbox"
               {...register('shuffle_questions')}
-              className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
             />
-            <span className="text-sm text-gray-700">خلط ترتيب الأسئلة</span>
+            <span className="text-sm font-medium text-neutral-700">خلط ترتيب الأسئلة</span>
           </label>
 
-          <label className="flex items-center gap-3">
+          <label className={checkboxLabelClass}>
             <input
               type="checkbox"
               {...register('shuffle_answers')}
-              className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
             />
-            <span className="text-sm text-gray-700">خلط ترتيب الخيارات</span>
+            <span className="text-sm font-medium text-neutral-700">خلط ترتيب الخيارات</span>
           </label>
 
-          <label className="flex items-center gap-3">
+          <label className={checkboxLabelClass}>
             <input
               type="checkbox"
               {...register('show_correct_answers')}
-              className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
             />
-            <span className="text-sm text-gray-700">إظهار الإجابات الصحيحة بعد الانتهاء</span>
+            <span className="text-sm font-medium text-neutral-700">إظهار الإجابات الصحيحة بعد الانتهاء</span>
           </label>
 
-          <label className="flex items-center gap-3">
+          <label className={checkboxLabelClass}>
             <input
               type="checkbox"
               {...register('show_score_immediately')}
-              className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
             />
-            <span className="text-sm text-gray-700">إظهار النتيجة فوراً</span>
+            <span className="text-sm font-medium text-neutral-700">إظهار النتيجة فوراً</span>
           </label>
         </div>
       </div>
 
       {/* Availability */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">فترة الإتاحة</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className={sectionClass}>
+        <h3 className="text-base font-bold text-neutral-900 mb-5">فترة الإتاحة</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label htmlFor="available_from" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="available_from" className={labelClass}>
               متاح من
             </label>
             <input
               type="datetime-local"
               id="available_from"
               {...register('available_from')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label htmlFor="available_until" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="available_until" className={labelClass}>
               متاح حتى
             </label>
             <input
               type="datetime-local"
               id="available_until"
               {...register('available_until')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className={inputClass}
             />
           </div>
         </div>
       </div>
 
       {/* Submit */}
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-4">
+        <button
+          type="button"
+          onClick={() => window.history.back()}
+          className="text-sm font-semibold text-neutral-600 hover:text-neutral-900 transition-colors"
+        >
+          إلغاء
+        </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-xl bg-gradient-to-l from-primary-600 to-primary-500 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:from-primary-700 hover:to-primary-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'جاري الحفظ...' : quiz ? 'تحديث الاختبار' : 'إنشاء الاختبار'}
         </button>
